@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Yoga Retreat — Coming Soon | Prana House</title>
+  <meta name="description" content="Full Day Yoga Retreat by Prana House — an immersive day of meditation, pranayama, asana and deep rest. Coming soon to Jaipur."/>
+  <link rel="stylesheet" href="/css/style.css"/>
+  <style>
+    .retreat-hero-full {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #1a2e1a 0%, #2d4a2d 60%, #1e3320 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 8rem 2rem 5rem;
+    }
+    .retreat-hero-full::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 40%, rgba(200,169,110,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(92,138,92,0.15) 0%, transparent 60%);
+    }
+    /* Animated orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      animation: drift 12s ease-in-out infinite;
+    }
+    .orb-1 { width:300px;height:300px; background:rgba(92,138,92,0.12); top:-50px; right:10%; animation-delay:0s; }
+    .orb-2 { width:200px;height:200px; background:rgba(200,169,110,0.1); bottom:10%; left:5%; animation-delay:-4s; }
+    .orb-3 { width:150px;height:150px; background:rgba(201,169,154,0.1); top:40%; left:15%; animation-delay:-8s; }
+    @keyframes drift {
+      0%,100% { transform: translate(0,0); }
+      33% { transform: translate(30px,-20px); }
+      66% { transform: translate(-20px,15px); }
+    }
+    .retreat-hero-content { position:relative; z-index:2; max-width: 700px; }
+    .retreat-big-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 9vw, 7.5rem);
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.05;
+      margin-bottom: 1rem;
+    }
+    .retreat-big-title em { font-style: italic; color: var(--accent-warm); }
+    .retreat-subtitle {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.65);
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.9;
+    }
+    .cs-badge {
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      border: 1px solid rgba(200,169,110,0.45);
+      color: var(--accent-warm);
+      padding: 0.65rem 1.75rem;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+    }
+    .cs-badge span { width:8px;height:8px;border-radius:50%;background:var(--accent-warm);animation:pulse-dot 2s infinite; }
+
+    /* Schedule preview */
+    .schedule-section { background: var(--bg-alt); }
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .schedule-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      text-align: center;
+      transition: var(--transition);
+      opacity: 0.75;
+    }
+    .schedule-item:hover { opacity: 1; transform: translateY(-3px); box-shadow: var(--shadow); }
+    .schedule-time {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      color: var(--accent-warm);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+    .schedule-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .schedule-item h4 { font-size: 1rem; margin-bottom: 0.4rem; }
+    .schedule-item p { font-size: 0.82rem; }
+
+    /* Notify form */
+    .notify-section {
+      background: var(--bg);
+      padding: 6rem 0;
+      text-align: center;
+    }
+    .notify-form {
+      display: flex; gap: 0.75rem; max-width: 420px; margin: 2rem auto 0;
+    }
+    @media (max-width: 480px) {
+      .notify-form { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <!-- Retreat Hero -->
+  <section id="section-retreat-hero" class="retreat-hero-full">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="retreat-hero-content">
+      <span class="retreat-eyebrow" style="display:block;font-size:0.75rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--accent-warm);margin-bottom:1.5rem;">✦ Prana House Presents ✦</span>
+      <h1 class="retreat-big-title">Full Day<br/><em>Yoga Retreat</em></h1>
+      <p class="retreat-subtitle">
+        An immersive journey of breath, movement, stillness and nourishment — from sunrise to sunset. A day dedicated entirely to you.
+      </p>
+      <div class="cs-badge"><span></span>Coming Soon<span></span></div>
+      <br/>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;">Be the first to know when dates are announced ↓</p>
+    </div>
+  </section>
+
+  <!-- Schedule Preview -->
+  <section class="schedule-section section-pad" id="section-schedule">
+    <div class="container">
+      <div class="section-header centered fade-in">
+        <span class="section-label">A Glimpse</span>
+        <h2>What the Day <span class="display-italic">Looks Like</span></h2>
+        <div class="divider-leaf centered"></div>
+        <p>A thoughtfully curated experience from sunrise through to dusk. (Full schedule to be revealed soon.)</p>
+      </div>
+
+      <div class="schedule-grid">
+        <div class="schedule-item fade-in">
+          <div class="schedule-time">6:00 – 7:00 AM</div>
+          <div class="schedule-icon">🌅</div>
+          <h4>Sunrise Meditation</h4>
+          <p>Welcome the day in stillness — breathwork and guided meditation to set your intention.</p>
+        </div>
+        <div class="schedule-item fade-in fade-in-delay-1">
+          <div class="schedule-time">7:00 – 9:00 AM</div>
+          <div class="schedule-icon">🌿</div>
+          <h4>Pranayama &amp; Asana</h4>
+          <p>A flowing yoga session — breath-led movement from gentle warm-up through dynamic practice.</p>
+        </div>
+        <div class="schedule-item fade-in fade-in-delay-2">
+          <div class="schedule-time">9:00 – 10:00 AM</div>
+          <div class="schedule-icon">🍵</div>
+          <h4>Mindful Breakfast</h4>
+          <p>A wholesome, sattvic meal eaten in awareness. Nourish the body as an act of self-care.</p>
+        </div>
+        <div class="schedule-item fade-in fade-in-delay-3">
+          <div class="schedule-time">10:30 AM – 1:00 PM</div>
+          <div class="schedule-icon">📖</div>
+          <h4>Wellness Workshop</h4>
+          <p>Deep dive into yogic lifestyle, naturopathic principles, or integrative health — theme TBA.</p>
+        </div>
+        <div class="schedule-item fade-in fade-in-delay-4">
+          <div class="schedule-time">1:00 – 2:30 PM</div>
+          <div class="schedule-icon">🌻</div>
+          <h4>Rest &amp; Mindful Lunch</h4>
+          <p>Unstructured time for rest, journaling or quiet reflection. A nourishing midday meal together.</p>
+        </div>
+        <div class="schedule-item fade-in">
+          <div class="schedule-time">3:00 – 5:00 PM</div>
+          <div class="schedule-icon">🧘</div>
+          <h4>Yoga Nidra &amp; Restore</h4>
+          <p>Deep relaxation, restorative asana and a Yoga Nidra session to integrate the day's practice.</p>
+        </div>
+        <div class="schedule-item fade-in fade-in-delay-1">
+          <div class="schedule-time">5:30 – 6:30 PM</div>
+          <div class="schedule-icon">🌄</div>
+          <h4>Sunset Ceremony</h4>
+          <p>A gentle closing circle — gratitude, sharing and a peaceful send-off into the evening.</p>
+        </div>
+        <div class="schedule-item fade-in fade-in-delay-2" style="background:rgba(92,138,92,0.06);border-color:rgba(92,138,92,0.2);">
+          <div class="schedule-time">All Day</div>
+          <div class="schedule-icon">💚</div>
+          <h4>Community &amp; Connection</h4>
+          <p>Meet fellow practitioners. Build a wellness community that continues beyond the retreat.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What's Included -->
+  <section class="section-pad" style="background:var(--bg);" id="section-includes">
+    <div class="container-sm">
+      <div class="section-header centered fade-in">
+        <span class="section-label">What's Included</span>
+        <h2>Everything You <span class="display-italic">Need</span></h2>
+        <div class="divider-leaf centered"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;" class="fade-in">
+        <div class="notice">✓ Full day guided yoga &amp; meditation sessions</div>
+        <div class="notice">✓ Sattvic breakfast &amp; mindful lunch</div>
+        <div class="notice">✓ Wellness workshop with Dr. Fareen Tak</div>
+        <div class="notice">✓ Yoga Nidra deep relaxation session</div>
+        <div class="notice">✓ Yoga mat &amp; props provided</div>
+        <div class="notice">✓ Welcome kit with herbal tea &amp; journal</div>
+        <div class="notice">✓ Certificate of participation</div>
+        <div class="notice">✓ Post-retreat support resources</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Notify Me -->
+  <section class="notify-section" id="section-notify">
+    <div class="container-sm">
+      <div class="fade-in">
+        <span class="section-label" style="display:block;text-align:center;">Stay Updated</span>
+        <h2>Be the First to <span class="display-italic">Know</span></h2>
+        <div class="divider-leaf centered"></div>
+        <p style="font-size:1.05rem;">Leave your details and we'll notify you the moment retreat dates and pricing are announced.</p>
+        <form class="notify-form" id="retreat-notify-form">
+          <input type="text" name="name" class="form-input" placeholder="Your name" autocomplete="name"/>
+          <input type="email" name="email" class="form-input" placeholder="Your email" required autocomplete="email"/>
+          <input type="hidden" name="interest" value="retreat-notify"/>
+          <button type="submit" class="btn btn-primary" style="white-space:nowrap;">Notify Me</button>
+        </form>
+        <div id="notify-msg" style="display:none;margin-top:1rem;font-size:0.9rem;color:var(--accent);"></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    document.getElementById('retreat-notify-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('[type="submit"]');
+      btn.disabled = true; btn.textContent = '...';
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
+        });
+        const data = await res.json();
+        const msg = document.getElementById('notify-msg');
+        msg.textContent = data.success ? '🌿 Thank you! We will notify you when the retreat is announced.' : 'Something went wrong. Please try again.';
+        msg.style.display = 'block';
+        if (data.success) e.target.reset();
+      } catch { }
+      btn.disabled = false; btn.textContent = 'Notify Me';
+    });
+  </script>
+</body>
+</html>
