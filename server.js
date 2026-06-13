@@ -1,3 +1,12 @@
+
+require('dotenv').config();
+
+const { createClient } = require('@supabase/supabase-js');
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
+
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -50,34 +59,39 @@ app.get('/testimonials', (req, res) => res.sendFile(path.join(__dirname, 'views'
 // ─── API ROUTES ──────────────────────────────────────────────────────────────
 
 // Contact form submission
-app.post('/api/contact', (req, res) => {
-  const { name, email, phone, message, interest } = req.body;
-
-  // Validate required fields
-  if (!name || !email || !message) {
-    return res.status(400).json({ success: false, error: 'Name, email and message are required.' });
+app.post('/api/contact', async (req, res) => {
+  try {
+    const { name, email, phone, message, interest } = req.body;
+    if (!name || !email || !message) {
+      return res.status(400).json({
+        success: false,
+        error: 'Name, email and message are required.'
+      });
+    }
+    const { error } = await supabase
+      .from('enquiries')
+      .insert([
+        {
+          name,
+          email,
+          phone,
+          message,
+          interest,
+          status: 'new'
+        }
+      ]);
+    if (error) throw error;
+    res.json({
+      success: true,
+      message: 'Thank you! We will get back to you within 24 hours.'
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      error: 'Server error'
+    });
   }
-
-  // Save to JSON file (acts as simple database)
-  const dataPath = path.join(__dirname, 'data', 'enquiries.json');
-  let enquiries = [];
-  if (fs.existsSync(dataPath)) {
-    try { enquiries = JSON.parse(fs.readFileSync(dataPath, 'utf8')); } catch (e) { enquiries = []; }
-  }
-
-  const newEnquiry = {
-    id: Date.now(),
-    name, email, phone: phone || '',
-    message, interest: interest || '',
-    submittedAt: new Date().toISOString(),
-    status: 'new'
-  };
-
-  enquiries.push(newEnquiry);
-  fs.writeFileSync(dataPath, JSON.stringify(enquiries, null, 2));
-
-  console.log(`📬 New enquiry from ${name} (${email})`);
-  res.json({ success: true, message: 'Thank you! We will get back to you within 24 hours.' });
 });
 
 // Newsletter signup
