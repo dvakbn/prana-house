@@ -95,35 +95,50 @@ app.post('/api/contact', async (req, res) => {
 });
 
 // Newsletter signup
-app.post('/api/newsletter', (req, res) => {
-  const { email, name } = req.body;
-  if (!email) return res.status(400).json({ success: false, error: 'Email is required.' });
-
-  const dataPath = path.join(__dirname, 'data', 'subscribers.json');
-  let subscribers = [];
-  if (fs.existsSync(dataPath)) {
-    try { subscribers = JSON.parse(fs.readFileSync(dataPath, 'utf8')); } catch (e) { subscribers = []; }
-  }
-
-  // Check duplicate
-  if (subscribers.find(s => s.email === email)) {
-    return res.json({ success: true, message: 'You are already subscribed!' });
-  }
-
-  subscribers.push({ email, name: name || '', subscribedAt: new Date().toISOString() });
-  fs.writeFileSync(dataPath, JSON.stringify(subscribers, null, 2));
-
-  res.json({ success: true, message: 'Welcome to the Prana House community! 🌿' });
-});
-
-// Get all enquiries (admin use)
-app.get('/api/admin/enquiries', (req, res) => {
-  const dataPath = path.join(__dirname, 'data', 'enquiries.json');
-  if (!fs.existsSync(dataPath)) return res.json([]);
+app.post('/api/newsletter', async (req, res) => {
   try {
-    res.json(JSON.parse(fs.readFileSync(dataPath, 'utf8')));
-  } catch (e) {
-    res.json([]);
+    const { email, name } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        error: 'Email is required.'
+      });
+    }
+
+    const { error } = await supabase
+      .from('subscribers')
+      .insert([
+        {
+          email,
+          name: name || ''
+        }
+      ]);
+
+    if (error) {
+      // Handle duplicate emails gracefully
+      if (error.code === '23505') {
+        return res.json({
+          success: true,
+          message: 'You are already subscribed!'
+        });
+      }
+
+      throw error;
+    }
+
+    res.json({
+      success: true,
+      message: 'Welcome to the Prana House community! 🌿'
+    });
+
+  } catch (err) {
+    console.error('NEWSLETTER ERROR:', err);
+
+    res.status(500).json({
+      success: false,
+      error: 'Server error'
+    });
   }
 });
 
