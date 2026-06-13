@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prana House | Yoga & Wellness Center, Jaipur</title>
+  <meta name="description" content="Prana House — A yoga and wellness center in Pratap Nagar, Jaipur. Guided meditation, breathing exercises, flexibility training, and stress relief classes online & offline."/>
+  <meta property="og:title" content="Prana House | Yoga & Wellness, Jaipur"/>
+  <meta property="og:description" content="Breathe. Move. Transform. Join Prana House for holistic yoga and wellness in Jaipur."/>
+  <link rel="stylesheet" href="/css/style.css"/>
+  <style>
+    /* ── Hero Canvas ── */
+    #hero-canvas { position:absolute; inset:0; z-index:0; pointer-events:none; }
+
+    /* ── Offerings strip ── */
+    .offerings-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--bg-card);
+      box-shadow: var(--shadow);
+    }
+    .offering-item {
+      padding: 2rem 1.5rem;
+      border-right: 1px solid var(--border);
+      transition: var(--transition);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .offering-item:last-child { border-right: none; }
+    .offering-item::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    .offering-item:hover::before { transform: scaleX(1); }
+    .offering-item:hover { background: var(--bg-alt); }
+    .offering-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .offering-item h4 { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 0.5rem; }
+    .offering-item p { font-size: 0.85rem; }
+
+    /* ── Why Choose ── */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    .why-card {
+      padding: 2.5rem 2rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-card);
+      text-align: center;
+      transition: var(--transition);
+    }
+    .why-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: rgba(92,138,92,0.3); }
+    .why-num {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--accent);
+      opacity: 0.3;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── Classes Panel ── */
+    .class-mode-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .class-mode-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      background: var(--bg-card);
+      transition: var(--transition);
+    }
+    .class-mode-card:hover { box-shadow: var(--shadow-hover); border-color: rgba(92,138,92,0.3); }
+    .class-mode-card h3 { font-size: 1.6rem; margin-bottom: 0.75rem; }
+    .class-feature {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 0.88rem; color: var(--text-secondary);
+      padding: 0.4rem 0; border-bottom: 1px solid var(--border);
+    }
+    .class-feature:last-of-type { border-bottom: none; }
+    .class-feature::before { content: '✓'; color: var(--accent); font-weight: 600; flex-shrink:0; }
+
+    /* ── Consultation banner ── */
+    .consultation-banner {
+      background: linear-gradient(135deg, rgba(92,138,92,0.1), rgba(200,169,110,0.08));
+      border: 1px solid rgba(92,138,92,0.2);
+      border-radius: var(--radius);
+      padding: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+    .consultation-banner h3 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+
+    /* ── Yoga posture SVG background ── */
+    .hero-pose-bg {
+      position: absolute;
+      right: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42%;
+      opacity: 0.08;
+      pointer-events: none;
+      z-index: 1;
+    }
+    [data-theme="dark"] .hero-pose-bg { opacity: 0.06; }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      background: var(--accent);
+      padding: 2rem 0;
+    }
+    .stats-inner {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-family: var(--font-display); font-size: 2.2rem; color: #fff; display: block; line-height: 1; }
+    .stat-lbl { font-size: 0.78rem; color: rgba(255,255,255,0.75); letter-spacing: 0.05em; }
+    .stat-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.25); }
+
+    @media (max-width: 900px) {
+      .offerings-strip { grid-template-columns: 1fr 1fr; }
+      .offering-item:nth-child(2) { border-right: none; }
+      .offering-item:nth-child(3) { border-top: 1px solid var(--border); }
+      .why-grid { grid-template-columns: 1fr 1fr; }
+      .class-mode-grid { grid-template-columns: 1fr; }
+      .consultation-banner { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 600px) {
+      .offerings-strip { grid-template-columns: 1fr; }
+      .offering-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .why-grid { grid-template-columns: 1fr; }
+      .stats-inner { flex-wrap: wrap; gap: 1.5rem; }
+      .stat-divider { display: none; }
+    }
+
+    .form-message { padding: 0.85rem 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; margin-top: 1rem; display: none; }
+    .form-message.success { background: rgba(92,138,92,0.12); color: var(--accent-deep); border: 1px solid rgba(92,138,92,0.3); }
+    .form-message.error { background: rgba(201,90,90,0.1); color: #b94040; border: 1px solid rgba(201,90,90,0.3); }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar injected by components.js -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- ═══════════════════════════════════════════
+       HERO SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="section-hero" class="hero">
+    <div class="hero-bg"></div>
+
+    <!-- Decorative yoga silhouette -->
+    <svg class="hero-pose-bg" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+      <!-- Tree Pose silhouette (line art) -->
+      <line x1="150" y1="380" x2="150" y2="200" stroke="var(--accent)" stroke-width="3"/>
+      <circle cx="150" cy="160" r="28" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+      <line x1="150" y1="200" x2="90" y2="270" stroke="var(--accent)" stroke-width="3"/>
+      <line x1="150" y1="260" x2="210" y2="330" stroke="var(--accent)" stroke-width="3"/>
+      <line x1="150" y1="220" x2="80" y2="190" stroke="var(--accent)" stroke-width="2.5"/>
+      <line x1="150" y1="220" x2="220" y2="180" stroke="var(--accent)" stroke-width="2.5"/>
+      <line x1="80" y1="190" x2="40" y2="145" stroke="var(--accent)" stroke-width="2"/>
+      <line x1="220" y1="180" x2="260" y2="135" stroke="var(--accent)" stroke-width="2"/>
+    </svg>
+
+    <div class="container" style="position:relative;z-index:2;">
+      <div class="hero-content">
+        <span class="hero-badge fade-in">🌿 Yoga &amp; Wellness · Pratap Nagar, Jaipur</span>
+        <h1 class="fade-in fade-in-delay-1">
+          Move. Breathe.<br/>
+          <span class="display-italic">Transform.</span>
+        </h1>
+        <p class="lead fade-in fade-in-delay-2">
+          A holistic sanctuary where ancient yogic wisdom meets modern wellness. Join Prana House for guided classes, personal consultations, and a community rooted in breath and stillness.
+        </p>
+        <div class="hero-btns fade-in fade-in-delay-3">
+          <a href="/classes" class="btn btn-primary btn-lg">Explore Classes</a>
+          <a href="/teacher" class="btn btn-outline btn-lg">Meet Your Teacher</a>
+        </div>
+        <div class="hero-stats fade-in fade-in-delay-4">
+          <div>
+            <span class="hero-stat-num">4+</span>
+            <span class="hero-stat-label">Programs offered</span>
+          </div>
+          <div>
+            <span class="hero-stat-num">1:1</span>
+            <span class="hero-stat-label">Personal consultations</span>
+          </div>
+          <div>
+            <span class="hero-stat-num">Online<br/>&amp; Offline</span>
+            <span class="hero-stat-label">Class formats</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       OFFERINGS STRIP
+  ═══════════════════════════════════════════ -->
+  <section id="section-offerings" class="section-pad-sm" style="background:var(--bg);">
+    <div class="container">
+      <div class="offerings-strip fade-in">
+
+        <!-- Card 1: Guided Meditation -->
+        <div class="offering-item" id="offering-meditation">
+          <div class="offering-icon">🧘</div>
+          <h4>Guided Meditation</h4>
+          <p>Settle the mind, cultivate presence and find lasting inner calm through structured meditative practice.</p>
+          <a href="/programs#meditation" style="font-size:0.82rem;color:var(--accent);margin-top:0.75rem;display:inline-block;">Learn more →</a>
+        </div>
+
+        <!-- Card 2: Breathing Exercises -->
+        <div class="offering-item" id="offering-breathing">
+          <div class="offering-icon">🌬️</div>
+          <h4>Breathing Exercises</h4>
+          <p>Pranayama techniques to balance energy, improve lung capacity and activate the nervous system.</p>
+          <a href="/programs#breathing" style="font-size:0.82rem;color:var(--accent);margin-top:0.75rem;display:inline-block;">Learn more →</a>
+        </div>
+
+        <!-- Card 3: Flexibility Training -->
+        <div class="offering-item" id="offering-flexibility">
+          <div class="offering-icon">🤸</div>
+          <h4>Flexibility Training</h4>
+          <p>Sequenced asana practice to release tension, improve posture and build body awareness.</p>
+          <a href="/programs#flexibility" style="font-size:0.82rem;color:var(--accent);margin-top:0.75rem;display:inline-block;">Learn more →</a>
+        </div>
+
+        <!-- Card 4: Stress Relief -->
+        <div class="offering-item" id="offering-stress">
+          <div class="offering-icon">🌸</div>
+          <h4>Stress Relief</h4>
+          <p>Restorative yoga and relaxation techniques designed to dissolve stress at its root.</p>
+          <a href="/programs#stress" style="font-size:0.82rem;color:var(--accent);margin-top:0.75rem;display:inline-block;">Learn more →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       STATS BAR
+  ═══════════════════════════════════════════ -->
+  <div class="stats-bar" id="section-stats">
+    <div class="stats-inner">
+      <div class="stat-item"><span class="stat-num">BNYS</span><span class="stat-lbl">Qualified Teacher</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num">4</span><span class="stat-lbl">Core Programs</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num">Online<br/>&amp; Offline</span><span class="stat-lbl">Class Formats</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num">1:1</span><span class="stat-lbl">Consultations Available</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       CLASSES SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="section-classes" class="section-pad" style="background:var(--bg-alt);">
+    <div class="container">
+      <div class="section-header centered fade-in">
+        <span class="section-label">Join Us</span>
+        <h2>Choose How You <span class="display-italic">Practice</span></h2>
+        <div class="divider-leaf centered"></div>
+        <p>Whether you prefer the energy of a physical space or the flexibility of home practice — Prana House meets you where you are.</p>
+      </div>
+
+      <div class="class-mode-grid">
+
+        <!-- Online -->
+        <div class="class-mode-card fade-in" id="card-online-classes">
+          <div style="font-size:2.5rem;margin-bottom:1rem;">💻</div>
+          <h3>Online Classes</h3>
+          <p style="margin-bottom:1.5rem;">Live interactive sessions from anywhere. All you need is a mat, an internet connection, and the will to begin.</p>
+          <div class="notice" style="margin-bottom:1.5rem;">📅 Schedule to be announced — stay tuned!</div>
+          <div class="class-feature">Live sessions with real-time guidance</div>
+          <div class="class-feature">Recorded replays available</div>
+          <div class="class-feature">Small group batches for personal attention</div>
+          <div class="class-feature">All levels welcome — beginners to advanced</div>
+          <div class="class-feature">Join from anywhere in India</div>
+          <br/>
+          <a href="/contact" class="btn btn-primary">Notify Me</a>
+        </div>
+
+        <!-- Offline -->
+        <div class="class-mode-card fade-in fade-in-delay-1" id="card-offline-classes">
+          <div style="font-size:2.5rem;margin-bottom:1rem;">🏡</div>
+          <h3>Offline Classes</h3>
+          <p style="margin-bottom:1.5rem;">In-person yoga at our center in Pratap Nagar, Jaipur — a calm, dedicated space to deepen your practice.</p>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.88rem;color:var(--text-secondary);margin-bottom:1.5rem;">
+            <span>📍</span> Pratap Nagar, Jaipur, Rajasthan
+          </div>
+          <div class="class-feature">Morning &amp; evening batch options</div>
+          <div class="class-feature">Dedicated yoga space with props provided</div>
+          <div class="class-feature">Community atmosphere &amp; group energy</div>
+          <div class="class-feature">Individual corrections and guidance</div>
+          <div class="class-feature">Weekend workshops available</div>
+          <br/>
+          <a href="/contact" class="btn btn-primary">Book a Spot</a>
+        </div>
+
+      </div>
+
+      <!-- 1:1 Consultation -->
+      <div class="consultation-banner fade-in" id="card-consultation">
+        <div>
+          <span class="section-label">Personal Attention</span>
+          <h3>One-to-One Consultation</h3>
+          <p style="max-width:500px;">Get a personalised wellness assessment with Dr. Fareen Tak — covering your health goals, physical limitations, diet, and a custom yoga plan designed just for you.</p>
+        </div>
+        <a href="/contact?interest=consultation" class="btn btn-gold btn-lg" style="flex-shrink:0;">Book Consultation</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       TEACHER SECTION (preview)
+  ═══════════════════════════════════════════ -->
+  <section id="section-teacher" class="section-pad teacher-section">
+    <div class="container">
+      <div class="teacher-grid">
+
+        <!-- Photo -->
+        <div class="teacher-photo fade-in">
+          <div class="teacher-photo-frame">
+             <img src="/images/fareen.jpg" alt="Dr. Fareen Tak">
+          </div>
+          <div class="teacher-photo-badge">
+            <div style="font-size:0.7rem;color:var(--text-light);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.25rem;">Qualification</div>
+            <div style="font-weight:500;font-size:0.9rem;">BNYS Physician</div>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="teacher-info fade-in fade-in-delay-1">
+          <span class="section-label">Know Your Teacher</span>
+          <h2>Dr. Fareen Tak</h2>
+          <div class="divider-leaf"></div>
+          <p style="font-size:1.05rem;line-height:1.9;margin-bottom:2rem;">
+            Dr. Fareen Tak is a naturopath, yoga practitioner and integrative health educator with a deep commitment to holistic healing. With clinical training in naturopathy, yoga therapy and integrative medicine, she brings both scientific rigour and heart-centred compassion to every session.
+          </p>
+
+          <div class="teacher-credentials">
+            <div class="credential-item"><div class="credential-dot"></div><span>Bachelor of Naturopathy &amp; Yogic Sciences (BNYS)</span></div>
+            <div class="credential-item"><div class="credential-dot"></div><span>Diploma in Naturopathy and Yoga</span></div>
+            <div class="credential-item"><div class="credential-dot"></div><span>Certificate in Integrative Medicine</span></div>
+            <div class="credential-item"><div class="credential-dot"></div><span>Certificate in Yoga</span></div>
+          </div>
+
+          <br/>
+          <a href="/teacher" class="btn btn-outline">Full Profile →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       RETREAT SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="section-retreat" class="retreat-section">
+    <div class="container">
+      <div class="retreat-content fade-in">
+        <span class="retreat-eyebrow">✦ An Immersive Experience ✦</span>
+        <h2 class="retreat-title">Full Day<br/><em>Yoga Retreat</em></h2>
+        <p class="retreat-desc">
+          A complete day of self-discovery — sunrise meditation, pranayama, asana, mindful meals, and restorative yoga. A journey back to yourself.
+        </p>
+        <div class="retreat-coming-soon">Coming Soon</div>
+        <br/><br/>
+        <a href="/retreat" class="btn btn-outline" style="border-color:rgba(200,169,110,0.5);color:var(--accent-warm);">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       TESTIMONIALS
+  ═══════════════════════════════════════════ -->
+  <section id="section-testimonials" class="section-pad" style="background:var(--bg);">
+    <div class="container">
+      <div class="section-header centered fade-in">
+        <span class="section-label">Community Love</span>
+        <h2>What Our <span class="display-italic">Students Say</span></h2>
+        <div class="divider-leaf centered"></div>
+      </div>
+
+      <div class="testimonial-grid">
+
+        <div class="testimonial-card fade-in" id="testimonial-1">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Fareen's approach to breathing exercises completely changed how I handle anxiety. I feel more grounded than I have in years."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">👩</div>
+            <div><div class="testimonial-name">Priya Sharma</div><div class="testimonial-location">Jaipur</div></div>
+          </div>
+        </div>
+
+        <div class="testimonial-card fade-in fade-in-delay-1" id="testimonial-2">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"The 1:1 consultation was incredibly personalised. Dr. Fareen understood my back issues and designed a program that actually worked."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">👨</div>
+            <div><div class="testimonial-name">Rahul Meena</div><div class="testimonial-location">Pratap Nagar</div></div>
+          </div>
+        </div>
+
+        <div class="testimonial-card fade-in fade-in-delay-2" id="testimonial-3">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"I joined the online flexibility program not expecting much — but the live corrections and attention made all the difference."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">👩</div>
+            <div><div class="testimonial-name">Anjali Verma</div><div class="testimonial-location">Delhi</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       GET IN TOUCH (Contact Section on Home)
+  ═══════════════════════════════════════════ -->
+  <section id="section-contact" class="section-pad" style="background:var(--bg-alt);">
+    <div class="container-sm">
+      <div class="section-header centered fade-in">
+        <span class="section-label">Get in Touch</span>
+        <h2>Start Your <span class="display-italic">Journey</span></h2>
+        <div class="divider-leaf centered"></div>
+        <p>Have questions about classes, programs or the retreat? Reach out and we'll respond within 24 hours.</p>
+      </div>
+
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2.5rem;" class="fade-in">
+        <form id="contact-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="name">Full Name *</label>
+              <input class="form-input" type="text" id="name" name="name" placeholder="Your name" required autocomplete="name"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email">Email Address *</label>
+              <input class="form-input" type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email"/>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="phone">Phone Number</label>
+              <input class="form-input" type="tel" id="phone" name="phone" placeholder="+91 98765 43210" autocomplete="tel"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="interest">I'm interested in</label>
+              <select class="form-input form-select" id="interest" name="interest">
+                <option value="">Select an option</option>
+                <option value="online-class">Online Classes</option>
+                <option value="offline-class">Offline Classes</option>
+                <option value="consultation">1:1 Consultation</option>
+                <option value="retreat">Yoga Retreat</option>
+                <option value="other">General Enquiry</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="message">Message *</label>
+            <textarea class="form-textarea" id="message" name="message" placeholder="Tell us about your wellness goals or any questions you have..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Send Message 🌿</button>
+          <div id="form-message" class="form-message"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer injected by components.js -->
+  <div id="footer-placeholder"></div>
+
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

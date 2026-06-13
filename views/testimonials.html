@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Testimonials | Prana House</title>
+  <meta name="description" content="Real stories from Prana House students — how yoga and wellness transformed their lives."/>
+  <link rel="stylesheet" href="/css/style.css"/>
+  <style>
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.75rem;
+    }
+    .tcard {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: var(--transition);
+    }
+    .tcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: rgba(92,138,92,0.3); }
+    .tcard-stars { color: var(--accent-warm); letter-spacing: 3px; font-size: 0.9rem; }
+    .tcard-text { font-size: 0.95rem; font-style: italic; color: var(--text-secondary); line-height: 1.8; flex: 1; }
+    .tcard-author { display: flex; align-items: center; gap: 0.75rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+    .tcard-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(92,138,92,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .tcard-name { font-weight: 500; font-size: 0.9rem; }
+    .tcard-location { font-size: 0.78rem; color: var(--text-light); }
+    .tcard-program {
+      display: inline-block; font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent); background: rgba(92,138,92,0.1);
+      padding: 0.2rem 0.65rem; border-radius: 50px;
+    }
+    .submit-box {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      max-width: 640px;
+      margin: 4rem auto 0;
+    }
+    .form-message { padding: 0.85rem 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; margin-top: 1rem; display: none; }
+    .form-message.success { background: rgba(92,138,92,0.12); color: var(--accent-deep); border: 1px solid rgba(92,138,92,0.3); }
+    .form-message.error { background: rgba(201,90,90,0.1); color: #b94040; border: 1px solid rgba(201,90,90,0.3); }
+    #loading-state { text-align: center; padding: 3rem; color: var(--text-light); font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="section-label">Community Stories</span>
+      <h1>Student <span class="display-italic">Testimonials</span></h1>
+      <p>Real experiences from real people — transformation one breath at a time.</p>
+    </div>
+  </div>
+
+  <section class="section-pad" style="background:var(--bg);" id="section-testimonials">
+    <div class="container">
+      <div id="loading-state">Loading stories... 🌿</div>
+      <div class="testimonials-grid" id="testimonials-grid" style="display:none;"></div>
+
+      <!-- Submit Your Story -->
+      <div class="submit-box fade-in" id="section-submit-testimonial">
+        <span class="section-label">Share Your Journey</span>
+        <h3 style="font-size:1.6rem;margin-bottom:0.5rem;">Submit Your Story</h3>
+        <p style="margin-bottom:1.75rem;">Your experience might be exactly what someone else needs to hear.</p>
+        <form id="testimonial-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Your Name *</label>
+              <input class="form-input" type="text" name="name" placeholder="Full name" required/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Location</label>
+              <input class="form-input" type="text" name="location" placeholder="City, State"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Program / Class</label>
+            <select class="form-input form-select" name="program">
+              <option value="">Select program</option>
+              <option>Guided Meditation</option>
+              <option>Breathing Exercises</option>
+              <option>Flexibility Training</option>
+              <option>Stress Relief</option>
+              <option>1:1 Consultation</option>
+              <option>General Classes</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rating</label>
+            <select class="form-input form-select" name="rating">
+              <option value="5">★★★★★ — Excellent</option>
+              <option value="4">★★★★☆ — Great</option>
+              <option value="3">★★★☆☆ — Good</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your Experience *</label>
+            <textarea class="form-textarea" name="message" placeholder="Share how Prana House helped you..." required style="min-height:120px;"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Submit Story 🌿</button>
+          <div id="testimonial-msg" class="form-message"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    // Load testimonials from API
+    async function loadTestimonials() {
+      const grid = document.getElementById('testimonials-grid');
+      const loader = document.getElementById('loading-state');
+      try {
+        const res = await fetch('/api/testimonials');
+        const data = await res.json();
+        loader.style.display = 'none';
+        grid.style.display = 'grid';
+        if (!data.length) {
+          grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-light);">No testimonials yet — be the first to share your story! 🌿</div>`;
+          return;
+        }
+        grid.innerHTML = data.map(t => `
+          <div class="tcard fade-in">
+            <div class="tcard-stars">${'★'.repeat(t.rating || 5)}</div>
+            <p class="tcard-text">"${t.message}"</p>
+            <div class="tcard-author">
+              <div class="tcard-avatar">👤</div>
+              <div>
+                <div class="tcard-name">${t.name}</div>
+                <div class="tcard-location">${t.location || 'Jaipur'}</div>
+              </div>
+              ${t.program ? `<span class="tcard-program" style="margin-left:auto;">${t.program}</span>` : ''}
+            </div>
+          </div>
+        `).join('');
+        // Re-trigger fade-in
+        document.querySelectorAll('.tcard.fade-in').forEach(el => {
+          setTimeout(() => el.classList.add('visible'), 50);
+        });
+      } catch {
+        loader.textContent = 'Could not load testimonials.';
+      }
+    }
+    loadTestimonials();
+
+    // Submit testimonial form
+    document.getElementById('testimonial-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('[type="submit"]');
+      const msg = document.getElementById('testimonial-msg');
+      btn.disabled = true; btn.textContent = 'Submitting...';
+      try {
+        const res = await fetch('/api/testimonials', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
+        });
+        const data = await res.json();
+        msg.className = 'form-message ' + (data.success ? 'success' : 'error');
+        msg.textContent = data.success ? '🌿 Thank you! Your story will appear after review.' : (data.error || 'Something went wrong.');
+        msg.style.display = 'block';
+        if (data.success) e.target.reset();
+      } catch { msg.className = 'form-message error'; msg.textContent = 'Network error.'; msg.style.display = 'block'; }
+      btn.disabled = false; btn.textContent = 'Submit Story 🌿';
+    });
+  </script>
+</body>
+</html>
