@@ -160,7 +160,7 @@ app.get('/api/admin/subscribers', (req, res) => {
 
 // ── Testimonials API ─────────────────────────────────────────────────────────
 
-// Get approved testimonials (public)
+// Get approved testimonials only (public)
 app.get('/api/testimonials', async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -215,6 +215,42 @@ app.get('/api/gallery', async (req, res) => {
   }
 });
 
+// ── Blog API ──────────────────────────────────────────────────────────────────
+
+// Get all published blog posts
+app.get('/api/blog', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('blog_posts')
+      .select('id, title, slug, excerpt, category, emoji, author, read_time, published_at')
+      .eq('published', true)
+      .order('published_at', { ascending: false });
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    console.error('BLOG GET ERROR:', err);
+    res.json([]);
+  }
+});
+
+// Get single blog post by slug
+app.get('/api/blog/:slug', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('blog_posts')
+      .select('*')
+      .eq('slug', req.params.slug)
+      .eq('published', true)
+      .single();
+    if (error) throw error;
+    res.json(data || null);
+  } catch (err) {
+    console.error('BLOG SINGLE ERROR:', err);
+    res.status(404).json(null);
+  }
+});
+
+// ── 404 ───────────────────────────────────────────────────────────────────────
 // 404
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blog | Prana House</title>
+  <link rel="stylesheet" href="/css/style.css"/>
+  <style>
+    .post-hero { background: var(--bg-alt); padding: 8rem 0 4rem; border-bottom: 1px solid var(--border); }
+    .post-meta { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1.5rem; font-size:0.82rem; color:var(--text-light); }
+    .post-body { max-width: 720px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+    .post-body h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; }
+    .post-body h3 { font-size: 1.3rem; margin: 2rem 0 0.75rem; }
+    .post-body p { font-size: 1rem; line-height: 1.9; color: var(--text-secondary); margin-bottom: 1.25rem; }
+    .post-body ul, .post-body ol { padding-left: 1.5rem; margin-bottom: 1.25rem; }
+    .post-body li { font-size: 1rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 0.4rem; }
+    .post-body ul li { list-style: disc; }
+    .post-body ol li { list-style: decimal; }
+    .post-body blockquote { border-left: 3px solid var(--accent); padding: 1rem 1.5rem; margin: 2rem 0; background: rgba(92,138,92,0.05); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-style: italic; font-family: var(--font-display); font-size: 1.2rem; }
+    .post-cover { width:100%; max-height:420px; object-fit:cover; border-radius:var(--radius); margin-bottom:2.5rem; }
+    .post-emoji-cover { height:220px; background:var(--surface); border-radius:var(--radius); display:flex;align-items:center;justify-content:center;font-size:6rem;margin-bottom:2.5rem; }
+    .back-link { display:inline-flex; align-items:center; gap:0.5rem; color:var(--accent); font-size:0.88rem; margin-bottom:2rem; }
+    .back-link:hover { text-decoration:underline; }
+    #loading-state { text-align:center; padding:5rem; color:var(--text-light); }
+    #not-found { text-align:center; padding:5rem; }
+  </style>
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+  <div id="loading-state">Loading article... 🌿</div>
+  <div id="post-container" style="display:none;"></div>
+  <div id="not-found" style="display:none;">
+    <h2>Article not found</h2>
+    <a href="/blog" class="btn btn-primary" style="margin-top:1.5rem;">← Back to Blog</a>
+  </div>
+  <div id="footer-placeholder"></div>
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    (async function() {
+      const slug = window.location.pathname.split('/blog/')[1];
+      const loader = document.getElementById('loading-state');
+      const container = document.getElementById('post-container');
+      const notFound = document.getElementById('not-found');
+      try {
+        const res = await fetch('/api/blog/' + slug);
+        const post = await res.json();
+        loader.style.display = 'none';
+        if (!post) { notFound.style.display = 'block'; return; }
+        // Update page title
+        document.title = post.title + ' | Prana House';
+        container.style.display = 'block';
+        container.innerHTML = `
+          <div class="post-hero">
+            <div class="container-sm">
+              <a href="/blog" class="back-link">← Back to Blog</a>
+              <span class="blog-category" style="display:inline-block;font-size:0.7rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);background:rgba(92,138,92,0.1);padding:0.25rem 0.75rem;border-radius:50px;margin-bottom:1rem;">${post.category || 'Wellness'}</span>
+              <h1 style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:1rem;">${post.title}</h1>
+              <div class="post-meta">
+                <span>✍️ ${post.author || 'Dr. Fareen Tak'}</span>
+                ${post.read_time ? `<span>⏱ ${post.read_time} min read</span>` : ''}
+                ${post.published_at ? `<span>📅 ${new Date(post.published_at).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</span>` : ''}
+              </div>
+            </div>
+          </div>
+          <div class="post-body">
+            ${post.cover_image
+              ? `<img class="post-cover" src="${post.cover_image}" alt="${post.title}"/>`
+              : `<div class="post-emoji-cover">${post.emoji || '🌿'}</div>`}
+            <div id="post-content">${post.content || '<p>Content coming soon.</p>'}</div>
+            <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+              <a href="/blog" class="btn btn-outline">← All Articles</a>
+              <a href="/contact" class="btn btn-primary">Book a Class 🌿</a>
+            </div>
+          </div>
+        `;
+      } catch {
+        loader.style.display = 'none';
+        notFound.style.display = 'block';
+      }
+    })();
+  </script>
+</body>
+</html>

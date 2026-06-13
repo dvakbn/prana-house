@@ -344,7 +344,7 @@
         <!-- Photo -->
         <div class="teacher-photo fade-in">
           <div class="teacher-photo-frame">
-             <img src="/images/fareen.jpg" alt="Dr. Fareen Tak">
+            <img src="/images/fareen.jpg" alt="Dr. Fareen Tak"/>
           </div>
           <div class="teacher-photo-badge">
             <div style="font-size:0.7rem;color:var(--text-light);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.25rem;">Qualification</div>
@@ -405,35 +405,12 @@
         <div class="divider-leaf centered"></div>
       </div>
 
-      <div class="testimonial-grid">
-
-        <div class="testimonial-card fade-in" id="testimonial-1">
-          <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"Fareen's approach to breathing exercises completely changed how I handle anxiety. I feel more grounded than I have in years."</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">👩</div>
-            <div><div class="testimonial-name">Priya Sharma</div><div class="testimonial-location">Jaipur</div></div>
-          </div>
-        </div>
-
-        <div class="testimonial-card fade-in fade-in-delay-1" id="testimonial-2">
-          <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"The 1:1 consultation was incredibly personalised. Dr. Fareen understood my back issues and designed a program that actually worked."</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">👨</div>
-            <div><div class="testimonial-name">Rahul Meena</div><div class="testimonial-location">Pratap Nagar</div></div>
-          </div>
-        </div>
-
-        <div class="testimonial-card fade-in fade-in-delay-2" id="testimonial-3">
-          <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"I joined the online flexibility program not expecting much — but the live corrections and attention made all the difference."</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">👩</div>
-            <div><div class="testimonial-name">Anjali Verma</div><div class="testimonial-location">Delhi</div></div>
-          </div>
-        </div>
-
+      <div class="testimonial-grid" id="home-testimonials-grid">
+        <!-- Loaded from Supabase (approved=true) -->
+        <div class="testimonial-card fade-in" style="grid-column:1/-1;text-align:center;color:var(--text-light);padding:2rem;">Loading stories... 🌿</div>
+      </div>
+      <div style="text-align:center;margin-top:2.5rem;">
+        <a href="/testimonials" class="btn btn-outline">Read All Stories →</a>
       </div>
     </div>
   </section>
@@ -495,5 +472,39 @@
 
   <script src="/js/components.js"></script>
   <script src="/js/main.js"></script>
+  <script>
+    // Load approved testimonials from Supabase into homepage section (max 3)
+    (async function loadHomeTestimonials() {
+      const grid = document.getElementById('home-testimonials-grid');
+      try {
+        const res = await fetch('/api/testimonials');
+        const data = await res.json();
+        if (!data.length) {
+          grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--text-light);padding:2rem;">Be the first to share your story! 🌿</div>`;
+          return;
+        }
+        // Show max 3
+        const top = data.slice(0, 3);
+        grid.innerHTML = top.map((t, i) => `
+          <div class="testimonial-card fade-in fade-in-delay-${i}" id="testimonial-${i+1}">
+            <div class="testimonial-stars">${'★'.repeat(t.rating||5)}${'☆'.repeat(5-(t.rating||5))}</div>
+            <p class="testimonial-text">"${t.message}"</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar" style="background:rgba(92,138,92,0.1);border-radius:50%;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🧘</div>
+              <div>
+                <div class="testimonial-name">${t.name}</div>
+                <div class="testimonial-location">${t.location || 'Jaipur'}${t.program ? ' · ' + t.program : ''}</div>
+              </div>
+            </div>
+          </div>
+        `).join('');
+        setTimeout(() => {
+          grid.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+        }, 50);
+      } catch {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--text-light);padding:2rem;">Could not load testimonials.</div>`;
+      }
+    })();
+  </script>
 </body>
 </html>
