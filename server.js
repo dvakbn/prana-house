@@ -56,6 +56,11 @@ app.get('/gallery', (req, res) => res.sendFile(path.join(__dirname, 'views', 'ga
 // Testimonials
 app.get('/testimonials', (req, res) => res.sendFile(path.join(__dirname, 'views', 'testimonials.html')));
 
+// Legal Pages
+app.get('/privacy-policy', (req, res) => res.sendFile(path.join(__dirname, 'views', 'privacy-policy.html')));
+app.get('/terms', (req, res) => res.sendFile(path.join(__dirname, 'views', 'terms.html')));
+app.get('/refund-policy', (req, res) => res.sendFile(path.join(__dirname, 'views', 'refund-policy.html')));
+
 // ─── API ROUTES ──────────────────────────────────────────────────────────────
 
 // Contact form submission
@@ -149,6 +154,62 @@ app.get('/api/admin/subscribers', (req, res) => {
   try {
     res.json(JSON.parse(fs.readFileSync(dataPath, 'utf8')));
   } catch (e) {
+    res.json([]);
+  }
+});
+
+// ── Testimonials API ─────────────────────────────────────────────────────────
+
+// Get all testimonials (public)
+app.get('/api/testimonials', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('testimonials')
+      .select('name, location, program, rating, message')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    console.error('TESTIMONIALS GET ERROR:', err);
+    res.json([]);
+  }
+});
+
+// Submit a new testimonial (pending approval)
+app.post('/api/testimonials', async (req, res) => {
+  try {
+    const { name, location, program, rating, message } = req.body;
+    if (!name || !message) {
+      return res.status(400).json({ success: false, error: 'Name and message are required.' });
+    }
+    const { error } = await supabase
+      .from('testimonials')
+      .insert([{ name, location: location || '', program: program || '', rating: parseInt(rating) || 5, message, approved: true }]);
+    if (error) throw error;
+    res.json({ success: true, message: 'Thank you! Your story will appear after review.' });
+  } catch (err) {
+    console.error('TESTIMONIALS POST ERROR:', err);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
+// ── Gallery API ───────────────────────────────────────────────────────────────
+
+// Get all gallery items (public)
+app.get('/api/gallery', async (req, res) => {
+  try {
+    const { category } = req.query;
+    let query = supabase
+      .from('gallery')
+      .select('url, caption, category, alt')
+      .eq('visible', true)
+      .order('sort_order', { ascending: true });
+    if (category && category !== 'all') query = query.eq('category', category);
+    const { data, error } = await query;
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    console.error('GALLERY GET ERROR:', err);
     res.json([]);
   }
 });
