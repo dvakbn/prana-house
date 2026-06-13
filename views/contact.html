@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us | Prana House Yoga, Jaipur</title>
+  <meta name="description" content="Get in touch with Prana House. Book a yoga class, ask about programs, or schedule a 1:1 consultation with Dr. Fareen Tak in Pratap Nagar, Jaipur."/>
+  <link rel="stylesheet" href="/css/style.css"/>
+  <style>
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .contact-info-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      position: sticky;
+      top: 90px;
+    }
+    .info-row {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.25rem 0; border-bottom: 1px solid var(--border);
+    }
+    .info-row:last-of-type { border-bottom: none; }
+    .info-icon {
+      width: 42px; height: 42px;
+      background: rgba(92,138,92,0.1);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .info-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.25rem; }
+    .info-value { font-size: 0.95rem; color: var(--text-primary); }
+    .map-placeholder {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      height: 200px;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 0.5rem;
+      margin-top: 1.5rem;
+      color: var(--text-light); font-size: 0.88rem;
+    }
+    .form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+    }
+    .form-message { padding: 0.85rem 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; margin-top: 1rem; display: none; }
+    .form-message.success { background: rgba(92,138,92,0.12); color: var(--accent-deep); border: 1px solid rgba(92,138,92,0.3); }
+    .form-message.error { background: rgba(201,90,90,0.1); color: #b94040; border: 1px solid rgba(201,90,90,0.3); }
+    .hours-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0.5rem; margin-top: 1rem;
+    }
+    .hours-row { font-size: 0.82rem; color: var(--text-secondary); }
+    .hours-row strong { color: var(--text-primary); font-weight: 500; }
+    @media (max-width: 768px) {
+      .contact-grid { grid-template-columns: 1fr; }
+      .contact-info-card { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="section-label">Reach Out</span>
+      <h1>Get in <span class="display-italic">Touch</span></h1>
+      <p>We'd love to hear from you — whether you have a question, want to book a class, or simply want to say hello.</p>
+    </div>
+  </div>
+
+  <section class="section-pad" style="background:var(--bg);">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- Left: Info -->
+        <div class="fade-in">
+          <div class="contact-info-card">
+            <h3 style="font-size:1.4rem;margin-bottom:1.5rem;">Find Us</h3>
+
+            <div class="info-row">
+              <div class="info-icon">📍</div>
+              <div>
+                <div class="info-label">Location</div>
+                <div class="info-value">Pratap Nagar, Jaipur<br/>Rajasthan, India</div>
+              </div>
+            </div>
+
+            <div class="info-row">
+              <div class="info-icon">✉️</div>
+              <div>
+                <div class="info-label">Email</div>
+                <div class="info-value"><a href="mailto:hello@pranahouse.in" style="color:var(--accent);">hello@pranahouse.in</a></div>
+              </div>
+            </div>
+
+            <div class="info-row">
+              <div class="info-icon">📞</div>
+              <div>
+                <div class="info-label">Phone / WhatsApp</div>
+                <div class="info-value"><a href="tel:+919999999999" style="color:var(--accent);">+91 99999 99999</a></div>
+              </div>
+            </div>
+
+            <div class="info-row">
+              <div class="info-icon">🕐</div>
+              <div>
+                <div class="info-label">Hours</div>
+                <div class="hours-grid">
+                  <div class="hours-row"><strong>Mon–Sat</strong></div>
+                  <div class="hours-row">6:00 AM – 8:00 PM</div>
+                  <div class="hours-row"><strong>Sunday</strong></div>
+                  <div class="hours-row">7:00 AM – 12:00 PM</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Map placeholder -->
+            <div class="map-placeholder">
+              <span style="font-size:2rem;">🗺️</span>
+              <span>Pratap Nagar, Jaipur</span>
+              <a href="https://maps.google.com/?q=Pratap+Nagar,+Jaipur" target="_blank" class="btn btn-outline btn-sm" style="margin-top:0.5rem;">Open in Google Maps</a>
+            </div>
+
+            <!-- Social -->
+            <div style="margin-top:1.75rem;">
+              <div class="info-label" style="margin-bottom:0.75rem;">Follow Us</div>
+              <div class="footer-social">
+                <a href="https://www.instagram.com/between2breath/" target="_blank" class="social-btn" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+                <a href="https://wa.me/919599839737?text=Hello%2C%20I%20want%20to%20know%20more%20about%20Prana%20House%20%F0%9F%8C%BF" target="_blank" class="social-btn" aria-label="WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+                <a href="https://www.youtube.com/@between2breath" target="_blank" class="social-btn" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                <a href="https://www.facebook.com/between2breath" target="_blank" class="social-btn" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="fade-in fade-in-delay-1">
+          <div class="form-card">
+            <h3 style="font-size:1.6rem;margin-bottom:0.5rem;">Send Us a Message</h3>
+            <p style="margin-bottom:2rem;">Fill in the details below and we'll get back to you within 24 hours.</p>
+
+            <form id="contact-form">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="name">Full Name *</label>
+                  <input class="form-input" type="text" id="name" name="name" placeholder="Your full name" required autocomplete="name"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="email">Email Address *</label>
+                  <input class="form-input" type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email"/>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="phone">Phone / WhatsApp</label>
+                  <input class="form-input" type="tel" id="phone" name="phone" placeholder="+91 98765 43210" autocomplete="tel"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="interest">I'm Interested In</label>
+                  <select class="form-input form-select" id="interest" name="interest">
+                    <option value="">Select an option</option>
+                    <option value="online-class">Online Classes</option>
+                    <option value="offline-class">Offline Classes (Jaipur)</option>
+                    <option value="consultation">1:1 Consultation with Dr. Fareen</option>
+                    <option value="meditation">Guided Meditation Program</option>
+                    <option value="breathing">Breathing Exercises Program</option>
+                    <option value="flexibility">Flexibility Training</option>
+                    <option value="stress-relief">Stress Relief Program</option>
+                    <option value="retreat">Yoga Retreat (Coming Soon)</option>
+                    <option value="other">General Enquiry</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="message">Message *</label>
+                <textarea class="form-textarea" id="message" name="message" placeholder="Tell us about your wellness goals, any health concerns, or questions you have about our programs..." required style="min-height:160px;"></textarea>
+              </div>
+
+              <div class="form-group" style="display:flex;align-items:center;gap:0.75rem;">
+                <input type="checkbox" id="consent" name="consent" style="width:16px;height:16px;accent-color:var(--accent);"/>
+                <label for="consent" style="font-size:0.82rem;color:var(--text-secondary);">I agree to be contacted by Prana House regarding my enquiry.</label>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">
+                Send Message 🌿
+              </button>
+              <div id="form-message" class="form-message"></div>
+            </form>
+          </div>
+
+          <!-- FAQ quick links -->
+          <div style="margin-top:2rem;padding:1.75rem;background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--radius);">
+            <h4 style="font-size:1rem;margin-bottom:1rem;">Common Questions</h4>
+            <div style="display:flex;flex-direction:column;gap:0.6rem;">
+              <a href="/classes" style="font-size:0.88rem;color:var(--accent);display:flex;align-items:center;gap:0.5rem;">→ What classes do you offer?</a>
+              <a href="/teacher" style="font-size:0.88rem;color:var(--accent);display:flex;align-items:center;gap:0.5rem;">→ Who is the teacher?</a>
+              <a href="/programs" style="font-size:0.88rem;color:var(--accent);display:flex;align-items:center;gap:0.5rem;">→ Are classes suitable for beginners?</a>
+              <a href="/retreat" style="font-size:0.88rem;color:var(--accent);display:flex;align-items:center;gap:0.5rem;">→ When is the retreat happening?</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    // Pre-select interest from URL query param or referrer page
+    const params = new URLSearchParams(window.location.search);
+    let interest = params.get('interest');
+    
+    // If no URL param, detect from referrer
+    if (!interest) {
+      const referrer = document.referrer || '';
+      if (referrer.includes('/retreat')) {
+        interest = 'retreat';
+      } else if (referrer.includes('/teacher')) {
+        interest = 'consultation';
+      } else if (referrer.includes('/classes')) {
+        interest = 'offline-class';
+      } else if (referrer.includes('/programs')) {
+        interest = 'online-class';
+      }
+    }
+    
+    if (interest) {
+      const sel = document.getElementById('interest');
+      if (sel) {
+        for (let opt of sel.options) {
+          if (opt.value === interest) { opt.selected = true; break; }
+        }
+      }
+    }
+  </script>
+</body>
+</html>
