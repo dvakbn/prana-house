@@ -7,6 +7,9 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY
 );
 
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -73,6 +76,8 @@ app.post('/api/contact', async (req, res) => {
         error: 'Name, email and message are required.'
       });
     }
+    
+    // Save to Supabase
     const { error } = await supabase
       .from('enquiries')
       .insert([
@@ -86,6 +91,37 @@ app.post('/api/contact', async (req, res) => {
         }
       ]);
     if (error) throw error;
+
+    // Send confirmation email to user
+    await resend.emails.send({
+      from: 'Prana House <onboarding@resend.dev>',
+      to: email,
+      subject: 'We Received Your Message - Prana House',
+      html: `
+        <h2>Hello ${name},</h2>
+        <p>Thank you for reaching out to Prana House! We've received your message and will get back to you within 24 hours.</p>
+        <p><strong>Your Interest:</strong> ${interest || 'General Enquiry'}</p>
+        <p>In the meantime, feel free to explore our <a href="https://prana-house.local/programs">programs</a> or check out our <a href="https://prana-house.local/blog">wellness blog</a>.</p>
+        <p>Namaste,<br/>The Prana House Team 🌿</p>
+      `
+    });
+
+    // Send notification email to admin
+    await resend.emails.send({
+      from: 'Prana House <onboarding@resend.dev>',
+      to: 'hello@pranahouse.in',
+      subject: `New Contact: ${name} - ${interest || 'General Enquiry'}`,
+      html: `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
+        <p><strong>Interest:</strong> ${interest || 'General Enquiry'}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
+      `
+    });
+
     res.json({
       success: true,
       message: 'Thank you! We will get back to you within 24 hours.'
@@ -123,6 +159,17 @@ app.post('/api/newsletter', async (req, res) => {
     if (error) {
       // Handle duplicate emails gracefully
       if (error.code === '23505') {
+        // Send email anyway for returning subscribers
+        await resend.emails.send({
+          from: 'Prana House <onboarding@resend.dev>',
+          to: email,
+          subject: 'Welcome Back to Prana House Newsletter',
+          html: `
+            <h2>Welcome Back!</h2>
+            <p>You're already subscribed to the Prana House newsletter. Check your inbox for our latest wellness tips, class updates, and retreat announcements.</p>
+            <p>Namaste,<br/>The Prana House Team 🌿</p>
+          `
+        });
         return res.json({
           success: true,
           message: 'You are already subscribed!'
@@ -131,6 +178,25 @@ app.post('/api/newsletter', async (req, res) => {
 
       throw error;
     }
+
+    // Send welcome email to new subscriber
+    await resend.emails.send({
+      from: 'Prana House <onboarding@resend.dev>',
+      to: email,
+      subject: 'Welcome to Prana House Newsletter 🌿',
+      html: `
+        <h2>Welcome to Prana House!</h2>
+        <p>Thank you for subscribing to our wellness newsletter. You'll now receive:</p>
+        <ul>
+          <li>Weekly wellness tips and yoga insights</li>
+          <li>Exclusive class updates and schedules</li>
+          <li>Retreat announcements and special offers</li>
+          <li>Mindfulness practices and breathing exercises</li>
+        </ul>
+        <p>Our next newsletter arrives this week. Stay tuned!</p>
+        <p>Namaste,<br/>The Prana House Team 🌿</p>
+      `
+    });
 
     res.json({
       success: true,
@@ -187,6 +253,24 @@ app.post('/api/testimonials', async (req, res) => {
       .from('testimonials')
       .insert([{ name, location: location || '', program: program || '', rating: parseInt(rating) || 5, message, approved: false }]);
     if (error) throw error;
+
+    // Send confirmation email to user
+    await resend.emails.send({
+      from: 'Prana House <onboarding@resend.dev>',
+      to: 'hello@pranahouse.in',
+      subject: `New Testimonial from ${name} - Pending Review`,
+      html: `
+        <h2>New Testimonial Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Location:</strong> ${location || 'Not provided'}</p>
+        <p><strong>Program:</strong> ${program || 'General'}</p>
+        <p><strong>Rating:</strong> ${'⭐'.repeat(parseInt(rating) || 5)}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
+        <p>Review and approve in your Supabase dashboard.</p>
+      `
+    });
+
     res.json({ success: true, message: 'Thank you! Your story will appear after review.' });
   } catch (err) {
     console.error('TESTIMONIALS POST ERROR:', err);
