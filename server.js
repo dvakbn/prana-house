@@ -179,10 +179,10 @@ app.post('/api/contact', async (req, res) => {
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
             <tr>
               <td style="padding:4px 8px 4px 0;" width="50%">
-                <a href="https://pranahouse.in/programs" style="display:block;text-align:center;padding:12px;background:#5C8A5C;color:#fff;text-decoration:none;border-radius:8px;font-size:13px;font-weight:500;">Explore Programs</a>
+                <a href="https://prana-house-beige.vercel.app/classes" style="display:block;text-align:center;padding:12px;background:#5C8A5C;color:#fff;text-decoration:none;border-radius:8px;font-size:13px;font-weight:500;">Explore Programs</a>
               </td>
               <td style="padding:4px 0 4px 8px;" width="50%">
-                <a href="https://pranahouse.in/blog" style="display:block;text-align:center;padding:12px;background:#F2EFE9;color:#5C8A5C;text-decoration:none;border-radius:8px;font-size:13px;font-weight:500;border:1px solid #DDD8CE;">Wellness Blog</a>
+                <a href="https://prana-house-beige.vercel.app/blog" style="display:block;text-align:center;padding:12px;background:#F2EFE9;color:#5C8A5C;text-decoration:none;border-radius:8px;font-size:13px;font-weight:500;border:1px solid #DDD8CE;">Wellness Blog</a>
               </td>
             </tr>
           </table>
@@ -296,7 +296,7 @@ app.post('/api/newsletter', async (req, res) => {
             <div style="background:#F2EFE9;border-radius:10px;padding:20px 24px;margin-bottom:24px;border-left:3px solid #C8A96E;">
               <p style="margin:0;font-size:14px;color:#6B6560;font-style:italic;font-family:Georgia,serif;">"You don't have to be perfect to begin. You just have to begin."</p>
             </div>
-            <a href="https://pranahouse.in/classes" style="display:inline-block;padding:12px 24px;background:#5C8A5C;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:500;">Explore Our Classes</a>
+            <a href="https://prana-house-beige.vercel.app/classes" style="display:inline-block;padding:12px 24px;background:#5C8A5C;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:500;">Explore Our Classes</a>
           `)
         });
       } catch (resendError) {
@@ -329,7 +329,7 @@ app.post('/api/newsletter', async (req, res) => {
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
               <td style="padding:0 8px 0 0;" width="50%">
-                <a href="https://pranahouse.in/classes" style="display:block;text-align:center;padding:13px;background:#5C8A5C;color:#fff;text-decoration:none;border-radius:8px;font-size:13px;font-weight:500;">Explore Classes</a>
+                <a href="https://prana-house-beige.vercel.app/classes" style="display:block;text-align:center;padding:13px;background:#5C8A5C;color:#fff;text-decoration:none;border-radius:8px;font-size:13px;font-weight:500;">Explore Classes</a>
               </td>
               <td style="padding:0 0 0 8px;" width="50%">
                 <a href="https://wa.me/919599839737?text=Hello%2C%20I%20want%20to%20know%20more%20about%20Prana%20House%20%F0%9F%8C%BF" style="display:block;text-align:center;padding:13px;background:#F2EFE9;color:#5C8A5C;text-decoration:none;border-radius:8px;font-size:13px;font-weight:500;border:1px solid #DDD8CE;">WhatsApp Us</a>
