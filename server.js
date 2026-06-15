@@ -9,7 +9,7 @@ const supabase = createClient(
 const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Prana House <onboarding@resend.dev>';
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Prana House <hello@pranayoga.qzz.io>';
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'hello@pranahouse.in';
 
 // ── Shared Email Template ─────────────────────────────────────────────────────
