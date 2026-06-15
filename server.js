@@ -53,7 +53,7 @@ function emailTemplate(bodyContent) {
           <td style="background:#F2EFE9;padding:24px 40px;text-align:center;border-top:1px solid #DDD8CE;">
             <p style="margin:0 0 8px;font-size:12px;color:#9B958E;">Pratap Nagar, Jaipur, Rajasthan, India</p>
             <p style="margin:0 0 8px;font-size:12px;color:#9B958E;">
-              <a href="mailto:hello@pranahouse.in" style="color:#5C8A5C;text-decoration:none;">hello@pranahouse.in</a>
+              <a href="mailto:hello@pranayoga.qzz.io" style="color:#5C8A5C;text-decoration:none;">hello@pranayoga.qzz.io</a>
               &nbsp;·&nbsp;
               <a href="https://wa.me/919599839737" style="color:#5C8A5C;text-decoration:none;">WhatsApp</a>
               &nbsp;·&nbsp;
