@@ -206,32 +206,48 @@
 <body>
   <div id="navbar-placeholder"></div>
 
-  <div class="page-hero">
-    <div class="container">
-      <span class="section-label">Join Us</span>
-      <h1>Our <span class="display-italic">Classes</span></h1>
-      <p>Online and offline yoga sessions designed for all levels — from your first breath to deepening practice.</p>
-    </div>
-  </div>
-
-  <!-- Dynamic Classes Section -->
-  <section class="section-pad" style="background:var(--bg-alt);" id="dynamic-classes-section">
+  <!-- Online Classes Section -->
+  <section class="section-pad" style="background:var(--bg);padding-top:8rem;" id="online-classes-section">
     <div class="container">
       <div class="section-header centered fade-in">
-        <span class="section-label">Currently Available</span>
-        <h2>Join Our <span class="display-italic">Classes</span></h2>
-        <p style="max-width:600px;margin:1rem auto 0;color:var(--text-secondary);">All our classes are designed for small groups to ensure personalized attention and guidance.</p>
+        <span class="section-label">💻 Learn From Home</span>
+        <h2>Online <span class="display-italic">Classes</span></h2>
+        <div class="divider-leaf centered"></div>
+        <p style="max-width:600px;margin:1rem auto 0;color:var(--text-secondary);">Live interactive yoga sessions from the comfort of your home. Small groups, personal attention.</p>
       </div>
-      <div id="classes-loading" style="text-align:center;padding:3rem;color:var(--text-light);">
-        <div style="font-size:2rem;margin-bottom:0.5rem;">🌿</div>
-        <div>Loading classes...</div>
+      <div id="online-loading" style="text-align:center;padding:3rem;color:var(--text-light);">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">💻</div>
+        <div>Loading online classes...</div>
       </div>
-      <div id="classes-grid" style="display:none;margin-top:2rem;"></div>
-      <div id="no-classes" style="display:none;text-align:center;padding:3rem;">
-        <div style="font-size:2.5rem;margin-bottom:1rem;">🧘</div>
-        <h3 style="font-size:1.3rem;margin-bottom:0.5rem;">Classes Coming Soon</h3>
-        <p style="color:var(--text-secondary);max-width:500px;margin:0 auto 2rem;">We're preparing our class schedule. Contact us to be notified when registration opens.</p>
-        <a href="/contact?interest=classes" class="btn btn-primary">Get Notified</a>
+      <div id="online-grid" style="display:none;margin-top:2rem;"></div>
+      <div id="no-online" style="display:none;text-align:center;padding:3rem;">
+        <div style="font-size:2.5rem;margin-bottom:1rem;">💻</div>
+        <h3 style="font-size:1.3rem;margin-bottom:0.5rem;">Online Classes Coming Soon</h3>
+        <p style="color:var(--text-secondary);max-width:500px;margin:0 auto 2rem;">We're preparing our online class schedule. Contact us to be notified when registration opens.</p>
+        <a href="/contact?interest=online-classes" class="btn btn-primary">Get Notified</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Offline Classes Section -->
+  <section class="section-pad" style="background:var(--bg-alt);" id="offline-classes-section">
+    <div class="container">
+      <div class="section-header centered fade-in">
+        <span class="section-label">🏡 In-Person Sessions</span>
+        <h2>Offline <span class="display-italic">Classes</span></h2>
+        <div class="divider-leaf centered"></div>
+        <p style="max-width:600px;margin:1rem auto 0;color:var(--text-secondary);">Join us at Prana House, Pratap Nagar, Jaipur for personalized in-person yoga sessions.</p>
+      </div>
+      <div id="offline-loading" style="text-align:center;padding:3rem;color:var(--text-light);">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">🏡</div>
+        <div>Loading offline classes...</div>
+      </div>
+      <div id="offline-grid" style="display:none;margin-top:2rem;"></div>
+      <div id="no-offline" style="display:none;text-align:center;padding:3rem;">
+        <div style="font-size:2.5rem;margin-bottom:1rem;">🏡</div>
+        <h3 style="font-size:1.3rem;margin-bottom:0.5rem;">Offline Classes Coming Soon</h3>
+        <p style="color:var(--text-secondary);max-width:500px;margin:0 auto 2rem;">We're preparing our in-person class schedule. Contact us to be notified when registration opens.</p>
+        <a href="/contact?interest=offline-classes" class="btn btn-primary">Get Notified</a>
       </div>
     </div>
   </section>
@@ -305,58 +321,84 @@
       });
     });
 
-    // Load dynamic classes
-    async function loadDynamicClasses() {
-      const loader = document.getElementById('classes-loading');
-      const grid = document.getElementById('classes-grid');
-      const noClasses = document.getElementById('no-classes');
+    // Load classes separated by type
+    async function loadClasses() {
+      const onlineLoader = document.getElementById('online-loading');
+      const onlineGrid = document.getElementById('online-grid');
+      const noOnline = document.getElementById('no-online');
+      
+      const offlineLoader = document.getElementById('offline-loading');
+      const offlineGrid = document.getElementById('offline-grid');
+      const noOffline = document.getElementById('no-offline');
       
       try {
         const res = await fetch('/api/classes');
-        const classes = await res.json();
+        const allClasses = await res.json();
         
-        loader.style.display = 'none';
+        // Separate classes by type
+        const onlineClasses = allClasses.filter(cls => cls.type === 'online');
+        const offlineClasses = allClasses.filter(cls => cls.type === 'offline');
+        const hybridClasses = allClasses.filter(cls => cls.type === 'hybrid');
         
-        if (classes.length === 0) {
-          noClasses.style.display = 'block';
-          return;
+        // Render online classes
+        onlineLoader.style.display = 'none';
+        if (onlineClasses.length === 0 && hybridClasses.length === 0) {
+          noOnline.style.display = 'block';
+        } else {
+          const onlineToShow = [...onlineClasses, ...hybridClasses];
+          onlineGrid.style.display = 'grid';
+          onlineGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(320px, 1fr))';
+          onlineGrid.style.gap = '1.5rem';
+          onlineGrid.innerHTML = renderClassCards(onlineToShow);
+          setTimeout(() => onlineGrid.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 50);
         }
         
-        grid.style.display = 'grid';
-        grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(320px, 1fr))';
-        grid.style.gap = '1.5rem';
-        
-        grid.innerHTML = classes.map(cls => `
-          <a href="/class/detail?id=${cls.id}" class="class-card fade-in" style="text-decoration:none;color:inherit;flex-direction:column;align-items:stretch;cursor:pointer;">
-            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;">
-              <div class="class-icon-box" style="width:48px;height:48px;font-size:1.3rem;">
-                ${cls.type === 'online' ? '💻' : cls.type === 'offline' ? '🏡' : '🔄'}
-              </div>
-              <div style="flex:1;">
-                <h3 style="font-size:1.1rem;margin-bottom:0.25rem;">${cls.name}</h3>
-                <span class="level-badge level-${cls.level === 'all' ? 'all' : cls.level.toLowerCase()}">${cls.level === 'all' ? 'All Levels' : cls.level.charAt(0).toUpperCase() + cls.level.slice(1)}</span>
-              </div>
-            </div>
-            ${cls.description ? `<p style="font-size:0.88rem;margin-bottom:1rem;color:var(--text-secondary);">${cls.description.substring(0, 120)}${cls.description.length > 120 ? '...' : ''}</p>` : ''}
-            <div class="class-meta-row" style="margin-bottom:1rem;">
-              <span class="class-meta-item">📅 ${cls.schedule}</span>
-              ${cls.duration ? `<span class="class-meta-item">⏱ ${cls.duration} min</span>` : ''}
-              ${cls.max_students ? `<span class="class-meta-item">👥 Max ${cls.max_students}</span>` : ''}
-            </div>
-            ${cls.price ? `<p style="font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:1rem;">₹${cls.price.toLocaleString('en-IN')}/month</p>` : ''}
-            <span class="btn btn-primary" style="margin-top:auto;pointer-events:none;">View Details →</span>
-          </a>
-        `).join('');
-        
-        setTimeout(() => grid.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 50);
+        // Render offline classes
+        offlineLoader.style.display = 'none';
+        if (offlineClasses.length === 0 && hybridClasses.length === 0) {
+          noOffline.style.display = 'block';
+        } else {
+          const offlineToShow = [...offlineClasses, ...hybridClasses];
+          offlineGrid.style.display = 'grid';
+          offlineGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(320px, 1fr))';
+          offlineGrid.style.gap = '1.5rem';
+          offlineGrid.innerHTML = renderClassCards(offlineToShow);
+          setTimeout(() => offlineGrid.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 50);
+        }
       } catch (err) {
         console.error('Failed to load classes:', err);
-        loader.style.display = 'none';
-        noClasses.style.display = 'block';
+        onlineLoader.style.display = 'none';
+        offlineLoader.style.display = 'none';
+        noOnline.style.display = 'block';
+        noOffline.style.display = 'block';
       }
     }
     
-    loadDynamicClasses();
+    function renderClassCards(classes) {
+      return classes.map(cls => `
+        <a href="/class/detail?id=${cls.id}" class="class-card fade-in" style="text-decoration:none;color:inherit;flex-direction:column;align-items:stretch;cursor:pointer;">
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;">
+            <div class="class-icon-box" style="width:48px;height:48px;font-size:1.3rem;">
+              ${cls.type === 'online' ? '💻' : cls.type === 'offline' ? '🏡' : '🔄'}
+            </div>
+            <div style="flex:1;">
+              <h3 style="font-size:1.1rem;margin-bottom:0.25rem;">${cls.name}</h3>
+              <span class="level-badge level-${cls.level === 'all' ? 'all' : cls.level.toLowerCase()}">${cls.level === 'all' ? 'All Levels' : cls.level.charAt(0).toUpperCase() + cls.level.slice(1)}</span>
+            </div>
+          </div>
+          ${cls.description ? `<p style="font-size:0.88rem;margin-bottom:1rem;color:var(--text-secondary);">${cls.description.substring(0, 120)}${cls.description.length > 120 ? '...' : ''}</p>` : ''}
+          <div class="class-meta-row" style="margin-bottom:1rem;">
+            <span class="class-meta-item">📅 ${cls.schedule}</span>
+            ${cls.duration ? `<span class="class-meta-item">⏱ ${cls.duration} min</span>` : ''}
+            ${cls.max_students ? `<span class="class-meta-item">👥 Max ${cls.max_students}</span>` : ''}
+          </div>
+          ${cls.price ? `<p style="font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:1rem;">₹${cls.price.toLocaleString('en-IN')}/month</p>` : ''}
+          <span class="btn btn-primary" style="margin-top:auto;pointer-events:none;">View Details →</span>
+        </a>
+      `).join('');
+    }
+    
+    loadClasses();
   </script>
 </body>
 </html>
