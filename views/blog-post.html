@@ -43,7 +43,7 @@
       const container = document.getElementById('post-container');
       const notFound = document.getElementById('not-found');
       try {
-        const res = await fetch('/api/blog/' + slug);
+        const res = await fetch('/api/blogs/' + slug);
         const post = await res.json();
         loader.style.display = 'none';
         if (!post) { notFound.style.display = 'block'; return; }

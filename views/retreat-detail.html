@@ -8,20 +8,36 @@
   <link rel="stylesheet" href="/css/style.css"/>
   <style>
     .retreat-detail-hero {
-      min-height: 60vh;
+      min-height: 70vh;
       background: linear-gradient(160deg, #1a2e1a 0%, #2d4a2d 60%, #1e3320 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       overflow: hidden;
-      padding: 8rem 2rem 4rem;
+      padding: 10rem 2rem 6rem;
     }
     .retreat-detail-hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(200,169,110,0.12) 0%, transparent 70%);
+      background: 
+        radial-gradient(ellipse 70% 60% at 50% 40%, rgba(200,169,110,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 60%, rgba(92,138,92,0.1) 0%, transparent 60%);
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.6;
+      animation: drift 15s ease-in-out infinite;
+    }
+    .orb-1 { width:350px;height:350px; background:rgba(92,138,92,0.15); top:10%; right:15%; animation-delay:0s; }
+    .orb-2 { width:250px;height:250px; background:rgba(200,169,110,0.12); bottom:20%; left:10%; animation-delay:-5s; }
+    @keyframes drift {
+      0%,100% { transform: translate(0,0); }
+      33% { transform: translate(40px,-30px); }
+      66% { transform: translate(-30px,20px); }
     }
     .retreat-hero-content {
       position: relative;
@@ -29,73 +45,235 @@
       max-width: 800px;
       text-align: center;
     }
+    .retreat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 2rem;
+    }
     .retreat-hero-content h1 {
       font-family: var(--font-display);
-      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-size: clamp(2.8rem, 7vw, 4.5rem);
       font-weight: 300;
       color: #fff;
-      line-height: 1.2;
-      margin-bottom: 1rem;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+    .retreat-hero-desc {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.8;
+      max-width: 650px;
+      margin: 0 auto 3rem;
     }
     .retreat-meta {
       display: flex;
-      gap: 2rem;
+      gap: 2.5rem;
       justify-content: center;
       flex-wrap: wrap;
-      margin-top: 2rem;
       font-size: 0.95rem;
-      color: rgba(255,255,255,0.8);
+      color: rgba(255,255,255,0.9);
     }
     .retreat-meta-item {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.65rem;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.15);
     }
-    .schedule-section {
-      background: var(--bg-alt);
+    .retreat-meta-item span:first-child {
+      font-size: 1.2rem;
     }
-    .schedule-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.5rem;
+    
+    .content-section {
+      padding: 5rem 0;
     }
-    .schedule-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.75rem;
-      transition: var(--transition);
+    .retreat-image-wrap {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 4rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.12);
     }
-    .schedule-item:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow);
-    }
-    .schedule-time {
-      font-family: var(--font-display);
-      font-size: 0.85rem;
-      color: var(--accent-warm);
-      letter-spacing: 0.1em;
-      margin-bottom: 0.75rem;
-    }
-    .schedule-icon {
-      font-size: 2.5rem;
-      margin-bottom: 0.75rem;
+    .retreat-image-wrap img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
       display: block;
     }
-    .schedule-item h4 {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-    }
-    .schedule-item p {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
+    
+    .highlights-section {
+      background: var(--bg-alt);
+      padding: 5rem 0;
     }
     .highlights-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-top: 3rem;
+    }
+    .highlight-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      align-items: start;
       gap: 1rem;
-      margin-top: 2rem;
+      transition: var(--transition);
+    }
+    .highlight-item:hover {
+      transform: translateX(5px);
+      border-color: rgba(92,138,92,0.3);
+    }
+    .highlight-icon {
+      width: 36px;
+      height: 36px;
+      background: rgba(92,138,92,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .highlight-text {
+      flex: 1;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    .schedule-section {
+      padding: 6rem 0;
+      background: var(--bg);
+    }
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+    .schedule-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .schedule-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent-warm) 100%);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .schedule-card:hover::before {
+      transform: scaleX(1);
+    }
+    .schedule-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+      border-color: rgba(92,138,92,0.25);
+    }
+    .schedule-time {
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      color: var(--accent-warm);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+    .schedule-icon {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 1.25rem;
+    }
+    .schedule-card h4 {
+      font-size: 1.15rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+    .schedule-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    
+    .booking-section {
+      background: linear-gradient(135deg, var(--accent) 0%, #2d4a2d 100%);
+      padding: 5rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .booking-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    }
+    .booking-card {
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(20px);
+      border-radius: var(--radius-lg);
+      padding: 4rem 3rem;
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    .booking-card h2 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+    }
+    .price-tag {
+      font-size: 3rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 2rem 0;
+      font-family: var(--font-display);
+    }
+    @media (max-width: 768px) {
+      .retreat-detail-hero {
+        padding: 8rem 1.5rem 4rem;
+        min-height: 60vh;
+      }
+      .retreat-meta {
+        gap: 1rem;
+      }
+      .retreat-meta-item {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.88rem;
+      }
+      .schedule-grid {
+        grid-template-columns: 1fr;
+      }
+      .booking-card {
+        padding: 3rem 2rem;
+      }
     }
   </style>
 </head>
@@ -103,43 +281,64 @@
   <div id="navbar-placeholder"></div>
 
   <!-- Retreat Hero -->
-  <section class="retreat-detail-hero" id="retreat-hero">
+  <section class="retreat-detail-hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
     <div class="retreat-hero-content">
+      <div class="retreat-badge">
+        <span>🌿</span>
+        <span>Yoga Retreat</span>
+      </div>
       <h1 id="retreat-title">Loading...</h1>
-      <p id="retreat-description" style="font-size:1.1rem;color:rgba(255,255,255,0.75);max-width:600px;margin:0 auto;line-height:1.8;"></p>
+      <p class="retreat-hero-desc" id="retreat-description"></p>
       <div class="retreat-meta" id="retreat-meta"></div>
     </div>
   </section>
 
-  <!-- Details Section -->
-  <section class="section-pad" style="background:var(--bg);" id="details-section">
-    <div class="container-sm">
-      <div id="retreat-image-container"></div>
-      <div id="highlights-container"></div>
+  <!-- Image Section -->
+  <section class="content-section" id="image-section" style="display:none;">
+    <div class="container">
+      <div class="retreat-image-wrap fade-in" id="retreat-image"></div>
+    </div>
+  </section>
+
+  <!-- Highlights Section -->
+  <section class="highlights-section" id="highlights-section" style="display:none;">
+    <div class="container">
+      <div class="section-header centered fade-in">
+        <span class="section-label">Experience</span>
+        <h2>What's <span class="display-italic">Included</span></h2>
+        <div class="divider-leaf centered"></div>
+      </div>
+      <div class="highlights-grid" id="highlights-container"></div>
     </div>
   </section>
 
   <!-- Schedule Section -->
-  <section class="schedule-section section-pad" id="schedule-section" style="display:none;">
+  <section class="schedule-section" id="schedule-section" style="display:none;">
     <div class="container">
       <div class="section-header centered fade-in">
-        <span class="section-label">Daily Schedule</span>
-        <h2>What the Day <span class="display-italic">Looks Like</span></h2>
+        <span class="section-label">Itinerary</span>
+        <h2>Daily <span class="display-italic">Schedule</span></h2>
         <div class="divider-leaf centered"></div>
+        <p style="max-width:600px;margin:1rem auto 0;">A thoughtfully curated journey through meditation, movement, nourishment and rest.</p>
       </div>
       <div class="schedule-grid" id="schedule-grid"></div>
     </div>
   </section>
 
   <!-- Booking Section -->
-  <section class="section-pad" style="background:var(--bg-alt);" id="booking-section">
+  <section class="booking-section">
     <div class="container-sm">
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:3rem;text-align:center;" class="fade-in">
+      <div class="booking-card fade-in">
         <h2>Ready to <span class="display-italic">Join?</span></h2>
         <div class="divider-leaf centered"></div>
-        <p style="font-size:1.05rem;margin-bottom:2rem;">Book your spot now or get in touch with questions.</p>
-        <div id="price-display" style="font-size:2rem;font-weight:600;color:var(--accent);margin-bottom:2rem;"></div>
-        <a href="#" id="whatsapp-button" class="btn btn-primary btn-lg">Enquire on WhatsApp</a>
+        <p style="font-size:1.05rem;color:var(--text-secondary);margin-bottom:0.5rem;">Secure your spot for this transformative experience</p>
+        <div id="price-display" class="price-tag"></div>
+        <a href="#" id="whatsapp-button" class="btn btn-primary btn-lg" style="font-size:1.05rem;padding:1rem 3rem;">
+          Book via WhatsApp →
+        </a>
+        <p style="font-size:0.85rem;color:var(--text-light);margin-top:2rem;">Questions? We're here to help — just send us a message</p>
       </div>
     </div>
   </section>
@@ -188,7 +387,7 @@
           ${retreat.max_participants ? `
             <div class="retreat-meta-item">
               <span>👥</span>
-              <span>Max ${retreat.max_participants} participants</span>
+              <span>Max ${retreat.max_participants} guests</span>
             </div>
           ` : ''}
         `;
@@ -196,46 +395,50 @@
 
         // Image
         if (retreat.image) {
-          document.getElementById('retreat-image-container').innerHTML = `
-            <img src="${retreat.image}" alt="${retreat.title}" style="width:100%;max-height:400px;object-fit:cover;border-radius:var(--radius);margin-bottom:3rem;">
+          document.getElementById('image-section').style.display = 'block';
+          document.getElementById('retreat-image').innerHTML = `
+            <img src="${retreat.image}" alt="${retreat.title}"/>
           `;
         }
 
         // Highlights
         if (retreat.highlights && retreat.highlights.length > 0) {
-          document.getElementById('highlights-container').innerHTML = `
-            <div class="section-header centered fade-in" style="margin-bottom:2rem;">
-              <span class="section-label">What's Included</span>
-              <h2>Retreat <span class="display-italic">Highlights</span></h2>
-              <div class="divider-leaf centered"></div>
+          document.getElementById('highlights-section').style.display = 'block';
+          document.getElementById('highlights-container').innerHTML = retreat.highlights.map(h => `
+            <div class="highlight-item fade-in">
+              <div class="highlight-icon">✓</div>
+              <div class="highlight-text">${h}</div>
             </div>
-            <div class="highlights-grid">
-              ${retreat.highlights.map(h => `<div class="notice">✓ ${h}</div>`).join('')}
-            </div>
-          `;
+          `).join('');
         }
 
         // Schedule
         if (retreat.schedule && retreat.schedule.length > 0) {
           document.getElementById('schedule-section').style.display = 'block';
           document.getElementById('schedule-grid').innerHTML = retreat.schedule.map(item => `
-            <div class="schedule-item fade-in">
+            <div class="schedule-card fade-in">
               <div class="schedule-time">${item.time}</div>
               <span class="schedule-icon">${item.icon || '🌿'}</span>
               <h4>${item.title}</h4>
               ${item.description ? `<p>${item.description}</p>` : ''}
             </div>
           `).join('');
-          setTimeout(() => document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 50);
         }
 
         // Price
         if (retreat.price) {
           document.getElementById('price-display').textContent = `₹${retreat.price.toLocaleString('en-IN')}`;
+        } else {
+          document.getElementById('price-display').style.display = 'none';
         }
 
         // WhatsApp button
         document.getElementById('whatsapp-button').href = `https://wa.me/919599839737?text=I'm interested in ${encodeURIComponent(retreat.title)}`;
+
+        // Trigger animations
+        setTimeout(() => {
+          document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+        }, 100);
 
       } catch (err) {
         console.error('Failed to load retreat details:', err);
