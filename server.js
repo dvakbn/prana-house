@@ -768,11 +768,11 @@ app.post('/api/admin/retreats', async (req, res) => {
       return res.status(401).json({ success: false, error: 'Unauthorized' });
     }
 
-    const { title, start_date, end_date, location, price, max_participants, description, highlights, image, active } = req.body;
+    const { title, start_date, end_date, location, price, max_participants, description, highlights, image, active, schedule } = req.body;
     
     const { data, error } = await supabase
       .from('retreats')
-      .insert([{ title, start_date, end_date, location, price, max_participants, description, highlights, image, active }])
+      .insert([{ title, start_date, end_date, location, price, max_participants, description, highlights, image, active, schedule }])
       .select();
     
     if (error) throw error;
@@ -792,11 +792,11 @@ app.put('/api/admin/retreats/:id', async (req, res) => {
       return res.status(401).json({ success: false, error: 'Unauthorized' });
     }
 
-    const { title, start_date, end_date, location, price, max_participants, description, highlights, image, active } = req.body;
+    const { title, start_date, end_date, location, price, max_participants, description, highlights, image, active, schedule } = req.body;
     
     const { data, error } = await supabase
       .from('retreats')
-      .update({ title, start_date, end_date, location, price, max_participants, description, highlights, image, active })
+      .update({ title, start_date, end_date, location, price, max_participants, description, highlights, image, active, schedule })
       .eq('id', req.params.id)
       .select();
     

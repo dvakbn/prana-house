@@ -83,6 +83,7 @@ document.getElementById('add-gallery-btn')?.addEventListener('click', () => {
   document.getElementById('gallery-modal-title').textContent = 'Add Gallery Image';
   document.getElementById('gallery-form').reset();
   document.getElementById('gallery-id').value = '';
+  document.getElementById('gallery-visible').checked = true; // Default to visible
   openModal('gallery-modal');
 });
 
@@ -225,6 +226,7 @@ document.getElementById('add-blog-btn')?.addEventListener('click', () => {
   document.getElementById('blog-modal-title').textContent = 'New Blog Post';
   document.getElementById('blog-form').reset();
   document.getElementById('blog-id').value = '';
+  document.getElementById('blog-published').checked = true; // Default to published
   openModal('blog-modal');
 });
 
@@ -367,8 +369,37 @@ document.getElementById('add-retreat-btn')?.addEventListener('click', () => {
   document.getElementById('retreat-modal-title').textContent = 'New Retreat';
   document.getElementById('retreat-form').reset();
   document.getElementById('retreat-id').value = '';
+  document.getElementById('retreat-active').checked = true; // Default to active
+  // Clear and add one default schedule item
+  document.getElementById('schedule-items').innerHTML = '';
+  addScheduleItem();
   openModal('retreat-modal');
 });
+
+// Schedule item management
+let scheduleItemIndex = 0;
+
+window.addScheduleItem = function() {
+  const container = document.getElementById('schedule-items');
+  const index = scheduleItemIndex++;
+  const item = document.createElement('div');
+  item.className = 'schedule-item-row';
+  item.style.cssText = 'display:grid;grid-template-columns:120px 60px 1fr 40px;gap:0.75rem;align-items:start;padding:1rem;background:var(--bg-alt);border-radius:var(--radius-sm);';
+  item.innerHTML = `
+    <input type="text" class="form-input" placeholder="6:00 - 7:00 AM" required data-schedule-time="${index}" style="font-size:0.85rem;"/>
+    <input type="text" class="form-input" placeholder="🌅" maxlength="2" data-schedule-icon="${index}" style="text-align:center;font-size:1.1rem;"/>
+    <div style="display:flex;flex-direction:column;gap:0.5rem;">
+      <input type="text" class="form-input" placeholder="Activity title" required data-schedule-title="${index}" style="font-size:0.9rem;"/>
+      <input type="text" class="form-input" placeholder="Brief description" data-schedule-desc="${index}" style="font-size:0.85rem;"/>
+    </div>
+    <button type="button" onclick="removeScheduleItem(this)" style="background:none;border:none;color:var(--text-light);cursor:pointer;font-size:1.2rem;padding:0;">×</button>
+  `;
+  container.appendChild(item);
+};
+
+window.removeScheduleItem = function(btn) {
+  btn.closest('.schedule-item-row').remove();
+};
 
 async function loadRetreatData() {
   try {
@@ -420,6 +451,15 @@ document.getElementById('retreat-form')?.addEventListener('submit', async (e) =>
   data.price = parseInt(data.price) || null;
   data.max_participants = parseInt(data.max_participants) || null;
   
+  // Collect schedule items
+  const scheduleRows = document.querySelectorAll('#schedule-items .schedule-item-row');
+  data.schedule = Array.from(scheduleRows).map((row, idx) => ({
+    time: row.querySelector(`[data-schedule-time="${idx}"]`)?.value || '',
+    icon: row.querySelector(`[data-schedule-icon="${idx}"]`)?.value || '🌿',
+    title: row.querySelector(`[data-schedule-title="${idx}"]`)?.value || '',
+    description: row.querySelector(`[data-schedule-desc="${idx}"]`)?.value || ''
+  })).filter(item => item.time && item.title);
+  
   try {
     const url = retreatId ? `/api/admin/retreats/${retreatId}` : '/api/admin/retreats';
     const method = retreatId ? 'PUT' : 'POST';
@@ -470,6 +510,30 @@ window.editRetreat = async (id) => {
       document.querySelector('[name="highlights"]').value = (retreat.highlights || []).join('\n');
       document.querySelector('[name="image"]').value = retreat.image || '';
       document.getElementById('retreat-active').checked = retreat.active;
+      
+      // Load schedule items
+      const scheduleContainer = document.getElementById('schedule-items');
+      scheduleContainer.innerHTML = '';
+      scheduleItemIndex = 0;
+      if (retreat.schedule && Array.isArray(retreat.schedule)) {
+        retreat.schedule.forEach((item, idx) => {
+          const row = document.createElement('div');
+          row.className = 'schedule-item-row';
+          row.style.cssText = 'display:grid;grid-template-columns:120px 60px 1fr 40px;gap:0.75rem;align-items:start;padding:1rem;background:var(--bg-alt);border-radius:var(--radius-sm);';
+          row.innerHTML = `
+            <input type="text" class="form-input" placeholder="6:00 - 7:00 AM" required data-schedule-time="${idx}" value="${item.time || ''}" style="font-size:0.85rem;"/>
+            <input type="text" class="form-input" placeholder="🌅" maxlength="2" data-schedule-icon="${idx}" value="${item.icon || '🌿'}" style="text-align:center;font-size:1.1rem;"/>
+            <div style="display:flex;flex-direction:column;gap:0.5rem;">
+              <input type="text" class="form-input" placeholder="Activity title" required data-schedule-title="${idx}" value="${item.title || ''}" style="font-size:0.9rem;"/>
+              <input type="text" class="form-input" placeholder="Brief description" data-schedule-desc="${idx}" value="${item.description || ''}" style="font-size:0.85rem;"/>
+            </div>
+            <button type="button" onclick="removeScheduleItem(this)" style="background:none;border:none;color:var(--text-light);cursor:pointer;font-size:1.2rem;padding:0;">×</button>
+          `;
+          scheduleContainer.appendChild(row);
+          scheduleItemIndex++;
+        });
+      }
+      
       openModal('retreat-modal');
     }
   } catch (err) {
@@ -509,6 +573,7 @@ document.getElementById('add-class-btn')?.addEventListener('click', () => {
   document.getElementById('class-modal-title').textContent = 'New Class';
   document.getElementById('class-form').reset();
   document.getElementById('class-id').value = '';
+  document.getElementById('class-active').checked = true; // Default to active
   openModal('class-modal');
 });
 
