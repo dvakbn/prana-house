@@ -1,0 +1,30 @@
+# Robots.txt for Prana House - Yoga & Wellness Center
+# Domain: pranayoga.qzz.io
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://pranayoga.qzz.io/sitemap.xml
+
+# Disallow admin and API routes
+Disallow: /api/
+Disallow: /admin/
+
+# Allow all public pages
+Allow: /
+Allow: /about
+Allow: /classes
+Allow: /programs
+Allow: /teacher
+Allow: /retreat
+Allow: /blog
+Allow: /gallery
+Allow: /testimonials
+Allow: /contact
+Allow: /privacy-policy
+Allow: /terms
+Allow: /refund-policy
+
+# Crawl delay (optional, be friendly to smaller servers)
+Crawl-delay: 1

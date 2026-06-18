@@ -87,6 +87,17 @@ app.set('view engine', 'html');
 
 // ─── ROUTES ─────────────────────────────────────────────────────────────────
 
+// SEO Files
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain');
+  res.sendFile(path.join(__dirname, 'public', 'robots.txt'));
+});
+
+app.get('/sitemap.xml', (req, res) => {
+  res.type('application/xml');
+  res.sendFile(path.join(__dirname, 'public', 'sitemap.xml'));
+});
+
 // Home
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.html')));
 
@@ -166,7 +177,8 @@ app.post('/api/contact', async (req, res) => {
       await resend.emails.send({
         from: FROM_EMAIL,
         to: email,
-        subject: 'We received your message 🌿 — Prana House',
+        replyTo: ADMIN_EMAIL,
+        subject: 'Thank you for contacting Prana House',
         html: emailTemplate(`
           <h2 style="margin:0 0 8px;font-size:24px;font-weight:400;color:#2C2C2C;font-family:Georgia,serif;">Namaste, ${name} 🙏</h2>
           <p style="margin:0 0 20px;font-size:15px;color:#6B6560;line-height:1.7;">Thank you for reaching out to Prana House. We've received your message and will get back to you within <strong style="color:#2C2C2C;">24 hours</strong>.</p>
@@ -200,7 +212,8 @@ app.post('/api/contact', async (req, res) => {
       await resend.emails.send({
         from: FROM_EMAIL,
         to: ADMIN_EMAIL,
-        subject: `📬 New Enquiry: ${name} — ${interest || 'General'}`,
+        replyTo: email,
+        subject: `New Enquiry from ${name} - ${interest || 'General'}`,
         html: emailTemplate(`
           <h2 style="margin:0 0 4px;font-size:22px;font-weight:400;color:#2C2C2C;font-family:Georgia,serif;">New Contact Form Submission</h2>
           <p style="margin:0 0 24px;font-size:13px;color:#9B958E;">${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST</p>
@@ -289,7 +302,8 @@ app.post('/api/newsletter', async (req, res) => {
         await resend.emails.send({
           from: FROM_EMAIL,
           to: email,
-          subject: 'You\'re already part of the community 🌿',
+          replyTo: ADMIN_EMAIL,
+          subject: 'You are already subscribed to Prana House',
           html: emailTemplate(`
             <h2 style="margin:0 0 8px;font-size:24px;font-weight:400;color:#2C2C2C;font-family:Georgia,serif;">You're already subscribed! 🌿</h2>
             <p style="margin:0 0 20px;font-size:15px;color:#6B6560;line-height:1.7;">Good news — you're already part of the Prana House wellness community. Keep an eye on your inbox for our weekly updates.</p>
@@ -311,7 +325,8 @@ app.post('/api/newsletter', async (req, res) => {
       await resend.emails.send({
         from: FROM_EMAIL,
         to: email,
-        subject: 'Welcome to Prana House 🌿 — Your wellness journey begins',
+        replyTo: ADMIN_EMAIL,
+        subject: 'Welcome to Prana House Yoga & Wellness',
         html: emailTemplate(`
           <h2 style="margin:0 0 8px;font-size:24px;font-weight:400;color:#2C2C2C;font-family:Georgia,serif;">Welcome${name ? ', ' + name : ''} 🙏</h2>
           <p style="margin:0 0 20px;font-size:15px;color:#6B6560;line-height:1.7;">You've just taken a beautiful step. Thank you for joining the Prana House wellness community — a space built around breath, movement and holistic living.</p>
