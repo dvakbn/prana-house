@@ -37,6 +37,41 @@
   <script src="/js/components.js"></script>
   <script src="/js/main.js"></script>
   <script>
+    // Format blog content: convert markdown-like syntax to HTML
+    function formatBlogContent(text) {
+      if (!text) return '<p>Content coming soon.</p>';
+      
+      let formatted = text;
+      
+      // Convert **bold** to <strong>bold</strong>
+      formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      
+      // Convert *italic* to <em>italic</em>
+      formatted = formatted.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      
+      // Convert ### Heading to <h3>
+      formatted = formatted.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+      
+      // Convert ## Heading to <h2>
+      formatted = formatted.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+      
+      // Split into paragraphs by double line breaks
+      const paragraphs = formatted.split(/\n\n+/);
+      
+      // Wrap each paragraph in <p> tags (unless it's already a heading)
+      formatted = paragraphs.map(para => {
+        para = para.trim();
+        if (!para) return '';
+        // Don't wrap headings
+        if (para.startsWith('<h2>') || para.startsWith('<h3>')) return para;
+        // Convert single line breaks to <br> within paragraphs
+        para = para.replace(/\n/g, '<br>');
+        return `<p>${para}</p>`;
+      }).join('\n');
+      
+      return formatted;
+    }
+
     (async function() {
       const slug = window.location.pathname.split('/blog/')[1];
       const loader = document.getElementById('loading-state');
@@ -50,6 +85,10 @@
         // Update page title
         document.title = post.title + ' | Prana House';
         container.style.display = 'block';
+        
+        // Use image field (from blog list) or cover_image field (alternative name)
+        const featuredImage = post.image || post.cover_image;
+        
         container.innerHTML = `
           <div class="post-hero">
             <div class="container-sm">
@@ -64,10 +103,10 @@
             </div>
           </div>
           <div class="post-body">
-            ${post.cover_image
-              ? `<img class="post-cover" src="${post.cover_image}" alt="${post.title}"/>`
+            ${featuredImage
+              ? `<img class="post-cover" src="${featuredImage}" alt="${post.title}"/>`
               : `<div class="post-emoji-cover">${post.emoji || '🌿'}</div>`}
-            <div id="post-content">${post.content || '<p>Content coming soon.</p>'}</div>
+            <div id="post-content">${formatBlogContent(post.content)}</div>
             <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
               <a href="/blog" class="btn btn-outline">← All Articles</a>
               <a href="/contact" class="btn btn-primary">Book a Class 🌿</a>

@@ -543,8 +543,12 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">Content *</label>
-          <textarea class="form-textarea" name="content" rows="12" required placeholder="Blog post content (Markdown supported)"></textarea>
+          <label class="form-label">Content * 
+            <span style="color:var(--text-light);font-size:0.8rem;font-weight:400;margin-left:0.5rem;">
+              (Use **bold**, ## Heading, double line breaks for paragraphs)
+            </span>
+          </label>
+          <textarea class="form-textarea" name="content" rows="12" required placeholder="Write your blog post here...&#10;&#10;Use **text** for bold&#10;Use ## for headings&#10;&#10;Press Enter twice to create a new paragraph"></textarea>
         </div>
 
         <div class="form-group" style="display:flex;align-items:center;gap:0.75rem;">
