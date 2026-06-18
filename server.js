@@ -575,6 +575,26 @@ app.get('/api/blogs', async (req, res) => {
   }
 });
 
+// Get all blogs for admin (including drafts)
+app.get('/api/admin/blogs', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    console.error('ADMIN BLOGS GET ERROR:', err);
+    res.json([]);
+  }
+});
+
 // Get single blog by slug (public)
 app.get('/api/blogs/:slug', async (req, res) => {
   try {
@@ -681,6 +701,26 @@ app.get('/api/retreats', async (req, res) => {
   }
 });
 
+// Get all retreats for admin (including inactive)
+app.get('/api/admin/retreats', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { data, error } = await supabase
+      .from('retreats')
+      .select('*')
+      .order('start_date', { ascending: false });
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    console.error('ADMIN RETREATS GET ERROR:', err);
+    res.json([]);
+  }
+});
+
 // Create retreat (admin)
 app.post('/api/admin/retreats', async (req, res) => {
   try {
@@ -766,6 +806,26 @@ app.get('/api/classes', async (req, res) => {
     res.json(data || []);
   } catch (err) {
     console.error('CLASSES GET ERROR:', err);
+    res.json([]);
+  }
+});
+
+// Get all classes for admin (including inactive)
+app.get('/api/admin/classes', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { data, error } = await supabase
+      .from('classes')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    console.error('ADMIN CLASSES GET ERROR:', err);
     res.json([]);
   }
 });

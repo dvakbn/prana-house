@@ -222,7 +222,11 @@ document.getElementById('add-blog-btn')?.addEventListener('click', () => {
 
 async function loadBlogData() {
   try {
-    const res = await fetch('/api/blogs');
+    const res = await fetch('/api/admin/blogs', {
+      headers: { 
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+      }
+    });
     const data = await res.json();
     
     document.getElementById('blog-count').textContent = data.length;
@@ -297,7 +301,11 @@ document.getElementById('blog-form')?.addEventListener('submit', async (e) => {
 
 window.editBlog = async (id) => {
   try {
-    const res = await fetch('/api/blogs');
+    const res = await fetch('/api/admin/blogs', {
+      headers: { 
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+      }
+    });
     const data = await res.json();
     const blog = data.find(b => b.id === id);
     
@@ -356,7 +364,11 @@ document.getElementById('add-retreat-btn')?.addEventListener('click', () => {
 
 async function loadRetreatData() {
   try {
-    const res = await fetch('/api/retreats');
+    const res = await fetch('/api/admin/retreats', {
+      headers: { 
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+      }
+    });
     const data = await res.json();
     
     const tbody = document.querySelector('#retreat-table tbody');
@@ -429,7 +441,11 @@ document.getElementById('retreat-form')?.addEventListener('submit', async (e) =>
 
 window.editRetreat = async (id) => {
   try {
-    const res = await fetch('/api/retreats');
+    const res = await fetch('/api/admin/retreats', {
+      headers: { 
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+      }
+    });
     const data = await res.json();
     const retreat = data.find(r => r.id === id);
     
@@ -490,7 +506,11 @@ document.getElementById('add-class-btn')?.addEventListener('click', () => {
 
 async function loadClassData() {
   try {
-    const res = await fetch('/api/classes');
+    const res = await fetch('/api/admin/classes', {
+      headers: { 
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+      }
+    });
     const data = await res.json();
     
     const tbody = document.querySelector('#class-table tbody');
@@ -563,7 +583,11 @@ document.getElementById('class-form')?.addEventListener('submit', async (e) => {
 
 window.editClass = async (id) => {
   try {
-    const res = await fetch('/api/classes');
+    const res = await fetch('/api/admin/classes', {
+      headers: { 
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+      }
+    });
     const data = await res.json();
     const cls = data.find(c => c.id === id);
     
