@@ -9,11 +9,14 @@
     .post-hero { background: var(--bg-alt); padding: 8rem 0 4rem; border-bottom: 1px solid var(--border); }
     .post-meta { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1.5rem; font-size:0.82rem; color:var(--text-light); }
     .post-body { max-width: 720px; margin: 0 auto; padding: 4rem 2rem 6rem; }
-    .post-body h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; }
-    .post-body h3 { font-size: 1.3rem; margin: 2rem 0 0.75rem; }
-    .post-body p { font-size: 1rem; line-height: 1.9; color: var(--text-secondary); margin-bottom: 1.25rem; }
-    .post-body ul, .post-body ol { padding-left: 1.5rem; margin-bottom: 1.25rem; }
-    .post-body li { font-size: 1rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 0.4rem; }
+    .post-body h2 { font-size: 1.7rem; margin: 2.5rem 0 1rem; font-weight: 600; color: var(--text); }
+    .post-body h3 { font-size: 1.3rem; margin: 2rem 0 0.75rem; font-weight: 600; color: var(--text); }
+    .post-body h4 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; font-weight: 600; color: var(--text); }
+    .post-body p { font-size: 1.05rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 1.5rem; }
+    .post-body strong { font-weight: 600; color: var(--text); }
+    .post-body em { font-style: italic; }
+    .post-body ul, .post-body ol { padding-left: 1.5rem; margin-bottom: 1.5rem; }
+    .post-body li { font-size: 1.05rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 0.5rem; }
     .post-body ul li { list-style: disc; }
     .post-body ol li { list-style: decimal; }
     .post-body blockquote { border-left: 3px solid var(--accent); padding: 1rem 1.5rem; margin: 2rem 0; background: rgba(92,138,92,0.05); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-style: italic; font-family: var(--font-display); font-size: 1.2rem; }
@@ -43,11 +46,9 @@
       
       let formatted = text;
       
-      // Convert **bold** to <strong>bold</strong>
-      formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-      
-      // Convert *italic* to <em>italic</em>
-      formatted = formatted.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      // First, handle headings (must be done before paragraph splitting)
+      // Convert #### Heading to <h4> (do h4 first, then h3, then h2 to avoid conflicts)
+      formatted = formatted.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
       
       // Convert ### Heading to <h3>
       formatted = formatted.replace(/^### (.+)$/gm, '<h3>$1</h3>');
@@ -55,19 +56,31 @@
       // Convert ## Heading to <h2>
       formatted = formatted.replace(/^## (.+)$/gm, '<h2>$1</h2>');
       
-      // Split into paragraphs by double line breaks
-      const paragraphs = formatted.split(/\n\n+/);
+      // Convert **bold** to <strong>bold</strong>
+      formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
       
-      // Wrap each paragraph in <p> tags (unless it's already a heading)
-      formatted = paragraphs.map(para => {
-        para = para.trim();
-        if (!para) return '';
-        // Don't wrap headings
-        if (para.startsWith('<h2>') || para.startsWith('<h3>')) return para;
-        // Convert single line breaks to <br> within paragraphs
-        para = para.replace(/\n/g, '<br>');
-        return `<p>${para}</p>`;
-      }).join('\n');
+      // Convert *italic* to <em>italic</em> (but not ** which are already converted)
+      formatted = formatted.replace(/(?<!\*)\*([^*]+?)\*(?!\*)/g, '<em>$1</em>');
+      
+      // Split into blocks by double line breaks or heading tags
+      const blocks = formatted.split(/\n\n+|(?=<h[234]>)|(?<=<\/h[234]>)/);
+      
+      // Process each block
+      formatted = blocks.map(block => {
+        block = block.trim();
+        if (!block) return '';
+        
+        // Skip if it's already a heading
+        if (block.startsWith('<h2>') || block.startsWith('<h3>') || block.startsWith('<h4>')) {
+          return block;
+        }
+        
+        // Convert single line breaks within blocks to <br>
+        block = block.replace(/\n/g, '<br>');
+        
+        // Wrap in paragraph tag
+        return `<p>${block}</p>`;
+      }).filter(b => b).join('\n');
       
       return formatted;
     }
