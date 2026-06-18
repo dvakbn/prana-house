@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title id="page-title">Class Details | Prana House</title>
+  <meta name="description" id="page-description" content=""/>
+  <link rel="stylesheet" href="/css/style.css"/>
+  <style>
+    .class-detail-hero {
+      min-height: 50vh;
+      background: linear-gradient(135deg, var(--accent) 0%, #2d4a2d 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 8rem 2rem 4rem;
+    }
+    .class-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      text-align: center;
+      color: #fff;
+    }
+    .class-hero-content h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 3.5rem);
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .class-type-badge {
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      margin-bottom: 1rem;
+    }
+    .class-meta {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      font-size: 0.95rem;
+    }
+    .class-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .info-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+    }
+    .info-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .info-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    .info-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <!-- Class Hero -->
+  <section class="class-detail-hero" id="class-hero">
+    <div class="class-hero-content">
+      <div class="class-type-badge" id="class-type"></div>
+      <h1 id="class-name">Loading...</h1>
+      <p id="class-description" style="font-size:1.05rem;opacity:0.9;line-height:1.8;"></p>
+      <div class="class-meta" id="class-meta"></div>
+    </div>
+  </section>
+
+  <!-- Details Section -->
+  <section class="section-pad" style="background:var(--bg);">
+    <div class="container">
+      <div class="info-grid" id="info-grid"></div>
+    </div>
+  </section>
+
+  <!-- Booking Section -->
+  <section class="section-pad" style="background:var(--bg-alt);">
+    <div class="container-sm">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:3rem;text-align:center;" class="fade-in">
+        <h2>Ready to <span class="display-italic">Begin?</span></h2>
+        <div class="divider-leaf centered"></div>
+        <p style="font-size:1.05rem;margin-bottom:2rem;">Join this class or get in touch with questions.</p>
+        <div id="price-display" style="font-size:2rem;font-weight:600;color:var(--accent);margin-bottom:2rem;"></div>
+        <a href="#" id="whatsapp-button" class="btn btn-primary btn-lg">Join on WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    // Get class ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const classId = urlParams.get('id');
+
+    if (!classId) {
+      window.location.href = '/classes';
+    }
+
+    async function loadClassDetails() {
+      try {
+        const res = await fetch('/api/classes');
+        const classes = await res.json();
+        const classData = classes.find(c => c.id === classId);
+
+        if (!classData) {
+          window.location.href = '/classes';
+          return;
+        }
+
+        // Update page title and meta
+        document.getElementById('page-title').textContent = `${classData.name} | Prana House`;
+        document.getElementById('page-description').content = classData.description || '';
+
+        // Hero section
+        document.getElementById('class-type').textContent = classData.type || 'Class';
+        document.getElementById('class-name').textContent = classData.name;
+        document.getElementById('class-description').textContent = classData.description || '';
+
+        // Meta info
+        const metaHTML = `
+          <div class="class-meta-item">
+            <span>📅</span>
+            <span>${classData.schedule}</span>
+          </div>
+          ${classData.duration ? `
+            <div class="class-meta-item">
+              <span>⏱</span>
+              <span>${classData.duration} minutes</span>
+            </div>
+          ` : ''}
+          <div class="class-meta-item">
+            <span>📊</span>
+            <span>${classData.level === 'all' ? 'All Levels' : classData.level.charAt(0).toUpperCase() + classData.level.slice(1)}</span>
+          </div>
+          ${classData.max_students ? `
+            <div class="class-meta-item">
+              <span>👥</span>
+              <span>Max ${classData.max_students} students</span>
+            </div>
+          ` : ''}
+        `;
+        document.getElementById('class-meta').innerHTML = metaHTML;
+
+        // Info cards
+        const infoCards = [
+          {
+            icon: '🎯',
+            title: 'Who Is This For?',
+            text: `Perfect for ${classData.level === 'all' ? 'everyone from beginners to advanced practitioners' : classData.level === 'beginner' ? 'those new to yoga or getting back to practice' : 'practitioners with some yoga experience'}.`
+          },
+          {
+            icon: '📍',
+            title: 'Location',
+            text: classData.type === 'Online' ? 'Join from anywhere via live video session' : 'Prana House, Pratap Nagar, Jaipur'
+          },
+          {
+            icon: '🌿',
+            title: 'What to Bring',
+            text: classData.type === 'Online' ? 'Yoga mat, stable internet, comfortable space' : 'Just yourself! Mat and props provided'
+          }
+        ];
+
+        document.getElementById('info-grid').innerHTML = infoCards.map(card => `
+          <div class="info-card fade-in">
+            <span class="info-icon">${card.icon}</span>
+            <h3>${card.title}</h3>
+            <p>${card.text}</p>
+          </div>
+        `).join('');
+
+        setTimeout(() => document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 50);
+
+        // Price
+        if (classData.price) {
+          document.getElementById('price-display').textContent = `₹${classData.price.toLocaleString('en-IN')}/month`;
+        } else {
+          document.getElementById('price-display').style.display = 'none';
+        }
+
+        // WhatsApp button
+        document.getElementById('whatsapp-button').href = `https://wa.me/919599839737?text=I want to join ${encodeURIComponent(classData.name)}`;
+
+      } catch (err) {
+        console.error('Failed to load class details:', err);
+        window.location.href = '/classes';
+      }
+    }
+
+    loadClassDetails();
+  </script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title id="page-title">Retreat Details | Prana House</title>
+  <meta name="description" id="page-description" content=""/>
+  <link rel="stylesheet" href="/css/style.css"/>
+  <style>
+    .retreat-detail-hero {
+      min-height: 60vh;
+      background: linear-gradient(160deg, #1a2e1a 0%, #2d4a2d 60%, #1e3320 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 8rem 2rem 4rem;
+    }
+    .retreat-detail-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(200,169,110,0.12) 0%, transparent 70%);
+    }
+    .retreat-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      text-align: center;
+    }
+    .retreat-hero-content h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .retreat-meta {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.8);
+    }
+    .retreat-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .schedule-section {
+      background: var(--bg-alt);
+    }
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .schedule-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      transition: var(--transition);
+    }
+    .schedule-item:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+    .schedule-time {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      color: var(--accent-warm);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+    }
+    .schedule-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .schedule-item h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    .schedule-item p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <!-- Retreat Hero -->
+  <section class="retreat-detail-hero" id="retreat-hero">
+    <div class="retreat-hero-content">
+      <h1 id="retreat-title">Loading...</h1>
+      <p id="retreat-description" style="font-size:1.1rem;color:rgba(255,255,255,0.75);max-width:600px;margin:0 auto;line-height:1.8;"></p>
+      <div class="retreat-meta" id="retreat-meta"></div>
+    </div>
+  </section>
+
+  <!-- Details Section -->
+  <section class="section-pad" style="background:var(--bg);" id="details-section">
+    <div class="container-sm">
+      <div id="retreat-image-container"></div>
+      <div id="highlights-container"></div>
+    </div>
+  </section>
+
+  <!-- Schedule Section -->
+  <section class="schedule-section section-pad" id="schedule-section" style="display:none;">
+    <div class="container">
+      <div class="section-header centered fade-in">
+        <span class="section-label">Daily Schedule</span>
+        <h2>What the Day <span class="display-italic">Looks Like</span></h2>
+        <div class="divider-leaf centered"></div>
+      </div>
+      <div class="schedule-grid" id="schedule-grid"></div>
+    </div>
+  </section>
+
+  <!-- Booking Section -->
+  <section class="section-pad" style="background:var(--bg-alt);" id="booking-section">
+    <div class="container-sm">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:3rem;text-align:center;" class="fade-in">
+        <h2>Ready to <span class="display-italic">Join?</span></h2>
+        <div class="divider-leaf centered"></div>
+        <p style="font-size:1.05rem;margin-bottom:2rem;">Book your spot now or get in touch with questions.</p>
+        <div id="price-display" style="font-size:2rem;font-weight:600;color:var(--accent);margin-bottom:2rem;"></div>
+        <a href="#" id="whatsapp-button" class="btn btn-primary btn-lg">Enquire on WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    // Get retreat ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const retreatId = urlParams.get('id');
+
+    if (!retreatId) {
+      window.location.href = '/retreat';
+    }
+
+    async function loadRetreatDetails() {
+      try {
+        const res = await fetch('/api/retreats');
+        const retreats = await res.json();
+        const retreat = retreats.find(r => r.id === retreatId);
+
+        if (!retreat) {
+          window.location.href = '/retreat';
+          return;
+        }
+
+        // Update page title and meta
+        document.getElementById('page-title').textContent = `${retreat.title} | Prana House`;
+        document.getElementById('page-description').content = retreat.description || '';
+
+        // Hero section
+        document.getElementById('retreat-title').textContent = retreat.title;
+        document.getElementById('retreat-description').textContent = retreat.description || '';
+
+        // Meta info
+        const metaHTML = `
+          <div class="retreat-meta-item">
+            <span>📅</span>
+            <span>${new Date(retreat.start_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - ${new Date(retreat.end_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+          </div>
+          <div class="retreat-meta-item">
+            <span>📍</span>
+            <span>${retreat.location}</span>
+          </div>
+          ${retreat.max_participants ? `
+            <div class="retreat-meta-item">
+              <span>👥</span>
+              <span>Max ${retreat.max_participants} participants</span>
+            </div>
+          ` : ''}
+        `;
+        document.getElementById('retreat-meta').innerHTML = metaHTML;
+
+        // Image
+        if (retreat.image) {
+          document.getElementById('retreat-image-container').innerHTML = `
+            <img src="${retreat.image}" alt="${retreat.title}" style="width:100%;max-height:400px;object-fit:cover;border-radius:var(--radius);margin-bottom:3rem;">
+          `;
+        }
+
+        // Highlights
+        if (retreat.highlights && retreat.highlights.length > 0) {
+          document.getElementById('highlights-container').innerHTML = `
+            <div class="section-header centered fade-in" style="margin-bottom:2rem;">
+              <span class="section-label">What's Included</span>
+              <h2>Retreat <span class="display-italic">Highlights</span></h2>
+              <div class="divider-leaf centered"></div>
+            </div>
+            <div class="highlights-grid">
+              ${retreat.highlights.map(h => `<div class="notice">✓ ${h}</div>`).join('')}
+            </div>
+          `;
+        }
+
+        // Schedule
+        if (retreat.schedule && retreat.schedule.length > 0) {
+          document.getElementById('schedule-section').style.display = 'block';
+          document.getElementById('schedule-grid').innerHTML = retreat.schedule.map(item => `
+            <div class="schedule-item fade-in">
+              <div class="schedule-time">${item.time}</div>
+              <span class="schedule-icon">${item.icon || '🌿'}</span>
+              <h4>${item.title}</h4>
+              ${item.description ? `<p>${item.description}</p>` : ''}
+            </div>
+          `).join('');
+          setTimeout(() => document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 50);
+        }
+
+        // Price
+        if (retreat.price) {
+          document.getElementById('price-display').textContent = `₹${retreat.price.toLocaleString('en-IN')}`;
+        }
+
+        // WhatsApp button
+        document.getElementById('whatsapp-button').href = `https://wa.me/919599839737?text=I'm interested in ${encodeURIComponent(retreat.title)}`;
+
+      } catch (err) {
+        console.error('Failed to load retreat details:', err);
+        window.location.href = '/retreat';
+      }
+    }
+
+    loadRetreatDetails();
+  </script>
+</body>
+</html>

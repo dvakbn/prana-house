@@ -459,7 +459,7 @@
         grid.style.gap = '1.5rem';
         
         grid.innerHTML = classes.map(cls => `
-          <div class="class-card fade-in" style="flex-direction:column;align-items:stretch;">
+          <a href="/class/detail?id=${cls.id}" class="class-card fade-in" style="text-decoration:none;color:inherit;flex-direction:column;align-items:stretch;cursor:pointer;">
             <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;">
               <div class="class-icon-box" style="width:48px;height:48px;font-size:1.3rem;">
                 ${cls.type === 'Online' ? '💻' : cls.type === 'Offline' ? '🏡' : '🔄'}
@@ -469,15 +469,15 @@
                 <span class="level-badge level-${cls.level === 'all' ? 'all' : cls.level.toLowerCase()}">${cls.level === 'all' ? 'All Levels' : cls.level.charAt(0).toUpperCase() + cls.level.slice(1)}</span>
               </div>
             </div>
-            ${cls.description ? `<p style="font-size:0.88rem;margin-bottom:1rem;color:var(--text-secondary);">${cls.description}</p>` : ''}
+            ${cls.description ? `<p style="font-size:0.88rem;margin-bottom:1rem;color:var(--text-secondary);">${cls.description.substring(0, 100)}${cls.description.length > 100 ? '...' : ''}</p>` : ''}
             <div class="class-meta-row" style="margin-bottom:1rem;">
               <span class="class-meta-item">📅 ${cls.schedule}</span>
               ${cls.duration ? `<span class="class-meta-item">⏱ ${cls.duration} min</span>` : ''}
               ${cls.max_students ? `<span class="class-meta-item">👥 Max ${cls.max_students}</span>` : ''}
             </div>
             ${cls.price ? `<p style="font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:1rem;">₹${cls.price.toLocaleString('en-IN')}/month</p>` : ''}
-            <a href="https://wa.me/919599839737?text=I want to join ${encodeURIComponent(cls.name)}" class="btn btn-primary" style="margin-top:auto;">Join Class</a>
-          </div>
+            <span class="btn btn-primary" style="margin-top:auto;pointer-events:none;">View Details</span>
+          </a>
         `).join('');
         
         setTimeout(() => grid.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 50);

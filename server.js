@@ -111,6 +111,11 @@ app.get('/teacher', (req, res) => res.sendFile(path.join(__dirname, 'views', 'te
 
 // Retreat
 app.get('/retreat', (req, res) => res.sendFile(path.join(__dirname, 'views', 'retreat.html')));
+app.get('/retreat/detail', (req, res) => res.sendFile(path.join(__dirname, 'views', 'retreat-detail.html')));
+
+// Classes
+app.get('/classes', (req, res) => res.sendFile(path.join(__dirname, 'views', 'classes.html')));
+app.get('/class/detail', (req, res) => res.sendFile(path.join(__dirname, 'views', 'class-detail.html')));
 
 // Blog / Articles
 app.get('/blog', (req, res) => res.sendFile(path.join(__dirname, 'views', 'blog.html')));
