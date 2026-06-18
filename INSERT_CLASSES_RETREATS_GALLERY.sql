@@ -1,8 +1,6 @@
--- ═══════════════════════════════════════════════════════════════
--- PRANA HOUSE - Final Clean Insert (Skips Existing Programs)
--- ═══════════════════════════════════════════════════════════════
+-- Classes, Retreats, and Gallery ONLY
+-- Simple and clean - will work!
 
--- Insert Classes
 INSERT INTO classes (name, type, level, schedule, duration, price, description, max_students, active) VALUES
 ('Morning Hatha Yoga Online', 'online', 'all', 'Mon, Wed, Fri - 6:30 to 7:30 AM', 60, 2000, 
 'Start your day with traditional Hatha Yoga from the comfort of home. This gentle yet invigorating practice combines asanas, pranayama, and meditation. Perfect for building a consistent morning practice. Small group size ensures personal attention and adjustments. Includes recorded sessions for makeup classes.', 
@@ -29,7 +27,7 @@ INSERT INTO classes (name, type, level, schedule, duration, price, description, 
 'Weekly restorative practice combining gentle asanas, breathwork, and guided relaxation. Learn practical stress management tools. Includes Yoga Nidra (yogic sleep) and mindfulness techniques. Supportive, nurturing environment.',
 15, true);
 
--- Insert Retreats
+
 INSERT INTO retreats (title, start_date, end_date, location, price, max_participants, description, highlights, image, schedule, active) VALUES
 ('Full Day Yoga & Wellness Retreat', '2026-08-15', '2026-08-15', 'Prana House, Pratap Nagar, Jaipur', 5000, 20,
 'Immerse yourself in a transformative day of yoga, meditation, wellness workshops, and sattvic nourishment. Disconnect from daily stress and reconnect with your inner self. Led by Dr. Fareen Tak with personalized attention throughout.',
@@ -82,7 +80,7 @@ ARRAY[
 ]'::jsonb,
 true);
 
--- Insert Gallery Images
+
 INSERT INTO gallery (url, caption, category, alt, sort_order, visible) VALUES
 ('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800', 'Morning Hatha Yoga Session', 'classes', 'Group yoga class in sunlit studio', 1, true),
 ('https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800', 'Meditation Circle at Prana House', 'classes', 'Students in seated meditation pose', 2, true),
@@ -99,14 +97,3 @@ INSERT INTO gallery (url, caption, category, alt, sort_order, visible) VALUES
 ('https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=800', 'Sattvic Retreat Meal', 'retreat', 'Healthy vegetarian retreat meal presentation', 13, true),
 ('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800', 'Yoga Nidra Relaxation', 'retreat', 'Deep relaxation practice during retreat', 14, true),
 ('https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800', 'Retreat Community Circle', 'retreat', 'Participants sharing and connecting', 15, true);
-
--- Success! Verify your data
-SELECT 'Classes' as table_name, COUNT(*)::text as count FROM classes
-UNION ALL
-SELECT 'Retreats', COUNT(*)::text FROM retreats
-UNION ALL
-SELECT 'Programs', COUNT(*)::text FROM programs  
-UNION ALL
-SELECT 'Gallery', COUNT(*)::text FROM gallery
-UNION ALL
-SELECT 'Blogs', COUNT(*)::text FROM blogs;
