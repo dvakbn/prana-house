@@ -1,10 +1,95 @@
 require('dotenv').config();
 
+const crypto = require('crypto');
+
 const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_ANON_KEY
 );
+
+// ── Security helpers ───────────────────────────────────────────────────────────
+// Secret used to sign admin session tokens. Prefer a dedicated SESSION_SECRET;
+// fall back to ADMIN_PASSWORD, then a random per-process secret (tokens reset on restart).
+const SESSION_SECRET =
+  process.env.SESSION_SECRET ||
+  process.env.ADMIN_PASSWORD ||
+  crypto.randomBytes(32).toString('hex');
+
+const TOKEN_TTL_MS = 8 * 60 * 60 * 1000; // 8 hours
+
+// Create a tamper-proof, expiring token: base64url(payload).hmac
+function signToken(username) {
+  const payload = `${username}:${Date.now() + TOKEN_TTL_MS}`;
+  const data = Buffer.from(payload).toString('base64url');
+  const sig = crypto.createHmac('sha256', SESSION_SECRET).update(data).digest('base64url');
+  return `${data}.${sig}`;
+}
+
+function verifyToken(token) {
+  if (!token || typeof token !== 'string' || !token.includes('.')) return false;
+  const [data, sig] = token.split('.');
+  if (!data || !sig) return false;
+  const expected = crypto.createHmac('sha256', SESSION_SECRET).update(data).digest('base64url');
+  const a = Buffer.from(sig);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return false;
+  try {
+    const payload = Buffer.from(data, 'base64url').toString();
+    const exp = parseInt(payload.split(':').pop(), 10);
+    return Boolean(exp) && Date.now() < exp;
+  } catch {
+    return false;
+  }
+}
+
+// Middleware: require a valid admin token
+function requireAuth(req, res, next) {
+  const header = req.headers.authorization || '';
+  const token = header.startsWith('Bearer ') ? header.slice(7) : header;
+  if (!verifyToken(token)) {
+    return res.status(401).json({ success: false, error: 'Unauthorized' });
+  }
+  next();
+}
+
+// Escape HTML to prevent injection in emails
+function escapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function isValidEmail(email) {
+  return typeof email === 'string' && email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// Lightweight in-memory rate limiter (per IP). No external dependency.
+function rateLimit({ windowMs, max, message }) {
+  const hits = new Map();
+  return (req, res, next) => {
+    const key = req.ip || 'global';
+    const now = Date.now();
+    let entry = hits.get(key);
+    if (!entry || now > entry.reset) {
+      entry = { count: 0, reset: now + windowMs };
+      hits.set(key, entry);
+    }
+    entry.count++;
+    // Opportunistic cleanup to keep the map small
+    if (hits.size > 5000) {
+      for (const [k, v] of hits) if (now > v.reset) hits.delete(k);
+    }
+    if (entry.count > max) {
+      res.setHeader('Retry-After', Math.ceil((entry.reset - now) / 1000));
+      return res.status(429).json({ success: false, error: message || 'Too many requests. Please try again later.' });
+    }
+    next();
+  };
+}
 
 const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -76,11 +161,48 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+// Behind a proxy (Vercel/Render/Nginx) — needed for correct client IPs in rate limiting
+app.set('trust proxy', 1);
+
+// ── Security headers ───────────────────────────────────────────────────────────
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), interest-cohort=()');
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.setHeader('Content-Security-Policy', [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https:",
+    "connect-src 'self' https:",
+    "frame-ancestors 'self'",
+    "base-uri 'self'",
+    "form-action 'self'"
+  ].join('; '));
+  res.removeHeader('X-Powered-By');
+  next();
+});
+
+// Middleware (explicit body size limit to limit abuse)
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1h', etag: true }));
 app.set('view engine', 'html');
+
+// ── Rate limiters ──────────────────────────────────────────────────────────────
+const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10, message: 'Too many login attempts. Please try again in 15 minutes.' });
+const contactLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5, message: 'Too many submissions. Please try again later.' });
+const newsletterLimiter = rateLimit({ windowMs: 60 * 60 * 1000, max: 8, message: 'Too many requests. Please try again later.' });
+const testimonialLimiter = rateLimit({ windowMs: 60 * 60 * 1000, max: 5, message: 'Too many submissions. Please try again later.' });
+
+// ── Admin API guard: every /api/admin/* route requires a valid token, except login ──
+app.use('/api/admin', (req, res, next) => {
+  if (req.path === '/login') return next();
+  return requireAuth(req, res, next);
+});
 
 // Simple HTML file server (no templating engine needed for static HTML)
 // Routes serve HTML files from /views directory
@@ -148,18 +270,34 @@ app.get('/admin/login', (req, res) => res.sendFile(path.join(__dirname, 'views',
 // Admin Dashboard Page
 app.get('/admin/dashboard', (req, res) => res.sendFile(path.join(__dirname, 'views', 'admin-dashboard.html')));
 
-// Admin Authentication (Simple - Replace with proper auth in production)
+// Admin Authentication
 const ADMIN_CREDENTIALS = {
   username: process.env.ADMIN_USERNAME || 'admin',
-  password: process.env.ADMIN_PASSWORD || 'pranahouse2025' // CHANGE THIS!
+  password: process.env.ADMIN_PASSWORD || '' // Must be set via environment variable
 };
 
-app.post('/api/admin/login', (req, res) => {
-  const { username, password } = req.body;
-  
-  if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-    // Generate simple token (use JWT in production)
-    const token = Buffer.from(`${username}:${Date.now()}`).toString('base64');
+// Timing-safe string comparison to avoid leaking length/content via timing
+function safeEqual(a, b) {
+  const ba = Buffer.from(String(a));
+  const bb = Buffer.from(String(b));
+  if (ba.length !== bb.length) return false;
+  return crypto.timingSafeEqual(ba, bb);
+}
+
+app.post('/api/admin/login', loginLimiter, (req, res) => {
+  const { username, password } = req.body || {};
+
+  // Refuse login if no admin password is configured (prevents blank-password access)
+  if (!ADMIN_CREDENTIALS.password) {
+    console.error('ADMIN_PASSWORD is not set. Admin login is disabled.');
+    return res.status(503).json({ success: false, error: 'Admin login is not configured.' });
+  }
+
+  const okUser = safeEqual(username || '', ADMIN_CREDENTIALS.username);
+  const okPass = safeEqual(password || '', ADMIN_CREDENTIALS.password);
+
+  if (okUser && okPass) {
+    const token = signToken(ADMIN_CREDENTIALS.username);
     res.json({ success: true, token });
   } else {
     res.status(401).json({ success: false, error: 'Invalid credentials' });
@@ -235,14 +373,20 @@ app.delete('/api/admin/gallery', async (req, res) => {
 // ─── API ROUTES (existing) ──────────────────────────────────────────────────
 
 // Contact form submission
-app.post('/api/contact', async (req, res) => {
+app.post('/api/contact', contactLimiter, async (req, res) => {
   try {
-    const { name, email, phone, message, interest } = req.body;
+    const { name, email, phone, message, interest } = req.body || {};
     if (!name || !email || !message) {
       return res.status(400).json({
         success: false,
         error: 'Name, email and message are required.'
       });
+    }
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ success: false, error: 'Please provide a valid email address.' });
+    }
+    if (String(name).length > 100 || String(message).length > 5000 || String(phone || '').length > 30 || String(interest || '').length > 100) {
+      return res.status(400).json({ success: false, error: 'One or more fields exceed the allowed length.' });
     }
     
     // Save to Supabase (wrapped to prevent failure from killing email flow)
@@ -278,12 +422,12 @@ app.post('/api/contact', async (req, res) => {
         replyTo: ADMIN_EMAIL,
         subject: 'Thank you for contacting Prana House',
         html: emailTemplate(`
-          <h2 style="margin:0 0 8px;font-size:24px;font-weight:400;color:#2C2C2C;font-family:Georgia,serif;">Namaste, ${name} 🙏</h2>
+          <h2 style="margin:0 0 8px;font-size:24px;font-weight:400;color:#2C2C2C;font-family:Georgia,serif;">Namaste, ${escapeHtml(name)} 🙏</h2>
           <p style="margin:0 0 20px;font-size:15px;color:#6B6560;line-height:1.7;">Thank you for reaching out to Prana House. We've received your message and will get back to you within <strong style="color:#2C2C2C;">24 hours</strong>.</p>
           <div style="background:#F2EFE9;border-radius:10px;padding:20px 24px;margin-bottom:24px;border-left:3px solid #5C8A5C;">
             <p style="margin:0 0 6px;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#5C8A5C;">Your Enquiry</p>
-            <p style="margin:0;font-size:14px;color:#2C2C2C;"><strong>Interest:</strong> ${interest || 'General Enquiry'}</p>
-            ${phone ? `<p style="margin:4px 0 0;font-size:14px;color:#2C2C2C;"><strong>Phone:</strong> ${phone}</p>` : ''}
+            <p style="margin:0;font-size:14px;color:#2C2C2C;"><strong>Interest:</strong> ${escapeHtml(interest || 'General Enquiry')}</p>
+            ${phone ? `<p style="margin:4px 0 0;font-size:14px;color:#2C2C2C;"><strong>Phone:</strong> ${escapeHtml(phone)}</p>` : ''}
           </div>
           <p style="margin:0 0 24px;font-size:15px;color:#6B6560;line-height:1.7;">While you wait, feel free to explore our offerings:</p>
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
@@ -317,17 +461,17 @@ app.post('/api/contact', async (req, res) => {
           <p style="margin:0 0 24px;font-size:13px;color:#9B958E;">${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST</p>
           <div style="background:#F2EFE9;border-radius:10px;padding:20px 24px;margin-bottom:20px;">
             <table width="100%" cellpadding="0" cellspacing="0">
-              <tr><td style="padding:6px 0;border-bottom:1px solid #DDD8CE;"><span style="font-size:12px;color:#9B958E;text-transform:uppercase;letter-spacing:0.08em;">Name</span><br/><span style="font-size:15px;color:#2C2C2C;font-weight:500;">${name}</span></td></tr>
-              <tr><td style="padding:6px 0;border-bottom:1px solid #DDD8CE;"><span style="font-size:12px;color:#9B958E;text-transform:uppercase;letter-spacing:0.08em;">Email</span><br/><a href="mailto:${email}" style="font-size:15px;color:#5C8A5C;text-decoration:none;">${email}</a></td></tr>
-              <tr><td style="padding:6px 0;border-bottom:1px solid #DDD8CE;"><span style="font-size:12px;color:#9B958E;text-transform:uppercase;letter-spacing:0.08em;">Phone</span><br/><span style="font-size:15px;color:#2C2C2C;">${phone || '—'}</span></td></tr>
-              <tr><td style="padding:6px 0;"><span style="font-size:12px;color:#9B958E;text-transform:uppercase;letter-spacing:0.08em;">Interest</span><br/><span style="display:inline-block;margin-top:4px;padding:3px 10px;background:rgba(92,138,92,0.1);color:#5C8A5C;border-radius:50px;font-size:13px;font-weight:500;">${interest || 'General Enquiry'}</span></td></tr>
+              <tr><td style="padding:6px 0;border-bottom:1px solid #DDD8CE;"><span style="font-size:12px;color:#9B958E;text-transform:uppercase;letter-spacing:0.08em;">Name</span><br/><span style="font-size:15px;color:#2C2C2C;font-weight:500;">${escapeHtml(name)}</span></td></tr>
+              <tr><td style="padding:6px 0;border-bottom:1px solid #DDD8CE;"><span style="font-size:12px;color:#9B958E;text-transform:uppercase;letter-spacing:0.08em;">Email</span><br/><a href="mailto:${encodeURIComponent(email)}" style="font-size:15px;color:#5C8A5C;text-decoration:none;">${escapeHtml(email)}</a></td></tr>
+              <tr><td style="padding:6px 0;border-bottom:1px solid #DDD8CE;"><span style="font-size:12px;color:#9B958E;text-transform:uppercase;letter-spacing:0.08em;">Phone</span><br/><span style="font-size:15px;color:#2C2C2C;">${escapeHtml(phone || '—')}</span></td></tr>
+              <tr><td style="padding:6px 0;"><span style="font-size:12px;color:#9B958E;text-transform:uppercase;letter-spacing:0.08em;">Interest</span><br/><span style="display:inline-block;margin-top:4px;padding:3px 10px;background:rgba(92,138,92,0.1);color:#5C8A5C;border-radius:50px;font-size:13px;font-weight:500;">${escapeHtml(interest || 'General Enquiry')}</span></td></tr>
             </table>
           </div>
           <div style="background:#fff;border:1px solid #DDD8CE;border-radius:10px;padding:20px 24px;margin-bottom:20px;">
             <p style="margin:0 0 8px;font-size:12px;color:#9B958E;text-transform:uppercase;letter-spacing:0.08em;">Message</p>
-            <p style="margin:0;font-size:15px;color:#2C2C2C;line-height:1.7;">${message.replace(/\n/g, '<br/>')}</p>
+            <p style="margin:0;font-size:15px;color:#2C2C2C;line-height:1.7;">${escapeHtml(message).replace(/\n/g, '<br/>')}</p>
           </div>
-          <a href="mailto:${email}?subject=Re: Your Prana House Enquiry" style="display:inline-block;padding:12px 24px;background:#5C8A5C;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:500;">Reply to ${name}</a>
+          <a href="mailto:${encodeURIComponent(email)}?subject=Re: Your Prana House Enquiry" style="display:inline-block;padding:12px 24px;background:#5C8A5C;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:500;">Reply to ${escapeHtml(name)}</a>
         `)
       });
       adminEmailSuccess = true;
@@ -357,15 +501,21 @@ app.post('/api/contact', async (req, res) => {
 });
 
 // Newsletter signup
-app.post('/api/newsletter', async (req, res) => {
+app.post('/api/newsletter', newsletterLimiter, async (req, res) => {
   try {
-    const { email, name } = req.body;
+    const { email, name } = req.body || {};
 
     if (!email) {
       return res.status(400).json({
         success: false,
         error: 'Email is required.'
       });
+    }
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ success: false, error: 'Please provide a valid email address.' });
+    }
+    if (String(name || '').length > 100) {
+      return res.status(400).json({ success: false, error: 'Name is too long.' });
     }
 
     let supabaseSuccess = false;
@@ -426,7 +576,7 @@ app.post('/api/newsletter', async (req, res) => {
         replyTo: ADMIN_EMAIL,
         subject: 'Welcome to Prana House Yoga & Wellness',
         html: emailTemplate(`
-          <h2 style="margin:0 0 8px;font-size:24px;font-weight:400;color:#2C2C2C;font-family:Georgia,serif;">Welcome${name ? ', ' + name : ''} 🙏</h2>
+          <h2 style="margin:0 0 8px;font-size:24px;font-weight:400;color:#2C2C2C;font-family:Georgia,serif;">Welcome${name ? ', ' + escapeHtml(name) : ''} 🙏</h2>
           <p style="margin:0 0 20px;font-size:15px;color:#6B6560;line-height:1.7;">You've just taken a beautiful step. Thank you for joining the Prana House wellness community — a space built around breath, movement and holistic living.</p>
           <p style="margin:0 0 16px;font-size:14px;color:#6B6560;font-weight:500;">Here's what you'll receive:</p>
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
@@ -506,11 +656,14 @@ app.get('/api/testimonials', async (req, res) => {
 });
 
 // Submit a new testimonial (pending approval)
-app.post('/api/testimonials', async (req, res) => {
+app.post('/api/testimonials', testimonialLimiter, async (req, res) => {
   try {
-    const { name, location, program, rating, message } = req.body;
+    const { name, location, program, rating, message } = req.body || {};
     if (!name || !message) {
       return res.status(400).json({ success: false, error: 'Name and message are required.' });
+    }
+    if (String(name).length > 100 || String(message).length > 2000 || String(location || '').length > 100 || String(program || '').length > 100) {
+      return res.status(400).json({ success: false, error: 'One or more fields exceed the allowed length.' });
     }
 
     let supabaseSuccess = false;
@@ -536,12 +689,12 @@ app.post('/api/testimonials', async (req, res) => {
         subject: `New Testimonial from ${name} - Pending Review`,
         html: `
           <h2>New Testimonial Submission</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Location:</strong> ${location || 'Not provided'}</p>
-          <p><strong>Program:</strong> ${program || 'General'}</p>
+          <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+          <p><strong>Location:</strong> ${escapeHtml(location || 'Not provided')}</p>
+          <p><strong>Program:</strong> ${escapeHtml(program || 'General')}</p>
           <p><strong>Rating:</strong> ${'⭐'.repeat(parseInt(rating) || 5)}</p>
           <p><strong>Message:</strong></p>
-          <p>${message.replace(/\n/g, '<br>')}</p>
+          <p>${escapeHtml(message).replace(/\n/g, '<br>')}</p>
           <p>Review and approve in your Supabase dashboard.</p>
         `
       });
@@ -1058,6 +1211,19 @@ app.delete('/api/admin/programs/:id', async (req, res) => {
 // 404
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
+});
+
+// ── Central error handler — return clean JSON, never leak stack traces ──
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  if (err && err.type === 'entity.too.large') {
+    return res.status(413).json({ success: false, error: 'Request payload too large.' });
+  }
+  if (err && (err.type === 'entity.parse.failed' || err instanceof SyntaxError)) {
+    return res.status(400).json({ success: false, error: 'Invalid request format.' });
+  }
+  console.error('Unhandled error:', err);
+  res.status(500).json({ success: false, error: 'Server error' });
 });
 
 app.listen(PORT, () => {

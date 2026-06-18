@@ -572,6 +572,7 @@
     // Load approved testimonials from Supabase into homepage section (max 3)
     (async function loadHomeTestimonials() {
       const grid = document.getElementById('home-testimonials-grid');
+      const escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
       try {
         const res = await fetch('/api/testimonials');
         const data = await res.json();
@@ -584,12 +585,12 @@
         grid.innerHTML = top.map((t, i) => `
           <div class="testimonial-card fade-in fade-in-delay-${i}" id="testimonial-${i+1}">
             <div class="testimonial-stars">${'★'.repeat(t.rating||5)}${'☆'.repeat(5-(t.rating||5))}</div>
-            <p class="testimonial-text">"${t.message}"</p>
+            <p class="testimonial-text">"${escHtml(t.message)}"</p>
             <div class="testimonial-author">
               <div class="testimonial-avatar" style="background:rgba(92,138,92,0.1);border-radius:50%;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🧘</div>
               <div>
-                <div class="testimonial-name">${t.name}</div>
-                <div class="testimonial-location">${t.location || 'Jaipur'}${t.program ? ' · ' + t.program : ''}</div>
+                <div class="testimonial-name">${escHtml(t.name)}</div>
+                <div class="testimonial-location">${escHtml(t.location || 'Jaipur')}${t.program ? ' · ' + escHtml(t.program) : ''}</div>
               </div>
             </div>
           </div>

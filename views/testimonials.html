@@ -156,6 +156,7 @@
   <script src="/js/main.js"></script>
   <script>
     // Load testimonials from API
+    const escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     async function loadTestimonials() {
       const grid = document.getElementById('testimonials-grid');
       const loader = document.getElementById('loading-state');
@@ -171,14 +172,14 @@
         grid.innerHTML = data.map(t => `
           <div class="tcard fade-in">
             <div class="tcard-stars">${'★'.repeat(t.rating || 5)}</div>
-            <p class="tcard-text">"${t.message}"</p>
+            <p class="tcard-text">"${escHtml(t.message)}"</p>
             <div class="tcard-author">
               <div class="tcard-avatar">👤</div>
               <div>
-                <div class="tcard-name">${t.name}</div>
-                <div class="tcard-location">${t.location || 'Jaipur'}</div>
+                <div class="tcard-name">${escHtml(t.name)}</div>
+                <div class="tcard-location">${escHtml(t.location || 'Jaipur')}</div>
               </div>
-              ${t.program ? `<span class="tcard-program" style="margin-left:auto;">${t.program}</span>` : ''}
+              ${t.program ? `<span class="tcard-program" style="margin-left:auto;">${escHtml(t.program)}</span>` : ''}
             </div>
           </div>
         `).join('');
