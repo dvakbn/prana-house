@@ -202,6 +202,7 @@ p  { font-size: 1rem; color: var(--text-secondary); }
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  height: 100%;
 }
 .nav-links a {
   padding: 0.5rem 0.9rem;
@@ -211,6 +212,8 @@ p  { font-size: 1rem; color: var(--text-secondary); }
   border-radius: 8px;
   transition: var(--transition);
   position: relative;
+  display: flex;
+  align-items: center;
 }
 .nav-links a:hover, .nav-links a.active {
   color: var(--accent);
@@ -218,7 +221,12 @@ p  { font-size: 1rem; color: var(--text-secondary); }
 }
 
 /* Dropdown */
-.nav-dropdown { position: relative; }
+.nav-dropdown { 
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
 .nav-dropdown-menu {
   position: absolute;
   top: calc(100% + 8px);
