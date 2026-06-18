@@ -171,9 +171,28 @@ app.post('/api/admin/gallery', async (req, res) => {
 
     const { url, caption, category, alt, sort_order, visible } = req.body;
     
-    const { error } = await supabase
+    // Check if image with this URL already exists
+    const { data: existing } = await supabase
       .from('gallery')
-      .upsert([{ url, caption, category, alt, sort_order: sort_order || 0, visible }], { onConflict: 'url' });
+      .select('url')
+      .eq('url', url)
+      .single();
+    
+    let error;
+    if (existing) {
+      // Update existing image
+      const result = await supabase
+        .from('gallery')
+        .update({ caption, category, alt, sort_order: sort_order || 0, visible })
+        .eq('url', url);
+      error = result.error;
+    } else {
+      // Insert new image
+      const result = await supabase
+        .from('gallery')
+        .insert([{ url, caption, category, alt, sort_order: sort_order || 0, visible }]);
+      error = result.error;
+    }
     
     if (error) throw error;
     
