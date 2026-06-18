@@ -214,6 +214,18 @@
     </div>
   </div>
 
+  <!-- Dynamic Classes Section -->
+  <section class="section-pad" style="background:var(--bg-alt);" id="dynamic-classes-section">
+    <div class="container">
+      <div class="section-header centered fade-in">
+        <span class="section-label">Currently Available</span>
+        <h2>Join Our <span class="display-italic">Classes</span></h2>
+      </div>
+      <div id="classes-loading" style="text-align:center;padding:2rem;color:var(--text-light);">Loading classes... 🌿</div>
+      <div id="classes-grid" style="display:none;"></div>
+    </div>
+  </section>
+
   <section class="section-pad" style="background:var(--bg);">
     <div class="container">
 
@@ -426,6 +438,57 @@
         if (!wasOpen) item.classList.add('open');
       });
     });
+
+    // Load dynamic classes
+    async function loadDynamicClasses() {
+      const loader = document.getElementById('classes-loading');
+      const grid = document.getElementById('classes-grid');
+      try {
+        const res = await fetch('/api/classes');
+        const classes = await res.json();
+        
+        if (classes.length === 0) {
+          loader.style.display = 'none';
+          document.getElementById('dynamic-classes-section').style.display = 'none';
+          return;
+        }
+        
+        loader.style.display = 'none';
+        grid.style.display = 'grid';
+        grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(320px, 1fr))';
+        grid.style.gap = '1.5rem';
+        
+        grid.innerHTML = classes.map(cls => `
+          <div class="class-card fade-in" style="flex-direction:column;align-items:stretch;">
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;">
+              <div class="class-icon-box" style="width:48px;height:48px;font-size:1.3rem;">
+                ${cls.type === 'Online' ? '💻' : cls.type === 'Offline' ? '🏡' : '🔄'}
+              </div>
+              <div style="flex:1;">
+                <h3 style="font-size:1.1rem;margin-bottom:0.25rem;">${cls.name}</h3>
+                <span class="level-badge level-${cls.level === 'all' ? 'all' : cls.level.toLowerCase()}">${cls.level === 'all' ? 'All Levels' : cls.level.charAt(0).toUpperCase() + cls.level.slice(1)}</span>
+              </div>
+            </div>
+            ${cls.description ? `<p style="font-size:0.88rem;margin-bottom:1rem;color:var(--text-secondary);">${cls.description}</p>` : ''}
+            <div class="class-meta-row" style="margin-bottom:1rem;">
+              <span class="class-meta-item">📅 ${cls.schedule}</span>
+              ${cls.duration ? `<span class="class-meta-item">⏱ ${cls.duration} min</span>` : ''}
+              ${cls.max_students ? `<span class="class-meta-item">👥 Max ${cls.max_students}</span>` : ''}
+            </div>
+            ${cls.price ? `<p style="font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:1rem;">₹${cls.price.toLocaleString('en-IN')}/month</p>` : ''}
+            <a href="https://wa.me/919599839737?text=I want to join ${encodeURIComponent(cls.name)}" class="btn btn-primary" style="margin-top:auto;">Join Class</a>
+          </div>
+        `).join('');
+        
+        setTimeout(() => grid.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 50);
+      } catch (err) {
+        console.error('Failed to load classes:', err);
+        loader.style.display = 'none';
+        document.getElementById('dynamic-classes-section').style.display = 'none';
+      }
+    }
+    
+    loadDynamicClasses();
   </script>
 </body>
 </html>

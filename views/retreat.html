@@ -134,6 +134,19 @@
     </div>
   </section>
 
+  <!-- Dynamic Upcoming Retreats Section -->
+  <section class="section-pad" style="background:var(--bg-alt);" id="dynamic-retreats-section">
+    <div class="container">
+      <div class="section-header centered fade-in">
+        <span class="section-label">Coming Up</span>
+        <h2>Upcoming <span class="display-italic">Retreats</span></h2>
+        <div class="divider-leaf centered"></div>
+      </div>
+      <div id="retreats-loading" style="text-align:center;padding:2rem;color:var(--text-light);">Loading retreats... 🌿</div>
+      <div id="retreats-grid" style="display:none;"></div>
+    </div>
+  </section>
+
   <!-- Schedule Preview -->
   <section class="schedule-section section-pad" id="section-schedule">
     <div class="container">
@@ -258,6 +271,63 @@
       } catch { }
       btn.disabled = false; btn.textContent = 'Notify Me';
     });
+
+    // Load dynamic retreats
+    async function loadDynamicRetreats() {
+      const loader = document.getElementById('retreats-loading');
+      const grid = document.getElementById('retreats-grid');
+      try {
+        const res = await fetch('/api/retreats');
+        const retreats = await res.json();
+        
+        if (retreats.length === 0) {
+          loader.style.display = 'none';
+          document.getElementById('dynamic-retreats-section').style.display = 'none';
+          return;
+        }
+        
+        loader.style.display = 'none';
+        grid.style.display = 'grid';
+        grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(340px, 1fr))';
+        grid.style.gap = '2rem';
+        
+        grid.innerHTML = retreats.map(retreat => `
+          <div class="fade-in" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:var(--transition);">
+            ${retreat.image ? `<img src="${retreat.image}" alt="${retreat.title}" style="width:100%;height:200px;object-fit:cover;">` : ''}
+            <div style="padding:2rem;">
+              <h3 style="font-size:1.4rem;margin-bottom:0.5rem;font-family:var(--font-display);">${retreat.title}</h3>
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;font-size:0.88rem;color:var(--text-light);">
+                <span>📍 ${retreat.location}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;font-size:0.88rem;color:var(--text-light);">
+                <span>📅 ${new Date(retreat.start_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - ${new Date(retreat.end_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+              </div>
+              ${retreat.description ? `<p style="font-size:0.9rem;margin-bottom:1.5rem;line-height:1.7;">${retreat.description}</p>` : ''}
+              ${retreat.highlights && retreat.highlights.length > 0 ? `
+                <div style="margin-bottom:1.5rem;">
+                  <p style="font-weight:600;font-size:0.85rem;margin-bottom:0.75rem;color:var(--accent);">Highlights:</p>
+                  <ul style="font-size:0.85rem;padding-left:1.25rem;color:var(--text-secondary);">
+                    ${retreat.highlights.slice(0, 3).map(h => `<li style="margin-bottom:0.25rem;">${h}</li>`).join('')}
+                  </ul>
+                </div>
+              ` : ''}
+              <div style="display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid var(--border);">
+                ${retreat.price ? `<p style="font-size:1.3rem;font-weight:600;color:var(--accent);">₹${retreat.price.toLocaleString('en-IN')}</p>` : '<div></div>'}
+                <a href="https://wa.me/919599839737?text=I'm interested in ${encodeURIComponent(retreat.title)}" class="btn btn-primary">Enquire Now</a>
+              </div>
+            </div>
+          </div>
+        `).join('');
+        
+        setTimeout(() => grid.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 50);
+      } catch (err) {
+        console.error('Failed to load retreats:', err);
+        loader.style.display = 'none';
+        document.getElementById('dynamic-retreats-section').style.display = 'none';
+      }
+    }
+    
+    loadDynamicRetreats();
   </script>
 </body>
 </html>
