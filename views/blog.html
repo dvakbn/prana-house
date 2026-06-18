@@ -67,7 +67,7 @@
       const grid = document.getElementById('blog-grid');
       const loader = document.getElementById('loading-state');
       try {
-        const res = await fetch('/api/blog');
+        const res = await fetch('/api/blogs');
         allPosts = await res.json();
         loader.style.display = 'none';
         grid.style.display = 'grid';
@@ -87,7 +87,7 @@
       grid.innerHTML = posts.map(p => `
         <a class="blog-card fade-in" href="/blog/${p.slug}">
           <div class="blog-thumb">
-            ${p.cover_image ? `<img src="${p.cover_image}" alt="${p.title}"/>` : `<span>${p.emoji || '🌿'}</span>`}
+            ${p.image ? `<img src="${p.image}" alt="${p.title}"/>` : `<span>🌿</span>`}
             <div class="blog-thumb-overlay"></div>
           </div>
           <div class="blog-body">
@@ -96,7 +96,7 @@
             <p>${p.excerpt || ''}</p>
             <div class="blog-footer">
               <span>${p.author || 'Dr. Fareen Tak'}</span>
-              <span>${p.read_time ? p.read_time + ' min read' : ''}</span>
+              <span>${new Date(p.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
             </div>
           </div>
         </a>
