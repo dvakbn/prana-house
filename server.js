@@ -557,6 +557,290 @@ app.get('/api/gallery', async (req, res) => {
   }
 });
 
+// ── Blog API ──────────────────────────────────────────────────────────────────
+
+// Get all blogs (public - published only)
+app.get('/api/blogs', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('*')
+      .eq('published', true)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    console.error('BLOGS GET ERROR:', err);
+    res.json([]);
+  }
+});
+
+// Get single blog by slug (public)
+app.get('/api/blogs/:slug', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('*')
+      .eq('slug', req.params.slug)
+      .eq('published', true)
+      .single();
+    if (error) throw error;
+    res.json(data);
+  } catch (err) {
+    console.error('BLOG GET ERROR:', err);
+    res.status(404).json({ error: 'Blog post not found' });
+  }
+});
+
+// Create blog (admin)
+app.post('/api/admin/blogs', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { title, slug, author, category, image, excerpt, content, published } = req.body;
+    
+    const { data, error } = await supabase
+      .from('blogs')
+      .insert([{ title, slug, author, category, image, excerpt, content, published }])
+      .select();
+    
+    if (error) throw error;
+    
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Admin Blog Create Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Update blog (admin)
+app.put('/api/admin/blogs/:id', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { title, slug, author, category, image, excerpt, content, published } = req.body;
+    
+    const { data, error } = await supabase
+      .from('blogs')
+      .update({ title, slug, author, category, image, excerpt, content, published, updated_at: new Date().toISOString() })
+      .eq('id', req.params.id)
+      .select();
+    
+    if (error) throw error;
+    
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Admin Blog Update Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Delete blog (admin)
+app.delete('/api/admin/blogs/:id', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { error } = await supabase
+      .from('blogs')
+      .delete()
+      .eq('id', req.params.id);
+    
+    if (error) throw error;
+    
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Admin Blog Delete Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ── Retreats API ──────────────────────────────────────────────────────────────
+
+// Get all retreats (public - active only)
+app.get('/api/retreats', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('retreats')
+      .select('*')
+      .eq('active', true)
+      .order('start_date', { ascending: true });
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    console.error('RETREATS GET ERROR:', err);
+    res.json([]);
+  }
+});
+
+// Create retreat (admin)
+app.post('/api/admin/retreats', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { title, start_date, end_date, location, price, max_participants, description, highlights, image, active } = req.body;
+    
+    const { data, error } = await supabase
+      .from('retreats')
+      .insert([{ title, start_date, end_date, location, price, max_participants, description, highlights, image, active }])
+      .select();
+    
+    if (error) throw error;
+    
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Admin Retreat Create Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Update retreat (admin)
+app.put('/api/admin/retreats/:id', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { title, start_date, end_date, location, price, max_participants, description, highlights, image, active } = req.body;
+    
+    const { data, error } = await supabase
+      .from('retreats')
+      .update({ title, start_date, end_date, location, price, max_participants, description, highlights, image, active })
+      .eq('id', req.params.id)
+      .select();
+    
+    if (error) throw error;
+    
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Admin Retreat Update Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Delete retreat (admin)
+app.delete('/api/admin/retreats/:id', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { error } = await supabase
+      .from('retreats')
+      .delete()
+      .eq('id', req.params.id);
+    
+    if (error) throw error;
+    
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Admin Retreat Delete Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ── Classes API ───────────────────────────────────────────────────────────────
+
+// Get all classes (public - active only)
+app.get('/api/classes', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('classes')
+      .select('*')
+      .eq('active', true)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    console.error('CLASSES GET ERROR:', err);
+    res.json([]);
+  }
+});
+
+// Create class (admin)
+app.post('/api/admin/classes', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { name, type, level, schedule, duration, price, description, max_students, active } = req.body;
+    
+    const { data, error } = await supabase
+      .from('classes')
+      .insert([{ name, type, level, schedule, duration, price, description, max_students, active }])
+      .select();
+    
+    if (error) throw error;
+    
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Admin Class Create Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Update class (admin)
+app.put('/api/admin/classes/:id', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { name, type, level, schedule, duration, price, description, max_students, active } = req.body;
+    
+    const { data, error } = await supabase
+      .from('classes')
+      .update({ name, type, level, schedule, duration, price, description, max_students, active })
+      .eq('id', req.params.id)
+      .select();
+    
+    if (error) throw error;
+    
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Admin Class Update Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Delete class (admin)
+app.delete('/api/admin/classes/:id', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { error } = await supabase
+      .from('classes')
+      .delete()
+      .eq('id', req.params.id);
+    
+    if (error) throw error;
+    
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Admin Class Delete Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // 404
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
