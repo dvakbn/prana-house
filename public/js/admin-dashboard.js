@@ -129,9 +129,9 @@ async function loadGalleryData() {
     console.error('Failed to load gallery:', err);
     const tbody = document.querySelector('#gallery-table tbody');
     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;">
-      <div style="color:#c94a4a;margin-bottom:0.5rem;">⚠️ Failed to connect to database</div>
+      <div style="color:#c94a4a;margin-bottom:0.5rem;">⚠️ Failed to load data</div>
       <div style="color:var(--text-light);font-size:0.9rem;">Please check that environment variables are set in Vercel.</div>
-      <div style="color:var(--text-light);font-size:0.9rem;margin-top:0.5rem;">See <code>VERCEL_SETUP_GUIDE.md</code> for instructions.</div>
+      <div style="color:var(--text-light);font-size:0.9rem;margin-top:0.5rem;">See <code>VERCEL_ENV_SETUP.md</code> for instructions.</div>
     </td></tr>`;
   }
 }
