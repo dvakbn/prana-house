@@ -114,6 +114,10 @@
     .program-detail:last-of-type { border-bottom: none; }
     .program-detail.reverse { direction: rtl; }
     .program-detail.reverse > * { direction: ltr; }
+    .program-detail:hover {
+      background: rgba(92,138,92,0.02);
+      transform: translateX(5px);
+    }
     .program-visual {
       background: var(--surface);
       border-radius: 24px;
@@ -124,6 +128,10 @@
       font-size: 6rem;
       position: relative;
       overflow: hidden;
+      transition: var(--transition);
+    }
+    .program-detail:hover .program-visual {
+      transform: scale(1.05);
     }
     .program-visual::after {
       content: '';
@@ -169,7 +177,7 @@
     <div class="container" style="padding-top:2rem;padding-bottom:5rem;">
 
       <!-- ── Guided Meditation ── -->
-      <div class="program-detail fade-in" id="meditation">
+      <a href="/program/detail?slug=guided-meditation" class="program-detail fade-in" id="meditation" style="text-decoration:none;color:inherit;cursor:pointer;transition:var(--transition);">
         <div class="program-visual">🧘</div>
         <div>
           <span class="section-label">Program 01</span>
@@ -192,12 +200,12 @@
             <span class="tag">30–45 min sessions</span>
           </div>
           <br/>
-          <a href="/contact?interest=meditation" class="btn btn-primary">Enquire Now</a>
+          <span class="btn btn-primary" style="pointer-events:none;">View Full Details →</span>
         </div>
-      </div>
+      </a>
 
       <!-- ── Breathing Exercises ── -->
-      <div class="program-detail reverse fade-in" id="breathing">
+      <a href="/program/detail?slug=breathing-exercises" class="program-detail reverse fade-in" id="breathing" style="text-decoration:none;color:inherit;cursor:pointer;transition:var(--transition);">
         <div class="program-visual">🌬️</div>
         <div>
           <span class="section-label">Program 02</span>
@@ -220,12 +228,12 @@
             <span class="tag">All Levels</span>
           </div>
           <br/>
-          <a href="/contact?interest=breathing" class="btn btn-primary">Enquire Now</a>
+          <span class="btn btn-primary" style="pointer-events:none;">View Full Details →</span>
         </div>
-      </div>
+      </a>
 
       <!-- ── Flexibility Training ── -->
-      <div class="program-detail fade-in" id="flexibility">
+      <a href="/program/detail?slug=flexibility-training" class="program-detail fade-in" id="flexibility" style="text-decoration:none;color:inherit;cursor:pointer;transition:var(--transition);">
         <div class="program-visual">🤸</div>
         <div>
           <span class="section-label">Program 03</span>
@@ -248,12 +256,12 @@
             <span class="tag">Progressive Levels</span>
           </div>
           <br/>
-          <a href="/contact?interest=flexibility" class="btn btn-primary">Enquire Now</a>
+          <span class="btn btn-primary" style="pointer-events:none;">View Full Details →</span>
         </div>
-      </div>
+      </a>
 
       <!-- ── Stress Relief ── -->
-      <div class="program-detail reverse fade-in" id="stress">
+      <a href="/program/detail?slug=stress-relief" class="program-detail reverse fade-in" id="stress" style="text-decoration:none;color:inherit;cursor:pointer;transition:var(--transition);">
         <div class="program-visual">🌸</div>
         <div>
           <span class="section-label">Program 04</span>
@@ -276,9 +284,9 @@
             <span class="tag">Gentle Pace</span>
           </div>
           <br/>
-          <a href="/contact?interest=stress-relief" class="btn btn-primary">Enquire Now</a>
+          <span class="btn btn-primary" style="pointer-events:none;">View Full Details →</span>
         </div>
-      </div>
+      </a>
 
     </div>
   </main>
