@@ -88,7 +88,11 @@ document.getElementById('add-gallery-btn')?.addEventListener('click', () => {
 
 async function loadGalleryData() {
   try {
-    const res = await fetch('/api/gallery');
+    const res = await fetch('/api/admin/gallery', {
+      headers: { 
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+      }
+    });
     
     // Check if server returned an error
     if (!res.ok) {
@@ -164,7 +168,11 @@ document.getElementById('gallery-form')?.addEventListener('submit', async (e) =>
 
 window.editGallery = async (url) => {
   try {
-    const res = await fetch('/api/gallery');
+    const res = await fetch('/api/admin/gallery', {
+      headers: { 
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+      }
+    });
     const data = await res.json();
     const item = data.find(i => i.url === url);
     

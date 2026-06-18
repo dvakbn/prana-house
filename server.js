@@ -557,7 +557,7 @@ app.post('/api/testimonials', async (req, res) => {
 
 // ── Gallery API ───────────────────────────────────────────────────────────────
 
-// Get all gallery items (public)
+// Get all gallery items (public - visible only)
 app.get('/api/gallery', async (req, res) => {
   try {
     const { category } = req.query;
@@ -572,6 +572,26 @@ app.get('/api/gallery', async (req, res) => {
     res.json(data || []);
   } catch (err) {
     console.error('GALLERY GET ERROR:', err);
+    res.json([]);
+  }
+});
+
+// Get all gallery items for admin (including hidden)
+app.get('/api/admin/gallery', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { data, error } = await supabase
+      .from('gallery')
+      .select('*')
+      .order('sort_order', { ascending: true });
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    console.error('ADMIN GALLERY GET ERROR:', err);
     res.json([]);
   }
 });
