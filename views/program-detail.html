@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title id="page-title">Program Details | Prana House</title>
+  <meta name="description" id="page-description" content=""/>
+  <link rel="stylesheet" href="/css/style.css"/>
+  <style>
+    .program-hero {
+      min-height: 65vh;
+      background: linear-gradient(135deg, #5c8a5c 0%, #3a6041 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 10rem 2rem 5rem;
+      overflow: hidden;
+    }
+    .program-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 30% 40%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(200,169,110,0.12) 0%, transparent 50%);
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.5;
+      animation: drift 18s ease-in-out infinite;
+    }
+    .orb-1 { width:400px;height:400px; background:rgba(255,255,255,0.08); top:5%; right:10%; }
+    .orb-2 { width:300px;height:300px; background:rgba(200,169,110,0.15); bottom:15%; left:5%; animation-delay:-7s; }
+    @keyframes drift {
+      0%,100% { transform: translate(0,0); }
+      33% { transform: translate(50px,-40px); }
+      66% { transform: translate(-40px,30px); }
+    }
+    .program-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      text-align: center;
+      color: #fff;
+    }
+    .program-icon-large {
+      font-size: 5rem;
+      margin-bottom: 1.5rem;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .program-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 0.65rem 1.75rem;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 2rem;
+    }
+    .program-hero-content h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 7vw, 4.2rem);
+      font-weight: 300;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+    .program-tagline {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      opacity: 0.92;
+      max-width: 650px;
+      margin: 0 auto 3rem;
+    }
+    .program-meta {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+    }
+    .program-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(10px);
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .content-section {
+      padding: 5rem 0;
+    }
+    .description-text {
+      font-size: 1.1rem;
+      line-height: 1.9;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+    
+    .benefits-section {
+      background: var(--bg-alt);
+      padding: 5rem 0;
+    }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .benefit-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      display: flex;
+      align-items: start;
+      gap: 1.25rem;
+      transition: var(--transition);
+    }
+    .benefit-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+      border-color: rgba(92,138,92,0.3);
+    }
+    .benefit-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(92,138,92,0.12);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .benefit-text {
+      flex: 1;
+      font-size: 0.98rem;
+      line-height: 1.7;
+    }
+    
+    .included-section {
+      padding: 5rem 0;
+      background: var(--bg);
+    }
+    .included-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-top: 3rem;
+    }
+    .included-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: var(--transition);
+    }
+    .included-item:hover {
+      transform: translateX(5px);
+      border-color: rgba(92,138,92,0.3);
+    }
+    .included-check {
+      color: var(--accent);
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    
+    .upcoming-section {
+      padding: 5rem 0;
+      background: var(--bg-alt);
+    }
+    .upcoming-dates {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .date-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      text-align: center;
+      transition: var(--transition);
+    }
+    .date-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    }
+    .date-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .date-text {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .date-note {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+    
+    .booking-section {
+      background: linear-gradient(135deg, #5c8a5c 0%, #3a6041 100%);
+      padding: 5rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .booking-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.1) 0%, transparent 60%);
+    }
+    .booking-card {
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(20px);
+      border-radius: var(--radius-lg);
+      padding: 4rem 3rem;
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.15);
+    }
+    .booking-card h2 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      font-family: var(--font-display);
+    }
+    .price-tag {
+      font-size: 3rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 2rem 0;
+      font-family: var(--font-display);
+    }
+    .price-tag small {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      font-weight: 400;
+    }
+    
+    @media (max-width: 768px) {
+      .program-hero {
+        padding: 8rem 1.5rem 4rem;
+        min-height: 60vh;
+      }
+      .program-meta {
+        gap: 1rem;
+      }
+      .benefits-grid, .upcoming-dates {
+        grid-template-columns: 1fr;
+      }
+      .booking-card {
+        padding: 3rem 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <!-- Program Hero -->
+  <section class="program-hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="program-hero-content">
+      <span class="program-icon-large" id="program-icon">🌿</span>
+      <div class="program-badge" id="program-badge">
+        <span>Program</span>
+      </div>
+      <h1 id="program-name">Loading...</h1>
+      <p class="program-tagline" id="program-tagline"></p>
+      <div class="program-meta" id="program-meta"></div>
+    </div>
+  </section>
+
+  <!-- Description Section -->
+  <section class="content-section" id="description-section" style="display:none;">
+    <div class="container">
+      <div class="section-header centered fade-in">
+        <span class="section-label">Overview</span>
+        <h2>What This <span class="display-italic">Program Offers</span></h2>
+        <div class="divider-leaf centered"></div>
+      </div>
+      <div class="description-text fade-in" id="program-description" style="max-width:800px;margin:2rem auto 0;"></div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="benefits-section" id="benefits-section" style="display:none;">
+    <div class="container">
+      <div class="section-header centered fade-in">
+        <span class="section-label">Benefits</span>
+        <h2>What You'll <span class="display-italic">Experience</span></h2>
+        <div class="divider-leaf centered"></div>
+      </div>
+      <div class="benefits-grid" id="benefits-container"></div>
+    </div>
+  </section>
+
+  <!-- What's Included Section -->
+  <section class="included-section" id="included-section" style="display:none;">
+    <div class="container">
+      <div class="section-header centered fade-in">
+        <span class="section-label">Program Includes</span>
+        <h2>What's <span class="display-italic">Included</span></h2>
+        <div class="divider-leaf centered"></div>
+      </div>
+      <div class="included-grid" id="included-container"></div>
+    </div>
+  </section>
+
+  <!-- Upcoming Dates Section -->
+  <section class="upcoming-section" id="upcoming-section" style="display:none;">
+    <div class="container">
+      <div class="section-header centered fade-in">
+        <span class="section-label">Schedule</span>
+        <h2>Upcoming <span class="display-italic">Sessions</span></h2>
+        <div class="divider-leaf centered"></div>
+      </div>
+      <div class="upcoming-dates" id="upcoming-container"></div>
+    </div>
+  </section>
+
+  <!-- Booking Section -->
+  <section class="booking-section">
+    <div class="container-sm">
+      <div class="booking-card fade-in">
+        <h2>Ready to <span class="display-italic">Begin?</span></h2>
+        <div class="divider-leaf centered"></div>
+        <p style="font-size:1.05rem;color:var(--text-secondary);margin-bottom:0.5rem;">Join this transformative program</p>
+        <div id="price-display" class="price-tag"></div>
+        <a href="#" id="whatsapp-button" class="btn btn-primary btn-lg" style="font-size:1.05rem;padding:1rem 3rem;">
+          Enquire Now →
+        </a>
+        <p style="font-size:0.85rem;color:var(--text-light);margin-top:2rem;">Questions? We're here to help</p>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/js/components.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    // Get program slug from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const programSlug = urlParams.get('slug');
+
+    if (!programSlug) {
+      window.location.href = '/programs';
+    }
+
+    async function loadProgramDetails() {
+      try {
+        const res = await fetch('/api/programs');
+        const programs = await res.json();
+        const program = programs.find(p => p.slug === programSlug);
+
+        if (!program) {
+          window.location.href = '/programs';
+          return;
+        }
+
+        // Update page title and meta
+        document.getElementById('page-title').textContent = `${program.name} | Prana House`;
+        document.getElementById('page-description').content = program.tagline || program.description || '';
+
+        // Hero section
+        document.getElementById('program-icon').textContent = program.icon || '🌿';
+        document.getElementById('program-badge').innerHTML = `<span>${program.category || 'Program'}</span>`;
+        document.getElementById('program-name').textContent = program.name;
+        document.getElementById('program-tagline').textContent = program.tagline || '';
+
+        // Meta info
+        const metaItems = [];
+        if (program.duration) metaItems.push(`<div class="program-meta-item"><span>⏱</span><span>${program.duration}</span></div>`);
+        if (program.level) {
+          const levelDisplay = program.level === 'all' ? 'All Levels' : program.level.charAt(0).toUpperCase() + program.level.slice(1);
+          metaItems.push(`<div class="program-meta-item"><span>📊</span><span>${levelDisplay}</span></div>`);
+        }
+        if (program.type) {
+          const typeDisplay = program.type === 'hybrid' ? 'Online & Offline' : program.type.charAt(0).toUpperCase() + program.type.slice(1);
+          metaItems.push(`<div class="program-meta-item"><span>${program.type === 'online' ? '💻' : program.type === 'offline' ? '🏡' : '🔄'}</span><span>${typeDisplay}</span></div>`);
+        }
+        if (program.location) metaItems.push(`<div class="program-meta-item"><span>📍</span><span>${program.location}</span></div>`);
+        document.getElementById('program-meta').innerHTML = metaItems.join('');
+
+        // Description
+        if (program.description || program.long_description) {
+          document.getElementById('description-section').style.display = 'block';
+          document.getElementById('program-description').textContent = program.long_description || program.description;
+        }
+
+        // Benefits
+        if (program.benefits && program.benefits.length > 0) {
+          document.getElementById('benefits-section').style.display = 'block';
+          document.getElementById('benefits-container').innerHTML = program.benefits.map(benefit => `
+            <div class="benefit-card fade-in">
+              <div class="benefit-icon">✓</div>
+              <div class="benefit-text">${benefit}</div>
+            </div>
+          `).join('');
+        }
+
+        // What's Included
+        if (program.what_included && program.what_included.length > 0) {
+          document.getElementById('included-section').style.display = 'block';
+          document.getElementById('included-container').innerHTML = program.what_included.map(item => `
+            <div class="included-item fade-in">
+              <span class="included-check">✓</span>
+              <span>${item}</span>
+            </div>
+          `).join('');
+        }
+
+        // Upcoming Dates
+        if (program.upcoming_dates && program.upcoming_dates.length > 0) {
+          document.getElementById('upcoming-section').style.display = 'block';
+          document.getElementById('upcoming-container').innerHTML = program.upcoming_dates.map(date => `
+            <div class="date-card fade-in">
+              <span class="date-icon">📅</span>
+              <div class="date-text">${new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+              <div class="date-note">Click below to register</div>
+            </div>
+          `).join('');
+        } else {
+          // No upcoming dates - show coming soon
+          document.getElementById('upcoming-section').style.display = 'block';
+          document.getElementById('upcoming-container').innerHTML = `
+            <div class="date-card fade-in" style="grid-column:1/-1;">
+              <span class="date-icon">🌿</span>
+              <div class="date-text">New Sessions Coming Soon</div>
+              <div class="date-note">Enquire to be notified when new dates are announced</div>
+            </div>
+          `;
+        }
+
+        // Price
+        if (program.price) {
+          document.getElementById('price-display').innerHTML = `₹${program.price.toLocaleString('en-IN')} <small>/month</small>`;
+        } else {
+          document.getElementById('price-display').style.display = 'none';
+        }
+
+        // WhatsApp button
+        document.getElementById('whatsapp-button').href = `https://wa.me/919599839737?text=I'm interested in ${encodeURIComponent(program.name)}`;
+
+        // Trigger animations
+        setTimeout(() => {
+          document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+        }, 100);
+
+      } catch (err) {
+        console.error('Failed to load program details:', err);
+        window.location.href = '/programs';
+      }
+    }
+
+    loadProgramDetails();
+  </script>
+</body>
+</html>

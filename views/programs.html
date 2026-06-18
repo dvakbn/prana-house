@@ -286,5 +286,45 @@
   <div id="footer-placeholder"></div>
   <script src="/js/components.js"></script>
   <script src="/js/main.js"></script>
+  <script>
+    // Make programs clickable by adding "View Details" buttons
+    async function enhancePrograms() {
+      try {
+        const res = await fetch('/api/programs');
+        const programs = await res.json();
+        
+        if (programs.length === 0) return; // No programs in database, keep static content
+        
+        // Create a map of category to program
+        const programMap = {};
+        programs.forEach(p => {
+          programMap[p.category] = p;
+        });
+        
+        // Add "View Details" buttons to existing sections
+        ['meditation', 'breathing', 'flexibility', 'stress'].forEach(category => {
+          const section = document.getElementById(category);
+          if (section && programMap[category]) {
+            const program = programMap[category];
+            const btnContainer = section.querySelector('.btn-primary');
+            if (btnContainer) {
+              // Add View Details button before Enquire Now
+              const viewBtn = document.createElement('a');
+              viewBtn.href = `/program/detail?slug=${program.slug}`;
+              viewBtn.className = 'btn btn-outline';
+              viewBtn.textContent = 'View Full Details';
+              viewBtn.style.marginRight = '1rem';
+              btnContainer.parentNode.insertBefore(viewBtn, btnContainer);
+            }
+          }
+        });
+        
+      } catch (err) {
+        console.log('Programs loading skipped:', err);
+      }
+    }
+    
+    enhancePrograms();
+  </script>
 </body>
 </html>

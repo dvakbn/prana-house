@@ -104,6 +104,7 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.htm
 // Classes / Programs
 app.get('/classes', (req, res) => res.sendFile(path.join(__dirname, 'views', 'classes.html')));
 app.get('/programs', (req, res) => res.sendFile(path.join(__dirname, 'views', 'programs.html')));
+app.get('/program/detail', (req, res) => res.sendFile(path.join(__dirname, 'views', 'program-detail.html')));
 
 // Teacher / About
 app.get('/about', (req, res) => res.sendFile(path.join(__dirname, 'views', 'about.html')));
@@ -941,6 +942,115 @@ app.delete('/api/admin/classes/:id', async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     console.error('Admin Class Delete Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ── Programs API ──────────────────────────────────────────────────────────────
+
+// Get all programs (public - active only)
+app.get('/api/programs', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('programs')
+      .select('*')
+      .eq('active', true)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    console.error('PROGRAMS GET ERROR:', err);
+    res.json([]);
+  }
+});
+
+// Get all programs for admin (including inactive)
+app.get('/api/admin/programs', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { data, error } = await supabase
+      .from('programs')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    console.error('ADMIN PROGRAMS GET ERROR:', err);
+    res.json([]);
+  }
+});
+
+// Create program (admin)
+app.post('/api/admin/programs', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { name, slug, category, icon, tagline, description, long_description, benefits, what_included, duration, schedule, location, price, max_participants, level, type, image, tags, upcoming_dates, active } = req.body;
+    
+    const { data, error } = await supabase
+      .from('programs')
+      .insert([{ name, slug, category, icon, tagline, description, long_description, benefits, what_included, duration, schedule, location, price, max_participants, level, type, image, tags, upcoming_dates, active }])
+      .select();
+    
+    if (error) throw error;
+    
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Admin Program Create Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Update program (admin)
+app.put('/api/admin/programs/:id', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { name, slug, category, icon, tagline, description, long_description, benefits, what_included, duration, schedule, location, price, max_participants, level, type, image, tags, upcoming_dates, active } = req.body;
+    
+    const { data, error } = await supabase
+      .from('programs')
+      .update({ name, slug, category, icon, tagline, description, long_description, benefits, what_included, duration, schedule, location, price, max_participants, level, type, image, tags, upcoming_dates, active, updated_at: new Date().toISOString() })
+      .eq('id', req.params.id)
+      .select();
+    
+    if (error) throw error;
+    
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Admin Program Update Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Delete program (admin)
+app.delete('/api/admin/programs/:id', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { error } = await supabase
+      .from('programs')
+      .delete()
+      .eq('id', req.params.id);
+    
+    if (error) throw error;
+    
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Admin Program Delete Error:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
