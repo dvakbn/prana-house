@@ -134,7 +134,80 @@ app.get('/privacy-policy', (req, res) => res.sendFile(path.join(__dirname, 'view
 app.get('/terms', (req, res) => res.sendFile(path.join(__dirname, 'views', 'terms.html')));
 app.get('/refund-policy', (req, res) => res.sendFile(path.join(__dirname, 'views', 'refund-policy.html')));
 
-// ─── API ROUTES ──────────────────────────────────────────────────────────────
+// ─── ADMIN ROUTES ────────────────────────────────────────────────────────────
+
+// Admin Login Page
+app.get('/admin/login', (req, res) => res.sendFile(path.join(__dirname, 'views', 'admin-login.html')));
+
+// Admin Dashboard Page
+app.get('/admin/dashboard', (req, res) => res.sendFile(path.join(__dirname, 'views', 'admin-dashboard.html')));
+
+// Admin Authentication (Simple - Replace with proper auth in production)
+const ADMIN_CREDENTIALS = {
+  username: process.env.ADMIN_USERNAME || 'admin',
+  password: process.env.ADMIN_PASSWORD || 'pranahouse2025' // CHANGE THIS!
+};
+
+app.post('/api/admin/login', (req, res) => {
+  const { username, password } = req.body;
+  
+  if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+    // Generate simple token (use JWT in production)
+    const token = Buffer.from(`${username}:${Date.now()}`).toString('base64');
+    res.json({ success: true, token });
+  } else {
+    res.status(401).json({ success: false, error: 'Invalid credentials' });
+  }
+});
+
+// Admin Gallery Management
+app.post('/api/admin/gallery', async (req, res) => {
+  try {
+    // Verify auth token (simplified)
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { url, caption, category, alt, sort_order, visible } = req.body;
+    
+    const { error } = await supabase
+      .from('gallery')
+      .upsert([{ url, caption, category, alt, sort_order: sort_order || 0, visible }], { onConflict: 'url' });
+    
+    if (error) throw error;
+    
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Admin Gallery Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.delete('/api/admin/gallery', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { url } = req.body;
+    
+    const { error } = await supabase
+      .from('gallery')
+      .delete()
+      .eq('url', url);
+    
+    if (error) throw error;
+    
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Admin Gallery Delete Error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ─── API ROUTES (existing) ──────────────────────────────────────────────────
 
 // Contact form submission
 app.post('/api/contact', async (req, res) => {

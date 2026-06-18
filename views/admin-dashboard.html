@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard | Prana House</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="stylesheet" href="/css/style.css"/>
+  <style>
+    body { background: var(--bg-alt); padding-top: 0; }
+    
+    .admin-header {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .admin-header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .admin-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+    }
+    .admin-logo svg { width: 32px; height: 32px; }
+    .admin-user {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .admin-container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    .admin-nav {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .admin-nav-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .admin-nav-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--accent);
+    }
+    .admin-nav-card.active {
+      border-color: var(--accent);
+      background: rgba(92,138,92,0.05);
+    }
+    .admin-nav-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .admin-nav-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .admin-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      display: none;
+    }
+    .admin-section.active {
+      display: block;
+    }
+    .admin-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+    }
+    .admin-table th {
+      background: var(--bg-alt);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+    .admin-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .admin-table tr:hover {
+      background: var(--bg-alt);
+    }
+    .admin-table img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-content {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      max-width: 700px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2.5rem;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+    .modal-close:hover {
+      background: var(--border);
+    }
+    
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .image-preview {
+      width: 100%;
+      max-width: 300px;
+      margin: 1rem 0;
+      border-radius: 8px;
+      display: none;
+    }
+    .image-preview.show {
+      display: block;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .btn-sm-action {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      border-radius: 6px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--bg-alt);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-family: var(--font-display);
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Admin Header -->
+  <div class="admin-header">
+    <div class="admin-header-inner">
+      <div class="admin-logo">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(92,138,92,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(0 20 20)"/>
+          <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(92,138,92,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(45 20 20)"/>
+          <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(92,138,92,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(90 20 20)"/>
+          <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(92,138,92,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(135 20 20)"/>
+          <circle cx="20" cy="20" r="3.5" fill="var(--accent-warm)" opacity="0.9"/>
+        </svg>
+        <span>Prana House Admin</span>
+      </div>
+      <div class="admin-user">
+        <span style="font-size:0.9rem;color:var(--text-secondary);">Admin</span>
+        <button class="btn btn-outline btn-sm" id="logout-btn">Logout</button>
+        <button class="theme-toggle" id="theme-toggle-admin">🌙</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-container">
+    
+    <!-- Navigation Cards -->
+    <div class="admin-nav">
+      <div class="admin-nav-card active" data-section="gallery">
+        <div class="admin-nav-icon">🖼️</div>
+        <h3>Gallery</h3>
+        <p style="font-size:0.85rem;color:var(--text-light);">Manage images</p>
+      </div>
+      <div class="admin-nav-card" data-section="blogs">
+        <div class="admin-nav-icon">📝</div>
+        <h3>Blog Posts</h3>
+        <p style="font-size:0.85rem;color:var(--text-light);">Add & edit articles</p>
+      </div>
+      <div class="admin-nav-card" data-section="retreats">
+        <div class="admin-nav-icon">🏕️</div>
+        <h3>Retreats</h3>
+        <p style="font-size:0.85rem;color:var(--text-light);">Manage retreat details</p>
+      </div>
+      <div class="admin-nav-card" data-section="classes">
+        <div class="admin-nav-icon">🧘</div>
+        <h3>Classes</h3>
+        <p style="font-size:0.85rem;color:var(--text-light);">Schedule & details</p>
+      </div>
+    </div>
+
+    <!-- GALLERY SECTION -->
+    <div id="section-gallery" class="admin-section active">
+      <div class="admin-section-header">
+        <div>
+          <h2>Gallery Management</h2>
+          <p style="color:var(--text-light);font-size:0.9rem;">Upload and organize gallery images</p>
+        </div>
+        <button class="btn btn-primary" id="add-gallery-btn">+ Add Image</button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="gallery-count">0</div>
+          <div class="stat-label">Total Images</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="gallery-visible">0</div>
+          <div class="stat-label">Visible Images</div>
+        </div>
+      </div>
+
+      <table class="admin-table" id="gallery-table">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Caption</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="5" style="text-align:center;padding:2rem;">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- BLOGS SECTION -->
+    <div id="section-blogs" class="admin-section">
+      <div class="admin-section-header">
+        <div>
+          <h2>Blog Management</h2>
+          <p style="color:var(--text-light);font-size:0.9rem;">Create and publish blog posts</p>
+        </div>
+        <button class="btn btn-primary" id="add-blog-btn">+ New Blog Post</button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="blog-count">0</div>
+          <div class="stat-label">Total Posts</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="blog-published">0</div>
+          <div class="stat-label">Published</div>
+        </div>
+      </div>
+
+      <table class="admin-table" id="blog-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="5" style="text-align:center;padding:2rem;">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RETREATS SECTION -->
+    <div id="section-retreats" class="admin-section">
+      <div class="admin-section-header">
+        <div>
+          <h2>Retreat Management</h2>
+          <p style="color:var(--text-light);font-size:0.9rem;">Add and manage retreat programs</p>
+        </div>
+        <button class="btn btn-primary" id="add-retreat-btn">+ New Retreat</button>
+      </div>
+
+      <table class="admin-table" id="retreat-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Dates</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="5" style="text-align:center;padding:2rem;">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CLASSES SECTION -->
+    <div id="section-classes" class="admin-section">
+      <div class="admin-section-header">
+        <div>
+          <h2>Class Management</h2>
+          <p style="color:var(--text-light);font-size:0.9rem;">Schedule classes and programs</p>
+        </div>
+        <button class="btn btn-primary" id="add-class-btn">+ New Class</button>
+      </div>
+
+      <table class="admin-table" id="class-table">
+        <thead>
+          <tr>
+            <th>Class Name</th>
+            <th>Type</th>
+            <th>Schedule</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="5" style="text-align:center;padding:2rem;">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- MODALS -->
+  
+  <!-- Gallery Modal -->
+  <div id="gallery-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-close" onclick="closeModal('gallery-modal')">×</div>
+      <h3 id="gallery-modal-title">Add Gallery Image</h3>
+      <form id="gallery-form" style="margin-top:2rem;">
+        <input type="hidden" id="gallery-id" name="id"/>
+        
+        <div class="form-group">
+          <label class="form-label">Image URL *</label>
+          <input class="form-input" type="url" name="url" required placeholder="https://..."/>
+          <p style="font-size:0.8rem;color:var(--text-light);margin-top:0.5rem;">Upload to Supabase Storage or use external URL</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Caption</label>
+          <input class="form-input" type="text" name="caption" placeholder="Image description"/>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select class="form-input form-select" name="category" required>
+              <option value="classes">Classes</option>
+              <option value="studio">Studio</option>
+              <option value="events">Events</option>
+              <option value="retreat">Retreat</option>
+              <option value="meditation">Meditation</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Alt Text</label>
+            <input class="form-input" type="text" name="alt" placeholder="For accessibility"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Display Order</label>
+          <input class="form-input" type="number" name="sort_order" value="0" min="0"/>
+        </div>
+
+        <div class="form-group" style="display:flex;align-items:center;gap:0.75rem;">
+          <input type="checkbox" id="gallery-visible" name="visible" checked style="width:18px;height:18px;"/>
+          <label for="gallery-visible">Visible on website</label>
+        </div>
+
+        <div style="display:flex;gap:1rem;margin-top:2rem;">
+          <button type="submit" class="btn btn-primary" style="flex:1;">Save Image</button>
+          <button type="button" class="btn btn-outline" onclick="closeModal('gallery-modal')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Blog Modal -->
+  <div id="blog-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-close" onclick="closeModal('blog-modal')">×</div>
+      <h3 id="blog-modal-title">New Blog Post</h3>
+      <form id="blog-form" style="margin-top:2rem;">
+        <input type="hidden" id="blog-id" name="id"/>
+        
+        <div class="form-group">
+          <label class="form-label">Title *</label>
+          <input class="form-input" type="text" name="title" required placeholder="Blog post title"/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Slug (URL)</label>
+          <input class="form-input" type="text" name="slug" placeholder="auto-generated-from-title"/>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Author</label>
+            <input class="form-input" type="text" name="author" value="Dr. Fareen Tak"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-input form-select" name="category">
+              <option value="yoga">Yoga</option>
+              <option value="wellness">Wellness</option>
+              <option value="meditation">Meditation</option>
+              <option value="nutrition">Nutrition</option>
+              <option value="lifestyle">Lifestyle</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Featured Image URL</label>
+          <input class="form-input" type="url" name="image" placeholder="https://..."/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Excerpt</label>
+          <textarea class="form-textarea" name="excerpt" rows="2" placeholder="Short description (150 chars)"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Content *</label>
+          <textarea class="form-textarea" name="content" rows="12" required placeholder="Blog post content (Markdown supported)"></textarea>
+        </div>
+
+        <div class="form-group" style="display:flex;align-items:center;gap:0.75rem;">
+          <input type="checkbox" id="blog-published" name="published" checked style="width:18px;height:18px;"/>
+          <label for="blog-published">Publish immediately</label>
+        </div>
+
+        <div style="display:flex;gap:1rem;margin-top:2rem;">
+          <button type="submit" class="btn btn-primary" style="flex:1;">Save Post</button>
+          <button type="button" class="btn btn-outline" onclick="closeModal('blog-modal')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Retreat Modal -->
+  <div id="retreat-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-close" onclick="closeModal('retreat-modal')">×</div>
+      <h3 id="retreat-modal-title">New Retreat</h3>
+      <form id="retreat-form" style="margin-top:2rem;">
+        <input type="hidden" id="retreat-id" name="id"/>
+        
+        <div class="form-group">
+          <label class="form-label">Retreat Title *</label>
+          <input class="form-input" type="text" name="title" required placeholder="e.g., Weekend Wellness Retreat"/>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Start Date *</label>
+            <input class="form-input" type="date" name="start_date" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">End Date *</label>
+            <input class="form-input" type="date" name="end_date" required/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Location *</label>
+          <input class="form-input" type="text" name="location" required placeholder="e.g., Rishikesh, Uttarakhand"/>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Price (₹)</label>
+            <input class="form-input" type="number" name="price" placeholder="5000"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Max Participants</label>
+            <input class="form-input" type="number" name="max_participants" placeholder="20"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-textarea" name="description" rows="4" placeholder="Detailed retreat description"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Program Highlights (one per line)</label>
+          <textarea class="form-textarea" name="highlights" rows="4" placeholder="Morning yoga session&#10;Meditation workshop&#10;Organic meals included"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Image URL</label>
+          <input class="form-input" type="url" name="image" placeholder="https://..."/>
+        </div>
+
+        <div class="form-group" style="display:flex;align-items:center;gap:0.75rem;">
+          <input type="checkbox" id="retreat-active" name="active" checked style="width:18px;height:18px;"/>
+          <label for="retreat-active">Active (show on website)</label>
+        </div>
+
+        <div style="display:flex;gap:1rem;margin-top:2rem;">
+          <button type="submit" class="btn btn-primary" style="flex:1;">Save Retreat</button>
+          <button type="button" class="btn btn-outline" onclick="closeModal('retreat-modal')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Class Modal -->
+  <div id="class-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-close" onclick="closeModal('class-modal')">×</div>
+      <h3 id="class-modal-title">New Class</h3>
+      <form id="class-form" style="margin-top:2rem;">
+        <input type="hidden" id="class-id" name="id"/>
+        
+        <div class="form-group">
+          <label class="form-label">Class Name *</label>
+          <input class="form-input" type="text" name="name" required placeholder="e.g., Morning Hatha Yoga"/>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Type *</label>
+            <select class="form-input form-select" name="type" required>
+              <option value="online">Online</option>
+              <option value="offline">Offline</option>
+              <option value="hybrid">Hybrid</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Level</label>
+            <select class="form-input form-select" name="level">
+              <option value="all">All Levels</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Schedule *</label>
+          <input class="form-input" type="text" name="schedule" required placeholder="Mon, Wed, Fri - 6:00 AM to 7:00 AM"/>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Duration (minutes)</label>
+            <input class="form-input" type="number" name="duration" placeholder="60"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Price (₹/month)</label>
+            <input class="form-input" type="number" name="price" placeholder="2000"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-textarea" name="description" rows="4" placeholder="Class description, benefits, what to expect..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Max Students</label>
+          <input class="form-input" type="number" name="max_students" placeholder="15"/>
+        </div>
+
+        <div class="form-group" style="display:flex;align-items:center;gap:0.75rem;">
+          <input type="checkbox" id="class-active" name="active" checked style="width:18px;height:18px;"/>
+          <label for="class-active">Active (accepting registrations)</label>
+        </div>
+
+        <div style="display:flex;gap:1rem;margin-top:2rem;">
+          <button type="submit" class="btn btn-primary" style="flex:1;">Save Class</button>
+          <button type="button" class="btn btn-outline" onclick="closeModal('class-modal')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/admin-dashboard.js"></script>
+</body>
+</html>
