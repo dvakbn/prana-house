@@ -708,6 +708,172 @@ window.deleteClass = async (id) => {
 };
 
 // ══════════════════════════════════════════════════════════════
+// PROGRAMS MANAGEMENT
+// ══════════════════════════════════════════════════════════════
+
+document.getElementById('add-program-btn')?.addEventListener('click', () => {
+  document.getElementById('program-modal-title').textContent = 'New Program';
+  document.getElementById('program-form').reset();
+  document.getElementById('program-id').value = '';
+  document.getElementById('program-active').checked = true; // Default to active
+  openModal('program-modal');
+});
+
+async function loadProgramData() {
+  try {
+    const res = await fetch('/api/admin/programs', {
+      headers: { 
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+      }
+    });
+    const data = await res.json();
+    
+    document.getElementById('program-count').textContent = data.length;
+    document.getElementById('program-active').textContent = data.filter(p => p.active).length;
+    
+    const tbody = document.querySelector('#program-table tbody');
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-light);">No programs yet. Add one to get started!</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = data.map(program => `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:0.75rem;">
+            <span style="font-size:1.5rem;">${program.icon || '🌿'}</span>
+            <span>${program.name}</span>
+          </div>
+        </td>
+        <td><span style="background:var(--bg-alt);padding:0.25rem 0.75rem;border-radius:50px;font-size:0.8rem;">${program.category}</span></td>
+        <td><span style="background:var(--bg-alt);padding:0.25rem 0.75rem;border-radius:50px;font-size:0.8rem;">${program.type || 'hybrid'}</span></td>
+        <td>${program.price ? '₹' + program.price.toLocaleString('en-IN') : '-'}</td>
+        <td>${program.active ? '<span style="color:var(--accent);">✓ Active</span>' : '<span style="color:var(--text-light);">Inactive</span>'}</td>
+        <td>
+          <div class="btn-group">
+            <button class="btn btn-outline btn-sm-action" onclick="editProgram('${program.id}')">Edit</button>
+            <button class="btn btn-outline btn-sm-action" onclick="deleteProgram('${program.id}')" style="color:#c94a4a;">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    console.error('Failed to load programs:', err);
+    const tbody = document.querySelector('#program-table tbody');
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;">
+      <div style="color:#c94a4a;margin-bottom:0.5rem;">⚠️ Failed to load programs</div>
+      <div style="color:var(--text-light);font-size:0.9rem;">Make sure the programs table exists in Supabase.</div>
+      <div style="color:var(--text-light);font-size:0.9rem;margin-top:0.5rem;">Run the SQL file: <code>8_create_programs_table.sql</code></div>
+    </td></tr>`;
+  }
+}
+
+document.getElementById('program-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData);
+  const programId = document.getElementById('program-id').value;
+  
+  data.active = document.getElementById('program-active').checked;
+  data.benefits = data.benefits ? data.benefits.split('\n').filter(b => b.trim()) : [];
+  data.what_included = data.what_included ? data.what_included.split('\n').filter(w => w.trim()) : [];
+  data.tags = data.tags ? data.tags.split(',').map(t => t.trim()).filter(t => t) : [];
+  data.upcoming_dates = data.upcoming_dates ? data.upcoming_dates.split('\n').filter(d => d.trim()) : [];
+  data.price = parseInt(data.price) || null;
+  data.max_participants = parseInt(data.max_participants) || null;
+  
+  try {
+    const url = programId ? `/api/admin/programs/${programId}` : '/api/admin/programs';
+    const method = programId ? 'PUT' : 'POST';
+    
+    const res = await fetch(url, {
+      method,
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+      },
+      body: JSON.stringify(data)
+    });
+    
+    const result = await res.json();
+    
+    if (res.ok) {
+      closeModal('program-modal');
+      loadProgramData();
+      alert('✅ Program saved successfully!');
+    } else {
+      alert('❌ Failed to save program\n\n' + (result.error || 'Please make sure programs table exists in Supabase'));
+    }
+  } catch (err) {
+    alert('❌ Error: ' + err.message + '\n\nRun 8_create_programs_table.sql in Supabase SQL Editor');
+  }
+});
+
+window.editProgram = async (id) => {
+  try {
+    const res = await fetch('/api/admin/programs', {
+      headers: { 
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+      }
+    });
+    const data = await res.json();
+    const program = data.find(p => p.id === id);
+    
+    if (program) {
+      document.getElementById('program-modal-title').textContent = 'Edit Program';
+      document.getElementById('program-id').value = program.id;
+      document.querySelector('[name="name"]').value = program.name;
+      document.querySelector('[name="slug"]').value = program.slug;
+      document.querySelector('[name="category"]').value = program.category;
+      document.querySelector('[name="icon"]').value = program.icon || '';
+      document.querySelector('[name="tagline"]').value = program.tagline || '';
+      document.querySelector('[name="description"]').value = program.description;
+      document.querySelector('[name="long_description"]').value = program.long_description || '';
+      document.querySelector('[name="benefits"]').value = (program.benefits || []).join('\n');
+      document.querySelector('[name="what_included"]').value = (program.what_included || []).join('\n');
+      document.querySelector('[name="duration"]').value = program.duration || '';
+      document.querySelector('[name="schedule"]').value = program.schedule || '';
+      document.querySelector('[name="location"]').value = program.location || '';
+      document.querySelector('[name="price"]').value = program.price || '';
+      document.querySelector('[name="max_participants"]').value = program.max_participants || '';
+      document.querySelector('[name="level"]').value = program.level || 'all';
+      document.querySelector('[name="type"]').value = program.type || 'hybrid';
+      document.querySelector('[name="image"]').value = program.image || '';
+      document.querySelector('[name="tags"]').value = (program.tags || []).join(', ');
+      document.querySelector('[name="upcoming_dates"]').value = (program.upcoming_dates || []).join('\n');
+      document.getElementById('program-active').checked = program.active;
+      openModal('program-modal');
+    }
+  } catch (err) {
+    alert('Failed to load program details');
+  }
+};
+
+window.deleteProgram = async (id) => {
+  if (!confirm('Delete this program?')) return;
+  
+  try {
+    const res = await fetch(`/api/admin/programs/${id}`, {
+      method: 'DELETE',
+      headers: { 
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+      }
+    });
+    
+    const result = await res.json();
+    
+    if (res.ok) {
+      loadProgramData();
+      alert('✅ Program deleted');
+    } else {
+      alert('❌ Failed to delete\n\n' + (result.error || 'Unknown error'));
+    }
+  } catch (err) {
+    alert('❌ Error: ' + err.message);
+  }
+};
+
+// ══════════════════════════════════════════════════════════════
 // LOAD SECTION DATA
 // ══════════════════════════════════════════════════════════════
 
@@ -724,6 +890,9 @@ function loadSectionData(section) {
       break;
     case 'classes':
       loadClassData();
+      break;
+    case 'programs':
+      loadProgramData();
       break;
   }
 }
