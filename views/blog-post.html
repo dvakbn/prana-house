@@ -44,45 +44,64 @@
     function formatBlogContent(text) {
       if (!text) return '<p>Content coming soon.</p>';
       
-      let formatted = text;
+      // Split content by line breaks
+      const lines = text.split('\n');
+      const output = [];
+      let currentParagraph = [];
       
-      // First, handle headings (must be done before paragraph splitting)
-      // Convert #### Heading to <h4> (do h4 first, then h3, then h2 to avoid conflicts)
-      formatted = formatted.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
-      
-      // Convert ### Heading to <h3>
-      formatted = formatted.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-      
-      // Convert ## Heading to <h2>
-      formatted = formatted.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-      
-      // Convert **bold** to <strong>bold</strong>
-      formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-      
-      // Convert *italic* to <em>italic</em> (but not ** which are already converted)
-      formatted = formatted.replace(/(?<!\*)\*([^*]+?)\*(?!\*)/g, '<em>$1</em>');
-      
-      // Split into blocks by double line breaks or heading tags
-      const blocks = formatted.split(/\n\n+|(?=<h[234]>)|(?<=<\/h[234]>)/);
-      
-      // Process each block
-      formatted = blocks.map(block => {
-        block = block.trim();
-        if (!block) return '';
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i].trim();
         
-        // Skip if it's already a heading
-        if (block.startsWith('<h2>') || block.startsWith('<h3>') || block.startsWith('<h4>')) {
-          return block;
+        // Skip empty lines
+        if (!line) {
+          // If we have accumulated paragraph text, wrap it
+          if (currentParagraph.length > 0) {
+            output.push('<p>' + currentParagraph.join(' ') + '</p>');
+            currentParagraph = [];
+          }
+          continue;
         }
         
-        // Convert single line breaks within blocks to <br>
-        block = block.replace(/\n/g, '<br>');
-        
-        // Wrap in paragraph tag
-        return `<p>${block}</p>`;
-      }).filter(b => b).join('\n');
+        // Check for headings
+        if (line.startsWith('#### ')) {
+          if (currentParagraph.length > 0) {
+            output.push('<p>' + currentParagraph.join(' ') + '</p>');
+            currentParagraph = [];
+          }
+          output.push('<h4>' + line.substring(5) + '</h4>');
+        } else if (line.startsWith('### ')) {
+          if (currentParagraph.length > 0) {
+            output.push('<p>' + currentParagraph.join(' ') + '</p>');
+            currentParagraph = [];
+          }
+          output.push('<h3>' + line.substring(4) + '</h3>');
+        } else if (line.startsWith('## ')) {
+          if (currentParagraph.length > 0) {
+            output.push('<p>' + currentParagraph.join(' ') + '</p>');
+            currentParagraph = [];
+          }
+          output.push('<h2>' + line.substring(3) + '</h2>');
+        } else {
+          // Regular text - accumulate into current paragraph
+          currentParagraph.push(line);
+        }
+      }
       
-      return formatted;
+      // Don't forget the last paragraph
+      if (currentParagraph.length > 0) {
+        output.push('<p>' + currentParagraph.join(' ') + '</p>');
+      }
+      
+      // Join all output and then apply inline formatting
+      let html = output.join('\n');
+      
+      // Convert **bold** to <strong>
+      html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      
+      // Convert *italic* to <em> (but not if part of **)
+      html = html.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>');
+      
+      return html;
     }
 
     (async function() {
@@ -93,14 +112,20 @@
       try {
         const res = await fetch('/api/blogs/' + slug);
         const post = await res.json();
+        
+        console.log('Blog post data:', post); // Debug log
+        
         loader.style.display = 'none';
         if (!post) { notFound.style.display = 'block'; return; }
+        
         // Update page title
         document.title = post.title + ' | Prana House';
         container.style.display = 'block';
         
-        // Use image field (from blog list) or cover_image field (alternative name)
-        const featuredImage = post.image || post.cover_image;
+        // Check for image field
+        const featuredImage = post.image || post.cover_image || '';
+        
+        console.log('Featured image:', featuredImage); // Debug log
         
         container.innerHTML = `
           <div class="post-hero">
@@ -111,13 +136,13 @@
               <div class="post-meta">
                 <span>✍️ ${post.author || 'Dr. Fareen Tak'}</span>
                 ${post.read_time ? `<span>⏱ ${post.read_time} min read</span>` : ''}
-                ${post.published_at ? `<span>📅 ${new Date(post.published_at).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</span>` : ''}
+                ${post.created_at ? `<span>📅 ${new Date(post.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</span>` : ''}
               </div>
             </div>
           </div>
           <div class="post-body">
-            ${featuredImage
-              ? `<img class="post-cover" src="${featuredImage}" alt="${post.title}"/>`
+            ${featuredImage && featuredImage.trim()
+              ? `<img class="post-cover" src="${featuredImage}" alt="${post.title}" onerror="this.style.display='none'"/>`
               : `<div class="post-emoji-cover">${post.emoji || '🌿'}</div>`}
             <div id="post-content">${formatBlogContent(post.content)}</div>
             <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
@@ -126,7 +151,8 @@
             </div>
           </div>
         `;
-      } catch {
+      } catch (err) {
+        console.error('Error loading blog:', err); // Debug log
         loader.style.display = 'none';
         notFound.style.display = 'block';
       }
