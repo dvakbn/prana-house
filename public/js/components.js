@@ -154,8 +154,8 @@ const FOOTER_HTML = `
         <h4>Visit Us</h4>
         <ul>
           <li><a href="#">📍 Pratap Nagar, Jaipur, Rajasthan</a></li>
-          <li><a href="mailto:hello@pranahouse.in">✉️ hello@pranahouse.in</a></li>
-          <li><a href="tel:+919999999999">📞 +91 99999 99999</a></li>
+          <li><a href="mailto:hello@pranayoga.qzz.io">✉️ hello@pranayoga.qzz.io</a></li>
+          <li><a href="https://wa.me/919599839737">📞 +91 95998 39737</a></li>
           <li style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-light);">Mon – Sat: 6:00 AM – 8:00 PM</li>
           <li style="font-size:0.82rem;color:var(--text-light);">Sunday: 7:00 AM – 12:00 PM</li>
         </ul>
