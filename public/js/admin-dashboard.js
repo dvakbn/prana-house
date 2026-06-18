@@ -89,6 +89,12 @@ document.getElementById('add-gallery-btn')?.addEventListener('click', () => {
 async function loadGalleryData() {
   try {
     const res = await fetch('/api/gallery');
+    
+    // Check if server returned an error
+    if (!res.ok) {
+      throw new Error(`Server error: ${res.status}`);
+    }
+    
     const data = await res.json();
     
     document.getElementById('gallery-count').textContent = data.length;
@@ -116,6 +122,12 @@ async function loadGalleryData() {
     `).join('');
   } catch (err) {
     console.error('Failed to load gallery:', err);
+    const tbody = document.querySelector('#gallery-table tbody');
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;">
+      <div style="color:#c94a4a;margin-bottom:0.5rem;">⚠️ Failed to connect to database</div>
+      <div style="color:var(--text-light);font-size:0.9rem;">Please check that environment variables are set in Vercel.</div>
+      <div style="color:var(--text-light);font-size:0.9rem;margin-top:0.5rem;">See <code>VERCEL_SETUP_GUIDE.md</code> for instructions.</div>
+    </td></tr>`;
   }
 }
 
@@ -136,15 +148,17 @@ document.getElementById('gallery-form')?.addEventListener('submit', async (e) =>
       body: JSON.stringify(data)
     });
     
+    const result = await res.json();
+    
     if (res.ok) {
       closeModal('gallery-modal');
       loadGalleryData();
-      alert('Image saved successfully!');
+      alert('✅ Image saved successfully!');
     } else {
-      alert('Failed to save image');
+      alert('❌ Failed to save image\n\n' + (result.error || 'Please check Vercel environment variables'));
     }
   } catch (err) {
-    alert('Error: ' + err.message);
+    alert('❌ Error: ' + err.message + '\n\nCheck VERCEL_SETUP_GUIDE.md for setup instructions');
   }
 });
 
@@ -182,12 +196,16 @@ window.deleteGallery = async (url) => {
       body: JSON.stringify({ url })
     });
     
+    const result = await res.json();
+    
     if (res.ok) {
       loadGalleryData();
-      alert('Image deleted');
+      alert('✅ Image deleted');
+    } else {
+      alert('❌ Failed to delete\n\n' + (result.error || 'Unknown error'));
     }
   } catch (err) {
-    alert('Failed to delete');
+    alert('❌ Error: ' + err.message);
   }
 };
 
