@@ -675,16 +675,17 @@ window.editClass = async (id) => {
     
     if (cls) {
       document.getElementById('class-modal-title').textContent = 'Edit Class';
-      document.getElementById('class-id').value = cls.id;
-      document.querySelector('[name="name"]').value = cls.name;
-      document.querySelector('[name="type"]').value = cls.type;
-      document.querySelector('[name="level"]').value = cls.level || 'all';
-      document.querySelector('[name="schedule"]').value = cls.schedule;
-      document.querySelector('[name="image"]').value = cls.image || '';
-      document.querySelector('[name="duration"]').value = cls.duration || '';
-      document.querySelector('[name="price"]').value = cls.price || '';
-      document.querySelector('[name="description"]').value = cls.description || '';
-      document.querySelector('[name="max_students"]').value = cls.max_students || '';
+      const form = document.getElementById('class-form');
+      form.querySelector('[name="id"]').value = cls.id;
+      form.querySelector('[name="name"]').value = cls.name;
+      form.querySelector('[name="type"]').value = cls.type;
+      form.querySelector('[name="level"]').value = cls.level || 'all';
+      form.querySelector('[name="schedule"]').value = cls.schedule;
+      form.querySelector('[name="image"]').value = cls.image || '';
+      form.querySelector('[name="duration"]').value = cls.duration || '';
+      form.querySelector('[name="price"]').value = cls.price || '';
+      form.querySelector('[name="description"]').value = cls.description || '';
+      form.querySelector('[name="max_students"]').value = cls.max_students || '';
       document.getElementById('class-active').checked = cls.active;
       openModal('class-modal');
     }
