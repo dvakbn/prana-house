@@ -632,6 +632,8 @@ document.getElementById('class-form')?.addEventListener('submit', async (e) => {
     data.image = null;
   }
   
+  console.log('Saving class data:', data); // Debug log
+  
   try {
     const url = classId ? `/api/admin/classes/${classId}` : '/api/admin/classes';
     const method = classId ? 'PUT' : 'POST';
@@ -646,6 +648,8 @@ document.getElementById('class-form')?.addEventListener('submit', async (e) => {
     });
     
     const result = await res.json();
+    
+    console.log('Save response:', result); // Debug log
     
     if (res.ok) {
       closeModal('class-modal');
