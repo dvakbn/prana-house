@@ -148,13 +148,12 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 2rem;
       display: flex;
-      align-items: flex-start;
-      gap: 1.5rem;
+      flex-direction: column;
       transition: var(--transition);
+      overflow: hidden;
     }
-    .class-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: rgba(92,138,92,0.3); }
+    .class-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: rgba(92,138,92,0.3); }
     .class-icon-box {
       width: 60px; height: 60px;
       background: rgba(92,138,92,0.1);
@@ -376,24 +375,54 @@
     
     function renderClassCards(classes) {
       return classes.map(cls => `
-        <a href="/class/detail?id=${cls.id}" class="class-card fade-in" style="text-decoration:none;color:inherit;flex-direction:column;align-items:stretch;cursor:pointer;">
-          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;">
-            <div class="class-icon-box" style="width:48px;height:48px;font-size:1.3rem;">
-              ${cls.type === 'online' ? '💻' : cls.type === 'offline' ? '🏡' : '🔄'}
+        <a href="/class/detail?id=${cls.id}" class="class-card fade-in" style="text-decoration:none;color:inherit;cursor:pointer;overflow:hidden;padding:0;">
+          ${cls.image ? `
+            <div style="width:100%;height:200px;overflow:hidden;position:relative;">
+              <img src="${cls.image}" alt="${cls.name}" 
+                style="width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease;" 
+                onmouseover="this.style.transform='scale(1.05)'" 
+                onmouseout="this.style.transform='scale(1)'"
+                onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;background:rgba(92,138,92,0.1);font-size:3rem;\\'>${cls.type === 'online' ? '💻' : cls.type === 'offline' ? '🏡' : '🔄'}</div>'"/>
+              <div style="position:absolute;top:1rem;right:1rem;">
+                <span class="level-badge level-${cls.level === 'all' ? 'all' : cls.level.toLowerCase()}" style="backdrop-filter:blur(10px);background:rgba(255,255,255,0.95);box-shadow:0 2px 8px rgba(0,0,0,0.1);">${cls.level === 'all' ? 'All Levels' : cls.level.charAt(0).toUpperCase() + cls.level.slice(1)}</span>
+              </div>
+              <div style="position:absolute;top:1rem;left:1rem;">
+                <div style="backdrop-filter:blur(10px);background:rgba(255,255,255,0.95);box-shadow:0 2px 8px rgba(0,0,0,0.1);border-radius:8px;padding:0.35rem 0.65rem;font-size:1.2rem;">
+                  ${cls.type === 'online' ? '💻' : cls.type === 'offline' ? '🏡' : '🔄'}
+                </div>
+              </div>
             </div>
-            <div style="flex:1;">
-              <h3 style="font-size:1.1rem;margin-bottom:0.25rem;">${cls.name}</h3>
-              <span class="level-badge level-${cls.level === 'all' ? 'all' : cls.level.toLowerCase()}">${cls.level === 'all' ? 'All Levels' : cls.level.charAt(0).toUpperCase() + cls.level.slice(1)}</span>
+            <div style="padding:1.5rem;">
+              <h3 style="font-size:1.1rem;margin-bottom:0.75rem;">${cls.name}</h3>
+              ${cls.description ? `<p style="font-size:0.88rem;margin-bottom:1rem;color:var(--text-secondary);line-height:1.6;">${cls.description.substring(0, 100)}${cls.description.length > 100 ? '...' : ''}</p>` : ''}
+              <div class="class-meta-row" style="margin-bottom:1rem;">
+                <span class="class-meta-item">📅 ${cls.schedule}</span>
+                ${cls.duration ? `<span class="class-meta-item">⏱ ${cls.duration} min</span>` : ''}
+              </div>
+              ${cls.price ? `<p style="font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:1rem;">₹${cls.price.toLocaleString('en-IN')}/month</p>` : ''}
+              <span class="btn btn-primary" style="width:100%;justify-content:center;pointer-events:none;">View Details →</span>
             </div>
-          </div>
-          ${cls.description ? `<p style="font-size:0.88rem;margin-bottom:1rem;color:var(--text-secondary);">${cls.description.substring(0, 120)}${cls.description.length > 120 ? '...' : ''}</p>` : ''}
-          <div class="class-meta-row" style="margin-bottom:1rem;">
-            <span class="class-meta-item">📅 ${cls.schedule}</span>
-            ${cls.duration ? `<span class="class-meta-item">⏱ ${cls.duration} min</span>` : ''}
-            ${cls.max_students ? `<span class="class-meta-item">👥 Max ${cls.max_students}</span>` : ''}
-          </div>
-          ${cls.price ? `<p style="font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:1rem;">₹${cls.price.toLocaleString('en-IN')}/month</p>` : ''}
-          <span class="btn btn-primary" style="margin-top:auto;pointer-events:none;">View Details →</span>
+          ` : `
+            <div style="padding:2rem;">
+              <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;">
+                <div class="class-icon-box" style="width:48px;height:48px;font-size:1.3rem;">
+                  ${cls.type === 'online' ? '💻' : cls.type === 'offline' ? '🏡' : '🔄'}
+                </div>
+                <div style="flex:1;">
+                  <h3 style="font-size:1.1rem;margin-bottom:0.25rem;">${cls.name}</h3>
+                  <span class="level-badge level-${cls.level === 'all' ? 'all' : cls.level.toLowerCase()}">${cls.level === 'all' ? 'All Levels' : cls.level.charAt(0).toUpperCase() + cls.level.slice(1)}</span>
+                </div>
+              </div>
+              ${cls.description ? `<p style="font-size:0.88rem;margin-bottom:1rem;color:var(--text-secondary);">${cls.description.substring(0, 120)}${cls.description.length > 120 ? '...' : ''}</p>` : ''}
+              <div class="class-meta-row" style="margin-bottom:1rem;">
+                <span class="class-meta-item">📅 ${cls.schedule}</span>
+                ${cls.duration ? `<span class="class-meta-item">⏱ ${cls.duration} min</span>` : ''}
+                ${cls.max_students ? `<span class="class-meta-item">👥 Max ${cls.max_students}</span>` : ''}
+              </div>
+              ${cls.price ? `<p style="font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:1rem;">₹${cls.price.toLocaleString('en-IN')}/month</p>` : ''}
+              <span class="btn btn-primary" style="margin-top:auto;pointer-events:none;">View Details →</span>
+            </div>
+          `}
         </a>
       `).join('');
     }

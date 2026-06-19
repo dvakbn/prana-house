@@ -671,6 +671,7 @@ window.editClass = async (id) => {
       document.querySelector('[name="type"]').value = cls.type;
       document.querySelector('[name="level"]').value = cls.level || 'all';
       document.querySelector('[name="schedule"]').value = cls.schedule;
+      document.querySelector('[name="image"]').value = cls.image || '';
       document.querySelector('[name="duration"]').value = cls.duration || '';
       document.querySelector('[name="price"]').value = cls.price || '';
       document.querySelector('[name="description"]').value = cls.description || '';
