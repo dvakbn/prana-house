@@ -627,6 +627,11 @@ document.getElementById('class-form')?.addEventListener('submit', async (e) => {
   data.price = parseInt(data.price) || null;
   data.max_students = parseInt(data.max_students) || null;
   
+  // Handle image URL - set to null if empty
+  if (!data.image || !data.image.trim()) {
+    data.image = null;
+  }
+  
   try {
     const url = classId ? `/api/admin/classes/${classId}` : '/api/admin/classes';
     const method = classId ? 'PUT' : 'POST';
