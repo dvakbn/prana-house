@@ -1036,11 +1036,11 @@ app.post('/api/admin/classes', async (req, res) => {
       return res.status(401).json({ success: false, error: 'Unauthorized' });
     }
 
-    const { name, type, level, schedule, duration, price, description, max_students, active } = req.body;
+    const { name, type, level, schedule, image, duration, price, description, max_students, active } = req.body;
     
     const { data, error } = await supabase
       .from('classes')
-      .insert([{ name, type, level, schedule, duration, price, description, max_students, active }])
+      .insert([{ name, type, level, schedule, image, duration, price, description, max_students, active }])
       .select();
     
     if (error) throw error;
@@ -1060,11 +1060,11 @@ app.put('/api/admin/classes/:id', async (req, res) => {
       return res.status(401).json({ success: false, error: 'Unauthorized' });
     }
 
-    const { name, type, level, schedule, duration, price, description, max_students, active } = req.body;
+    const { name, type, level, schedule, image, duration, price, description, max_students, active } = req.body;
     
     const { data, error } = await supabase
       .from('classes')
-      .update({ name, type, level, schedule, duration, price, description, max_students, active })
+      .update({ name, type, level, schedule, image, duration, price, description, max_students, active })
       .eq('id', req.params.id)
       .select();
     
