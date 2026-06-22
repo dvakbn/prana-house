@@ -94,7 +94,7 @@
 
 /* ── Reset & Base ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
+html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
 
 body {
   font-family: var(--font-body);
@@ -107,6 +107,8 @@ body {
   text-rendering: optimizeLegibility;
   transition: background 0.5s ease, color 0.5s ease;
   overflow-x: hidden;
+  /* Ensure body never exceeds viewport width on mobile */
+  max-width: 100vw;
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -229,29 +231,29 @@ p  { font-size: 1rem; color: var(--text-secondary); }
 .navbar {
   position: fixed;
   top: 0; left: 0; right: 0;
-  /* Account for iOS notch / status bar */
+  width: 100%;
+  box-sizing: border-box;
   padding-top: env(safe-area-inset-top, 0px);
   z-index: 1000;
   background: transparent;
   border-bottom: 1px solid transparent;
   box-shadow: none;
-  /* NO transform on the navbar itself — transforms break position:fixed on mobile WebKit */
 }
 .nav-inner {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem;
   height: 76px;
+  width: 100%;
   max-width: 1200px;
+  box-sizing: border-box;
   margin: 0 auto;
-  /* Floating pill offset lives here as margin-top, not as translateY on parent */
   margin-top: 0px;
   padding: 0 1.75rem;
   border: 1px solid transparent;
   border-radius: 50px;
-  /* Only animate properties that don't cause layout recalc on mobile */
   transition: height 0.38s cubic-bezier(0.22, 1, 0.36, 1),
               max-width 0.38s cubic-bezier(0.22, 1, 0.36, 1),
               margin-top 0.38s cubic-bezier(0.22, 1, 0.36, 1),
@@ -259,9 +261,6 @@ p  { font-size: 1rem; color: var(--text-secondary); }
               box-shadow 0.38s ease,
               border-color 0.38s ease;
 }
-/* Scrolled → floating frosted glass pill
-   The float is achieved via margin-top on .nav-inner, not translateY on .navbar,
-   so position:fixed is never affected on mobile */
 .navbar.scrolled .nav-inner {
   height: 64px;
   max-width: 1080px;
@@ -278,20 +277,46 @@ p  { font-size: 1rem; color: var(--text-secondary); }
   border-color: rgba(255,255,255,0.08);
   box-shadow: 0 10px 36px rgba(0,0,0,0.42);
 }
-/* Mobile — tighter pill, honour safe-area inset */
-@media (max-width: 768px) {
-  .navbar {
-    padding-top: max(env(safe-area-inset-top, 0px), 0px);
-  }
-  .nav-inner { height: 60px; padding: 0 1.1rem; }
-  .navbar.scrolled .nav-inner {
-    margin-top: 8px;
+/* ── Small mobile ≤480px ── */
+@media (max-width: 480px) {
+  .nav-inner {
     height: 56px;
-    max-width: calc(100vw - 2rem);
+    padding: 0 0.85rem;
+    gap: 0.4rem;
+    max-width: 100%;
+    border-radius: 0;
   }
+  .navbar.scrolled .nav-inner {
+    height: 52px;
+    margin-top: 6px;
+    padding: 0 0.75rem;
+    max-width: calc(100vw - 1.5rem);
+    border-radius: 28px;
+  }
+  .nav-logo { gap: 0.4rem; font-size: 1.05rem; flex: 1 1 auto; min-width: 0; overflow: hidden; }
+  .nav-logo svg { width: 24px; height: 24px; flex-shrink: 0; }
+  .nav-logo-sub { display: none; }
+  .nav-logo-text { font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
+  .nav-right { gap: 0.3rem; flex-shrink: 0; }
+  .nav-right .btn { padding: 0.45rem 0.8rem; font-size: 0.76rem; }
+  .theme-toggle { width: 32px; height: 32px; font-size: 0.8rem; }
+}
+/* ── Tablet/medium mobile 481–768px ── */
+@media (min-width: 481px) and (max-width: 768px) {
+  .nav-inner { height: 62px; padding: 0 1.1rem; max-width: 100%; }
+  .navbar.scrolled .nav-inner { margin-top: 8px; height: 56px; max-width: calc(100vw - 2rem); }
+  .nav-logo { font-size: 1.25rem; gap: 0.5rem; }
+  .nav-logo svg { width: 28px; height: 28px; }
+  .nav-logo-sub { display: none; }
+}
+/* ── Hide nav links on mobile ── */
+@media (max-width: 768px) {
+  .nav-links { display: none !important; }
 }
 .nav-logo {
   flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -1559,4 +1584,10 @@ body.nav-over-hero .navbar:not(.scrolled) .nav-hamburger span { background: #fff
   .class-card-portrait { flex: 0 0 260px; }
   .class-card-image-wrap { height: 280px; }
   .philosophy-section { padding: 4.5rem 0; }
+}
+
+/* ── Viewport clamp — prevent any horizontal scroll on small screens ── */
+@media (max-width: 480px) {
+  .container, .container-sm { padding: 0 1rem; }
+  h1 { font-size: clamp(2rem, 10vw, 2.8rem); }
 }
