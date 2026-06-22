@@ -26,11 +26,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Navbar Scroll ─────────────────────────────────
   const navbar = document.querySelector('.navbar');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 30) navbar?.classList.add('scrolled');
-    else navbar?.classList.remove('scrolled');
+  let lastScrollY = 0;
+  let rafPending = false;
+
+  function updateNavbar() {
+    rafPending = false;
+    // 60px threshold — avoids false triggers on mobile touch momentum
+    if (window.scrollY > 60) {
+      navbar?.classList.add('scrolled');
+    } else {
+      navbar?.classList.remove('scrolled');
+    }
     updateScrollProgress();
     markActiveNav();
+  }
+
+  window.addEventListener('scroll', () => {
+    lastScrollY = window.scrollY;
+    if (!rafPending) {
+      rafPending = true;
+      requestAnimationFrame(updateNavbar);
+    }
   }, { passive: true });
 
   // ── Scroll Progress Bar ───────────────────────────
@@ -183,10 +199,12 @@ document.addEventListener('DOMContentLoaded', () => {
     appearEls.forEach(el => appearObserver.observe(el));
   }
 
-  // ── Hero parallax ─────────────────────────────────
+  // ── Hero parallax (desktop only — parallax on mobile hurts perf and fixed layout) ──
   const heroImage = document.querySelector('.hero-editorial .hero-image');
-  if (heroImage) {
+  const isMobile = () => window.innerWidth <= 768;
+  if (heroImage && !isMobile()) {
     window.addEventListener('scroll', () => {
+      if (isMobile()) return;
       heroImage.style.transform = `translateY(${window.scrollY * 0.22}px)`;
     }, { passive: true });
   }

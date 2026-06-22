@@ -233,7 +233,11 @@ p  { font-size: 1rem; color: var(--text-secondary); }
   background: transparent;
   border-bottom: 1px solid transparent;
   box-shadow: none;
-  transition: top 0.35s ease, background 0.35s ease;
+  /* GPU-composited transform only — no top/layout animation, no jank on mobile */
+  will-change: transform;
+  transform: translateY(0);
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.38s ease;
 }
 .nav-inner {
   position: relative;
@@ -247,12 +251,17 @@ p  { font-size: 1rem; color: var(--text-secondary); }
   padding: 0 1.75rem;
   border: 1px solid transparent;
   border-radius: 50px;
-  transition: height 0.35s ease, max-width 0.35s ease, padding 0.35s ease,
-              background 0.35s ease, box-shadow 0.35s ease,
-              border-color 0.35s ease, backdrop-filter 0.35s ease;
+  /* All pill transitions on the inner element — never on top/layout properties */
+  transition: height 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+              max-width 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.38s ease,
+              box-shadow 0.38s ease,
+              border-color 0.38s ease;
 }
-/* Scrolled → floating frosted glass pill */
-.navbar.scrolled { top: 14px; }
+/* Scrolled → floating frosted glass pill via translateY (GPU path) */
+.navbar.scrolled {
+  transform: translateY(14px);
+}
 .navbar.scrolled .nav-inner {
   height: 64px;
   max-width: 1080px;
@@ -1233,10 +1242,10 @@ body.nav-over-hero .navbar:not(.scrolled) .nav-hamburger span { background: #fff
 /* Editorial logo wordmark */
 .nav-logo-text { font-family: var(--font-serif); letter-spacing: 0.04em; }
 
-/* Mobile: hide centered links */
+/* Mobile: hide centered links, keep pill tidy */
 @media (max-width: 768px) {
   .nav-inner { height: 68px; padding: 0 1.25rem; }
-  .navbar.scrolled .nav-inner { max-width: calc(100% - 1.5rem); }
+  .navbar.scrolled .nav-inner { max-width: calc(100vw - 2rem); }
   .nav-links { display: none; }
 }
 
