@@ -145,7 +145,7 @@
   }
   </script>
   
-  <link rel="stylesheet" href="/css/style.css"/>
+  <link rel="stylesheet" href="/css/style.css?v=20260621d"/>
   <style>
     /* ── Hero Canvas ── */
     #hero-canvas { position:absolute; inset:0; z-index:0; pointer-events:none; }
@@ -198,7 +198,7 @@
       text-align: center;
       transition: var(--transition);
     }
-    .why-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: rgba(92,138,92,0.3); }
+    .why-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: rgba(194,115,138,0.3); }
     .why-num {
       font-family: var(--font-display);
       font-size: 3rem;
@@ -221,7 +221,7 @@
       background: var(--bg-card);
       transition: var(--transition);
     }
-    .class-mode-card:hover { box-shadow: var(--shadow-hover); border-color: rgba(92,138,92,0.3); }
+    .class-mode-card:hover { box-shadow: var(--shadow-hover); border-color: rgba(194,115,138,0.3); }
     .class-mode-card h3 { font-size: 1.6rem; margin-bottom: 0.75rem; }
     .class-feature {
       display: flex; align-items: center; gap: 0.6rem;
@@ -233,8 +233,8 @@
 
     /* ── Consultation banner ── */
     .consultation-banner {
-      background: linear-gradient(135deg, rgba(92,138,92,0.1), rgba(200,169,110,0.08));
-      border: 1px solid rgba(92,138,92,0.2);
+      background: linear-gradient(135deg, rgba(194,115,138,0.1), rgba(200,169,110,0.08));
+      border: 1px solid rgba(194,115,138,0.2);
       border-radius: var(--radius);
       padding: 3rem;
       display: flex;
@@ -293,184 +293,182 @@
     }
 
     .form-message { padding: 0.85rem 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; margin-top: 1rem; display: none; }
-    .form-message.success { background: rgba(92,138,92,0.12); color: var(--accent-deep); border: 1px solid rgba(92,138,92,0.3); }
+    .form-message.success { background: rgba(194,115,138,0.12); color: var(--accent-deep); border: 1px solid rgba(194,115,138,0.3); }
     .form-message.error { background: rgba(201,90,90,0.1); color: #b94040; border: 1px solid rgba(201,90,90,0.3); }
   </style>
 </head>
-<body>
+<body class="nav-over-hero">
 
   <!-- Navbar injected by components.js -->
   <div id="navbar-placeholder"></div>
 
   <!-- ═══════════════════════════════════════════
-       HERO SECTION
+       HERO SECTION (editorial, full-viewport)
   ═══════════════════════════════════════════ -->
-  <section id="section-hero" class="hero">
-    <div class="hero-bg"></div>
+  <section id="section-hero" class="hero-editorial">
+    <div class="hero-image-wrap">
+      <img src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=1600&q=80"
+           alt="Yoga practice at Prana House, Jaipur" class="hero-image"/>
+      <div class="hero-overlay"></div>
+    </div>
 
-    <div class="container" style="position:relative;z-index:2;">
-      <div class="hero-content">
-        <span class="hero-badge fade-in">🌿 Yoga · Meditation · Wellness</span>
-        <h1 class="fade-in fade-in-delay-1">
-          Breathe. Balance.<br/>
-          <span class="display-italic">Belong.</span>
-        </h1>
-        <p class="lead fade-in fade-in-delay-2">
-          Experience authentic yoga and holistic wellness with Dr. Fareen Tak at Prana House, Jaipur. Online and offline classes for all levels.
-        </p>
-        <div class="hero-btns fade-in fade-in-delay-3">
-          <a href="/classes" class="btn btn-primary btn-lg">Explore Classes</a>
-          <a href="/contact" class="btn btn-outline btn-lg">Book Consultation</a>
-        </div>
+    <div class="hero-content">
+      <div class="eyebrow-label" style="color:rgba(255,255,255,0.75);">Pratap Nagar · Jaipur</div>
+      <h1 class="heading-editorial hero-heading">Breathe. Balance. <em>Belong.</em></h1>
+      <p class="hero-subtext">
+        A warm space to move mindfully, breathe deeply, and return to yourself — with Dr. Fareen Tak. Online &amp; offline classes for all levels.
+      </p>
+      <div class="hero-actions">
+        <a href="/classes" class="btn btn-primary btn-lg">Explore Classes</a>
+        <a href="/contact" class="btn-outline-light">Book Consultation</a>
       </div>
     </div>
+
+    <div class="hero-scroll-hint" aria-hidden="true"><div class="scroll-line"></div></div>
   </section>
 
   <!-- ═══════════════════════════════════════════
-       OFFERINGS STRIP
+       MARQUEE TICKER
   ═══════════════════════════════════════════ -->
-  <section id="section-offerings" class="section-pad-sm" style="background:var(--bg);">
+  <div class="marquee-track" aria-hidden="true">
+    <div class="marquee-inner">
+      <span>Breathe Deeply</span><span class="marquee-dot">✦</span>
+      <span>Move Mindfully</span><span class="marquee-dot">✦</span>
+      <span>Find Balance</span><span class="marquee-dot">✦</span>
+      <span>Return to Yourself</span><span class="marquee-dot">✦</span>
+      <span>Prana House · Jaipur</span><span class="marquee-dot">✦</span>
+      <span>Breathe Deeply</span><span class="marquee-dot">✦</span>
+      <span>Move Mindfully</span><span class="marquee-dot">✦</span>
+      <span>Find Balance</span><span class="marquee-dot">✦</span>
+      <span>Return to Yourself</span><span class="marquee-dot">✦</span>
+      <span>Prana House · Jaipur</span><span class="marquee-dot">✦</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PHILOSOPHY SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="section-philosophy" class="philosophy-section" style="background:var(--bg);">
     <div class="container">
-      <div class="offerings-strip fade-in">
-
-        <!-- Card 1: Guided Meditation -->
-        <div class="offering-item" id="offering-meditation">
-          <div class="offering-icon">🧘</div>
-          <h4>Guided Meditation</h4>
-          <p>Settle the mind, cultivate presence and find lasting inner calm through structured meditative practice.</p>
-          <a href="/programs" style="font-size:0.82rem;color:var(--accent);margin-top:0.75rem;display:inline-block;">Learn more →</a>
+      <div class="philosophy-grid">
+        <div class="philosophy-text-col">
+          <div class="eyebrow-label">The Philosophy</div>
+          <h2 class="heading-editorial appear-on-scroll">A space to breathe, <em>time to arrive.</em></h2>
+          <p class="philosophy-body appear-on-scroll" style="--delay:0.1s;">
+            Prana House is a soft landing in a loud world. We believe true wellness is not about doing more, but about being more aware of what you already have. Our studio is built to feel less like a gym and more like a deep breath.
+          </p>
+          <a href="/teacher" class="btn-text-link appear-on-scroll" style="--delay:0.2s;">Our story →</a>
         </div>
 
-        <!-- Card 2: Breathing Exercises -->
-        <div class="offering-item" id="offering-breathing">
-          <div class="offering-icon">🌬️</div>
-          <h4>Breathing Exercises</h4>
-          <p>Pranayama techniques to balance energy, improve lung capacity and activate the nervous system.</p>
-          <a href="/programs" style="font-size:0.82rem;color:var(--accent);margin-top:0.75rem;display:inline-block;">Learn more →</a>
+        <div class="philosophy-image-col appear-on-scroll" style="--delay:0.1s;">
+          <div class="philosophy-slideshow">
+            <div class="philosophy-slides">
+              <img src="https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?auto=format&fit=crop&w=900&q=80" alt="Studio interior" class="philosophy-slide active"/>
+              <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=900&q=80" alt="Yoga class" class="philosophy-slide"/>
+              <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=900&q=80" alt="Meditation space" class="philosophy-slide"/>
+            </div>
+            <div class="slideshow-controls">
+              <button class="slide-btn slide-prev" aria-label="Previous">←</button>
+              <button class="slide-btn slide-next" aria-label="Next">→</button>
+            </div>
+          </div>
+          <div class="botanical-leaf-decor" aria-hidden="true">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#C2738A" stroke-width="1" opacity="0.18">
+              <path d="M100 180 C60 160 20 120 30 60 C40 20 80 10 100 30 C120 10 160 20 170 60 C180 120 140 160 100 180Z"/>
+              <path d="M100 30 L100 180" stroke-dasharray="4 6"/>
+              <path d="M100 80 C80 70 65 75 60 90"/>
+              <path d="M100 80 C120 70 135 75 140 90"/>
+              <path d="M100 110 C82 100 70 108 65 120"/>
+              <path d="M100 110 C118 100 130 108 135 120"/>
+            </svg>
+          </div>
         </div>
+      </div>
 
-        <!-- Card 3: Flexibility Training -->
-        <div class="offering-item" id="offering-flexibility">
-          <div class="offering-icon">🤸</div>
-          <h4>Flexibility Training</h4>
-          <p>Sequenced asana practice to release tension, improve posture and build body awareness.</p>
-          <a href="/programs" style="font-size:0.82rem;color:var(--accent);margin-top:0.75rem;display:inline-block;">Learn more →</a>
-        </div>
-
-        <!-- Card 4: Stress Relief -->
-        <div class="offering-item" id="offering-stress">
-          <div class="offering-icon">🌸</div>
-          <h4>Stress Relief</h4>
-          <p>Restorative yoga and relaxation techniques designed to dissolve stress at its root.</p>
-          <a href="/programs" style="font-size:0.82rem;color:var(--accent);margin-top:0.75rem;display:inline-block;">Learn more →</a>
-        </div>
-
+      <div class="divider-botanical" aria-hidden="true">
+        <div class="divider-line"></div>
+        <svg viewBox="0 0 24 24" fill="none" class="divider-icon">
+          <path d="M12 2 C8 6 4 10 4 14 C4 18 7.6 21 12 21 C16.4 21 20 18 20 14 C20 10 16 6 12 2Z" stroke="#C2738A" stroke-width="1.2" fill="rgba(194,115,138,0.1)"/>
+          <line x1="12" y1="21" x2="12" y2="24" stroke="#C2738A" stroke-width="1"/>
+        </svg>
+        <div class="divider-line"></div>
       </div>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════
-       CLASSES SECTION
+       STATS COUNTER
+  ═══════════════════════════════════════════ -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item appear-on-scroll">
+          <div class="stat-number" data-target="200" data-suffix="+">0</div>
+          <div class="stat-label">Students Taught</div>
+        </div>
+        <div class="stat-item appear-on-scroll" style="--delay:0.1s;">
+          <div class="stat-number" data-target="15" data-suffix="+">0</div>
+          <div class="stat-label">Classes Each Week</div>
+        </div>
+        <div class="stat-item appear-on-scroll" style="--delay:0.2s;">
+          <div class="stat-number" data-target="5" data-suffix="+">0</div>
+          <div class="stat-label">Years in Jaipur</div>
+        </div>
+        <div class="stat-item appear-on-scroll" style="--delay:0.3s;">
+          <div class="stat-number" data-target="98" data-suffix="%">0</div>
+          <div class="stat-label">Satisfaction</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       CLASSES SECTION (dynamic portrait sliders)
   ═══════════════════════════════════════════ -->
   <section id="section-classes" class="section-pad" style="background:var(--bg-alt);">
     <div class="container">
-      <div class="section-header centered fade-in">
-        <span class="section-label">Join Us</span>
-        <h2>Choose How You <span class="display-italic">Practice</span></h2>
+      <div class="section-header centered">
+        <div class="eyebrow-label" style="text-align:center;">What we offer</div>
+        <h2 class="heading-editorial appear-on-scroll">Choose how you <em>practice.</em></h2>
         <div class="divider-leaf centered"></div>
         <p>Whether you prefer the energy of a physical space or the flexibility of home practice — Prana House meets you where you are.</p>
       </div>
+    </div>
 
-      <div class="class-mode-grid">
-
-        <!-- Online -->
-        <div class="class-mode-card fade-in" id="card-online-classes">
-          <div style="font-size:2.5rem;margin-bottom:1rem;">💻</div>
-          <h3>Online Classes</h3>
-          <p style="margin-bottom:1.5rem;">Live interactive sessions from anywhere. Join from the comfort of your home with personalized guidance.</p>
-          <div class="class-feature">Morning Hatha Yoga - Mon, Wed, Fri</div>
-          <div class="class-feature">Evening Relaxation Flow - Tue, Thu</div>
-          <div class="class-feature">Daily Pranayama & Meditation</div>
-          <div class="class-feature">Small groups for personal attention</div>
-          <div class="class-feature">Recorded sessions available</div>
-          <br/>
-          <a href="/classes" class="btn btn-primary">View All Online Classes</a>
-        </div>
-
-        <!-- Offline -->
-        <div class="class-mode-card fade-in fade-in-delay-1" id="card-offline-classes">
-          <div style="font-size:2.5rem;margin-bottom:1rem;">🏡</div>
-          <h3>Offline Classes</h3>
-          <p style="margin-bottom:1.5rem;">In-person yoga at Prana House, Pratap Nagar, Jaipur. Experience hands-on adjustments and community connection.</p>
-          <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.88rem;color:var(--text-secondary);margin-bottom:1.5rem;">
-            <span>📍</span> Pratap Nagar, Jaipur, Rajasthan
-          </div>
-          <div class="class-feature">Sunrise Yoga - Mon, Wed, Fri mornings</div>
-          <div class="class-feature">Therapeutic Yoga - Tue, Thu mornings</div>
-          <div class="class-feature">Power Vinyasa - Tue, Thu, Sat evenings</div>
-          <div class="class-feature">Flexibility & Mobility - Saturday mornings</div>
-          <div class="class-feature">Hands-on adjustments & personalized guidance</div>
-          <br/>
-          <a href="/classes" class="btn btn-primary">View All Offline Classes</a>
-        </div>
-
+    <!-- Online -->
+    <div class="container" style="margin-bottom:0.5rem;">
+      <div class="eyebrow-label">💻 Online Classes</div>
+    </div>
+    <div class="cards-slider-track">
+      <div class="cards-slider" id="home-online-slider">
+        <div class="class-card-portrait" style="flex:0 0 auto;padding:2rem;color:var(--text-light);">Loading…</div>
       </div>
+    </div>
 
+    <!-- Offline -->
+    <div class="container" style="margin:2.5rem 0 0.5rem;">
+      <div class="eyebrow-label">🏡 Offline Classes</div>
+    </div>
+    <div class="cards-slider-track">
+      <div class="cards-slider" id="home-offline-slider">
+        <div class="class-card-portrait" style="flex:0 0 auto;padding:2rem;color:var(--text-light);">Loading…</div>
+      </div>
+    </div>
+
+    <div class="container">
       <!-- 1:1 Consultation -->
-      <div class="consultation-banner fade-in" id="card-consultation">
+      <div class="consultation-banner appear-on-scroll" id="card-consultation">
         <div>
-          <span class="section-label">Personal Attention</span>
-          <h3>One-to-One Consultation</h3>
+          <span class="eyebrow-label">Personal Attention</span>
+          <h3 class="heading-editorial">One-to-One <em>Consultation</em></h3>
           <p style="max-width:500px;">Get a personalised wellness assessment with Dr. Fareen Tak — covering your health goals, physical limitations, diet, and a custom yoga plan designed just for you.</p>
         </div>
         <a href="/contact?interest=consultation" class="btn btn-gold btn-lg" style="flex-shrink:0;">Book Consultation</a>
       </div>
-
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════
-       TEACHER SECTION (preview)
-  ═══════════════════════════════════════════ -->
-  <section id="section-teacher" class="section-pad teacher-section">
-    <div class="container">
-      <div class="teacher-grid">
-
-        <!-- Photo -->
-        <div class="teacher-photo fade-in">
-          <div class="teacher-photo-frame">
-            <img src="/images/fareen.jpg" alt="Dr. Fareen Tak"/>
-          </div>
-          <div class="teacher-photo-badge">
-            <div style="font-size:0.7rem;color:var(--text-light);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.25rem;">Qualification</div>
-            <div style="font-weight:500;font-size:0.9rem;">BNYS Physician</div>
-          </div>
-        </div>
-
-        <!-- Info -->
-        <div class="teacher-info fade-in fade-in-delay-1">
-          <span class="section-label">Know Your Teacher</span>
-          <h2>Dr. Fareen Tak</h2>
-          <div class="divider-leaf"></div>
-          <p style="font-size:1.05rem;line-height:1.9;margin-bottom:2rem;">
-            Dr. Fareen Tak is a naturopath, yoga practitioner and integrative health educator with a deep commitment to holistic healing. With clinical training in naturopathy, yoga therapy and integrative medicine, she brings both scientific rigour and heart-centred compassion to every session.
-          </p>
-
-          <div class="teacher-credentials">
-            <div class="credential-item"><div class="credential-dot"></div><span>BNYS — Dr. S. Radhakrishnan Rajasthan Ayurved University, Jodhpur</span></div>
-            <div class="credential-item"><div class="credential-dot"></div><span>Gandhi National Academy of Naturopathy</span></div>
-            <div class="credential-item"><div class="credential-dot"></div><span>NIMHANS, Bengaluru</span></div>
-            <div class="credential-item"><div class="credential-dot"></div><span>Kaivalyadhama Yoga Institute</span></div>
-          </div>
-
-          <br/>
-          <a href="/teacher" class="btn btn-outline">Full Profile →</a>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
   <!-- ═══════════════════════════════════════════
        RETREAT SECTION
   ═══════════════════════════════════════════ -->
@@ -491,74 +489,41 @@
   </section>
 
   <!-- ═══════════════════════════════════════════
-       TESTIMONIALS
+       TESTIMONIALS (portrait slider)
   ═══════════════════════════════════════════ -->
-  <section id="section-testimonials" class="section-pad" style="background:var(--bg);">
+  <section id="section-testimonials" class="section-pad watercolor-bg" style="background:var(--bg);">
     <div class="container">
-      <div class="section-header centered fade-in">
-        <span class="section-label">Community Love</span>
-        <h2>What Our <span class="display-italic">Students Say</span></h2>
+      <div class="section-header centered">
+        <div class="eyebrow-label" style="text-align:center;">What they say</div>
+        <h2 class="heading-editorial appear-on-scroll">Student <em>voices.</em></h2>
         <div class="divider-leaf centered"></div>
       </div>
+    </div>
 
-      <div class="testimonial-grid" id="home-testimonials-grid">
-        <!-- Loaded from Supabase (approved=true) -->
-        <div class="testimonial-card fade-in" style="grid-column:1/-1;text-align:center;color:var(--text-light);padding:2rem;">Loading stories... 🌿</div>
+    <div class="cards-slider-track">
+      <div class="cards-slider" id="home-testimonials-slider">
+        <div class="testimonial-portrait-card" style="flex:0 0 auto;padding:2rem;color:var(--text-light);">Loading stories… 🌿</div>
       </div>
-      <div style="text-align:center;margin-top:2.5rem;">
-        <a href="/testimonials" class="btn btn-outline">Read All Stories →</a>
-      </div>
+    </div>
+    <div style="text-align:center;margin-top:2.5rem;">
+      <a href="/testimonials" class="btn btn-outline">Read All Stories →</a>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════
-       GET IN TOUCH (Contact Section on Home)
+       BLOG (editorial grid)
   ═══════════════════════════════════════════ -->
-  <section id="section-contact" class="section-pad" style="background:var(--bg-alt);">
-    <div class="container-sm">
-      <div class="section-header centered fade-in">
-        <span class="section-label">Get in Touch</span>
-        <h2>Start Your <span class="display-italic">Journey</span></h2>
-        <div class="divider-leaf centered"></div>
-        <p>Have questions about classes, programs or the retreat? Reach out and we'll respond within 24 hours.</p>
+  <section id="section-blog" class="section-pad" style="background:var(--bg-alt);">
+    <div class="container">
+      <div class="section-header-row">
+        <div>
+          <div class="eyebrow-label">From the Journal</div>
+          <h2 class="heading-editorial appear-on-scroll">Wellness <em>notes.</em></h2>
+        </div>
+        <a href="/blog" class="btn-text-link">Visit our blog →</a>
       </div>
-
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2.5rem;" class="fade-in">
-        <form id="contact-form">
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label" for="name">Full Name *</label>
-              <input class="form-input" type="text" id="name" name="name" placeholder="Your name" required autocomplete="name"/>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="email">Email Address *</label>
-              <input class="form-input" type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email"/>
-            </div>
-          </div>
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label" for="phone">Phone Number</label>
-              <input class="form-input" type="tel" id="phone" name="phone" placeholder="+91 98765 43210" autocomplete="tel"/>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="interest">I'm interested in</label>
-              <select class="form-input form-select" id="interest" name="interest">
-                <option value="">Select an option</option>
-                <option value="online-class">Online Classes</option>
-                <option value="offline-class">Offline Classes</option>
-                <option value="consultation">1:1 Consultation</option>
-                <option value="retreat">Yoga Retreat</option>
-                <option value="other">General Enquiry</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="message">Message *</label>
-            <textarea class="form-textarea" id="message" name="message" placeholder="Tell us about your wellness goals or any questions you have..." required></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Send Message 🌿</button>
-          <div id="form-message" class="form-message"></div>
-        </form>
+      <div id="home-blog-grid">
+        <div style="text-align:center;padding:2rem;color:var(--text-light);">Loading articles… 🌿</div>
       </div>
     </div>
   </section>
@@ -566,40 +531,114 @@
   <!-- Footer injected by components.js -->
   <div id="footer-placeholder"></div>
 
-  <script src="/js/components.js"></script>
-  <script src="/js/main.js"></script>
+  <script src="/js/components.js?v=20260621d"></script>
+  <script src="/js/main.js?v=20260621d"></script>
   <script>
-    // Load approved testimonials from Supabase into homepage section (max 3)
+    const escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+    // ── Classes → portrait sliders (online / offline) ──
+    (async function loadHomeClasses() {
+      const onlineEl = document.getElementById('home-online-slider');
+      const offlineEl = document.getElementById('home-offline-slider');
+      const emoji = (t) => t === 'online' ? '💻' : t === 'offline' ? '🏡' : '🔄';
+      const card = (cls, i) => {
+        const hasImg = cls.image && cls.image.trim();
+        const lvl = cls.level === 'all' ? 'All Levels' : (cls.level ? cls.level.charAt(0).toUpperCase() + cls.level.slice(1) : '');
+        const meta = [cls.duration ? cls.duration + ' min' : '', lvl].filter(Boolean).join(' · ');
+        return `
+          <div class="class-card-portrait appear-on-scroll" style="--delay:${(i % 4) * 0.08}s;">
+            <div class="class-card-image-wrap">
+              ${hasImg
+                ? `<img src="${escHtml(cls.image)}" alt="${escHtml(cls.name)}" class="class-card-image" onerror="this.outerHTML='<div class=class-card-image-fallback>${emoji(cls.type)}</div>'"/>`
+                : `<div class="class-card-image-fallback">${emoji(cls.type)}</div>`}
+              <div class="class-card-overlay"></div>
+              <div class="class-card-badges"><span class="badge-glass">${escHtml(cls.type || 'Class')}</span></div>
+            </div>
+            <div class="class-card-body">
+              <div class="class-card-meta">${escHtml(meta || cls.schedule || '')}</div>
+              <h3 class="class-card-title">${escHtml(cls.name)}</h3>
+              <a href="/class/detail?id=${cls.id}" class="class-card-link">Learn more →</a>
+            </div>
+          </div>`;
+      };
+      const empty = (label) => `<div class="class-card-portrait" style="flex:0 0 auto;padding:2rem;color:var(--text-light);">No ${label} classes yet.</div>`;
+      try {
+        const res = await fetch('/api/classes');
+        const all = await res.json();
+        const hybrid = all.filter(c => c.type === 'hybrid');
+        const online = [...all.filter(c => c.type === 'online'), ...hybrid];
+        const offline = [...all.filter(c => c.type === 'offline'), ...hybrid];
+        onlineEl.innerHTML = online.length ? online.map(card).join('') : empty('online');
+        offlineEl.innerHTML = offline.length ? offline.map(card).join('') : empty('offline');
+        if (typeof bindTilt === 'function') bindTilt(document);
+        if (typeof observeAppear === 'function') observeAppear(document);
+      } catch {
+        onlineEl.innerHTML = empty('online');
+        offlineEl.innerHTML = empty('offline');
+      }
+    })();
+
+    // ── Testimonials → portrait slider (max 6) ──
     (async function loadHomeTestimonials() {
-      const grid = document.getElementById('home-testimonials-grid');
-      const escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const slider = document.getElementById('home-testimonials-slider');
       try {
         const res = await fetch('/api/testimonials');
         const data = await res.json();
         if (!data.length) {
-          grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--text-light);padding:2rem;">Be the first to share your story! 🌿</div>`;
+          slider.innerHTML = `<div class="testimonial-portrait-card" style="flex:0 0 auto;padding:2rem;color:var(--text-light);">Be the first to share your story! 🌿</div>`;
           return;
         }
-        // Show max 3
-        const top = data.slice(0, 3);
-        grid.innerHTML = top.map((t, i) => `
-          <div class="testimonial-card fade-in fade-in-delay-${i}" id="testimonial-${i+1}">
-            <div class="testimonial-stars">${'★'.repeat(t.rating||5)}${'☆'.repeat(5-(t.rating||5))}</div>
-            <p class="testimonial-text">"${escHtml(t.message)}"</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar" style="background:rgba(92,138,92,0.1);border-radius:50%;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🧘</div>
-              <div>
-                <div class="testimonial-name">${escHtml(t.name)}</div>
-                <div class="testimonial-location">${escHtml(t.location || 'Jaipur')}${t.program ? ' · ' + escHtml(t.program) : ''}</div>
-              </div>
+        slider.innerHTML = data.slice(0, 6).map((t, i) => `
+          <div class="testimonial-portrait-card appear-on-scroll" style="--delay:${(i % 4) * 0.08}s;">
+            <div class="testimonial-pimg-wrap">${t.image ? `<img src="${escHtml(t.image)}" alt="${escHtml(t.name)}" class="testimonial-pimg" onerror="this.outerHTML='🧘'"/>` : '🧘'}</div>
+            <div class="testimonial-pbody">
+              <blockquote class="testimonial-pquote">"${escHtml(t.message)}"</blockquote>
+              <cite class="testimonial-pauthor">— ${escHtml(t.name)}${t.location ? ', ' + escHtml(t.location) : ''}</cite>
+              <div class="testimonial-pstars">${'★'.repeat(t.rating || 5)}</div>
             </div>
           </div>
         `).join('');
-        setTimeout(() => {
-          grid.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
-        }, 50);
+        if (typeof observeAppear === 'function') observeAppear(document);
       } catch {
-        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--text-light);padding:2rem;">Could not load testimonials.</div>`;
+        slider.innerHTML = `<div class="testimonial-portrait-card" style="flex:0 0 auto;padding:2rem;color:var(--text-light);">Could not load testimonials.</div>`;
+      }
+    })();
+
+    // ── Blog → editorial grid (featured + 2 side) ──
+    (async function loadHomeBlog() {
+      const grid = document.getElementById('home-blog-grid');
+      try {
+        const res = await fetch('/api/blogs');
+        const posts = await res.json();
+        if (!posts.length) { grid.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-light);">No articles yet. 🌿</div>`; return; }
+        const [feat, ...rest] = posts;
+        const side = rest.slice(0, 2);
+        const featImg = feat.image ? `<img src="${escHtml(feat.image)}" alt="${escHtml(feat.title)}" class="blog-card-image"/>` : `<div class="class-card-image-fallback">🌿</div>`;
+        grid.innerHTML = `
+          <div class="blog-editorial-grid">
+            <a href="/blog/${feat.slug}" class="blog-card-featured appear-on-scroll">
+              <div class="blog-card-image-wrap">${featImg}</div>
+              <div class="blog-card-body">
+                <span class="blog-category-tag">${escHtml(feat.category || 'Wellness')}</span>
+                <h3 class="blog-card-title-lg heading-editorial">${escHtml(feat.title)}</h3>
+                <p class="blog-card-excerpt">${escHtml((feat.excerpt || '').substring(0, 140))}</p>
+              </div>
+            </a>
+            <div class="blog-side-cards">
+              ${side.map((p, i) => `
+                <a href="/blog/${p.slug}" class="blog-card-side appear-on-scroll" style="--delay:${0.1 * (i + 1)}s;">
+                  <div class="blog-card-side-image">${p.image ? `<img src="${escHtml(p.image)}" alt="${escHtml(p.title)}"/>` : `<div class="class-card-image-fallback" style="font-size:2rem;">🌿</div>`}</div>
+                  <div class="blog-card-side-body">
+                    <span class="blog-category-tag">${escHtml(p.category || 'Wellness')}</span>
+                    <h4 class="blog-card-side-title">${escHtml(p.title)}</h4>
+                  </div>
+                </a>`).join('')}
+            </div>
+          </div>`;
+        if (typeof bindTilt === 'function') bindTilt(document);
+        if (typeof observeAppear === 'function') observeAppear(document);
+      } catch {
+        grid.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-light);">Could not load articles.</div>`;
       }
     })();
   </script>

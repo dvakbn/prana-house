@@ -37,7 +37,7 @@
   }
   </script>
   
-  <link rel="stylesheet" href="/css/style.css"/>
+  <link rel="stylesheet" href="/css/style.css?v=20260621d"/>
   <style>
     .testimonials-grid {
       display: grid;
@@ -54,13 +54,13 @@
       gap: 1rem;
       transition: var(--transition);
     }
-    .tcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: rgba(92,138,92,0.3); }
+    .tcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: rgba(194,115,138,0.3); }
     .tcard-stars { color: var(--accent-warm); letter-spacing: 3px; font-size: 0.9rem; }
     .tcard-text { font-size: 0.95rem; font-style: italic; color: var(--text-secondary); line-height: 1.8; flex: 1; }
     .tcard-author { display: flex; align-items: center; gap: 0.75rem; padding-top: 1rem; border-top: 1px solid var(--border); }
     .tcard-avatar {
       width: 44px; height: 44px; border-radius: 50%;
-      background: rgba(92,138,92,0.1);
+      background: rgba(194,115,138,0.1);
       display: flex; align-items: center; justify-content: center;
       font-size: 1.2rem; flex-shrink: 0;
     }
@@ -69,7 +69,7 @@
     .tcard-program {
       display: inline-block; font-size: 0.7rem; font-weight: 600;
       letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--accent); background: rgba(92,138,92,0.1);
+      color: var(--accent); background: rgba(194,115,138,0.1);
       padding: 0.2rem 0.65rem; border-radius: 50px;
     }
     .submit-box {
@@ -81,7 +81,7 @@
       margin: 4rem auto 0;
     }
     .form-message { padding: 0.85rem 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; margin-top: 1rem; display: none; }
-    .form-message.success { background: rgba(92,138,92,0.12); color: var(--accent-deep); border: 1px solid rgba(92,138,92,0.3); }
+    .form-message.success { background: rgba(194,115,138,0.12); color: var(--accent-deep); border: 1px solid rgba(194,115,138,0.3); }
     .form-message.error { background: rgba(201,90,90,0.1); color: #b94040; border: 1px solid rgba(201,90,90,0.3); }
     #loading-state { text-align: center; padding: 3rem; color: var(--text-light); font-size: 1rem; }
   </style>
@@ -152,8 +152,8 @@
   </section>
 
   <div id="footer-placeholder"></div>
-  <script src="/js/components.js"></script>
-  <script src="/js/main.js"></script>
+  <script src="/js/components.js?v=20260621d"></script>
+  <script src="/js/main.js?v=20260621d"></script>
   <script>
     // Load testimonials from API
     const escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

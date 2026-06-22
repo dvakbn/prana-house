@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Yoga Retreat — Coming Soon | Prana House</title>
   <meta name="description" content="Full Day Yoga Retreat by Prana House — an immersive day of meditation, pranayama, asana and deep rest. Coming soon to Jaipur."/>
-  <link rel="stylesheet" href="/css/style.css"/>
+  <link rel="stylesheet" href="/css/style.css?v=20260621d"/>
   <style>
     .retreat-hero-full {
       min-height: 100vh;
-      background: linear-gradient(160deg, #1a2e1a 0%, #2d4a2d 60%, #1e3320 100%);
+      background: linear-gradient(160deg, #4A2233 0%, #7A3A4E 60%, #3A1B29 100%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -24,7 +24,7 @@
       inset: 0;
       background:
         radial-gradient(ellipse 70% 60% at 50% 40%, rgba(200,169,110,0.12) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(92,138,92,0.15) 0%, transparent 60%);
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(194,115,138,0.15) 0%, transparent 60%);
     }
     /* Animated orbs */
     .orb {
@@ -33,7 +33,7 @@
       filter: blur(60px);
       animation: drift 12s ease-in-out infinite;
     }
-    .orb-1 { width:300px;height:300px; background:rgba(92,138,92,0.12); top:-50px; right:10%; animation-delay:0s; }
+    .orb-1 { width:300px;height:300px; background:rgba(194,115,138,0.12); top:-50px; right:10%; animation-delay:0s; }
     .orb-2 { width:200px;height:200px; background:rgba(200,169,110,0.1); bottom:10%; left:5%; animation-delay:-4s; }
     .orb-3 { width:150px;height:150px; background:rgba(201,169,154,0.1); top:40%; left:15%; animation-delay:-8s; }
     @keyframes drift {
@@ -128,9 +128,6 @@
       <p class="retreat-subtitle">
         An immersive journey of breath, movement, stillness and nourishment — from sunrise to sunset. A day dedicated entirely to you.
       </p>
-      <div class="cs-badge"><span></span>Coming Soon<span></span></div>
-      <br/>
-      <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;">Be the first to know when dates are announced ↓</p>
     </div>
   </section>
 
@@ -138,18 +135,18 @@
   <section class="section-pad" style="background:var(--bg-alt);" id="dynamic-retreats-section">
     <div class="container">
       <div class="section-header centered fade-in">
-        <span class="section-label">Coming Up</span>
-        <h2>Upcoming <span class="display-italic">Retreats</span></h2>
+        <div class="eyebrow-label" style="text-align:center;">Coming Up</div>
+        <h2 class="heading-editorial">Upcoming <em>retreats.</em></h2>
         <div class="divider-leaf centered"></div>
       </div>
       <div id="retreats-loading" style="text-align:center;padding:2rem;color:var(--text-light);">Loading retreats... 🌿</div>
-      <div id="retreats-grid" style="display:none;"></div>
     </div>
+    <div id="retreats-grid" style="display:none;"></div>
   </section>
 
   <div id="footer-placeholder"></div>
-  <script src="/js/components.js"></script>
-  <script src="/js/main.js"></script>
+  <script src="/js/components.js?v=20260621d"></script>
+  <script src="/js/main.js?v=20260621d"></script>
   <script>
     // Load dynamic retreats
     async function loadDynamicRetreats() {
@@ -166,56 +163,44 @@
         }
         
         loader.style.display = 'none';
-        grid.style.display = 'grid';
-        grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(340px, 1fr))';
-        grid.style.gap = '2rem';
-        
-        grid.innerHTML = retreats.map(retreat => `
-          <a href="/retreat/detail?id=${retreat.id}" class="fade-in" style="text-decoration:none;color:inherit;display:block;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:var(--transition);cursor:pointer;">
-            ${retreat.image ? `<img src="${retreat.image}" alt="${retreat.title}" style="width:100%;height:200px;object-fit:cover;">` : ''}
-            <div style="padding:2rem;">
-              <h3 style="font-size:1.4rem;margin-bottom:0.5rem;font-family:var(--font-display);">${retreat.title}</h3>
-              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;font-size:0.88rem;color:var(--text-light);">
-                <span>📍 ${retreat.location}</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;font-size:0.88rem;color:var(--text-light);">
-                <span>📅 ${new Date(retreat.start_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - ${new Date(retreat.end_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-              </div>
-              ${retreat.description ? `<p style="font-size:0.9rem;margin-bottom:1.5rem;line-height:1.7;">${retreat.description.substring(0, 120)}${retreat.description.length > 120 ? '...' : ''}</p>` : ''}
-              ${retreat.highlights && retreat.highlights.length > 0 ? `
-                <div style="margin-bottom:1.5rem;">
-                  <p style="font-weight:600;font-size:0.85rem;margin-bottom:0.75rem;color:var(--accent);">Highlights:</p>
-                  <ul style="font-size:0.85rem;padding-left:1.25rem;color:var(--text-secondary);">
-                    ${retreat.highlights.slice(0, 3).map(h => `<li style="margin-bottom:0.25rem;">${h}</li>`).join('')}
-                  </ul>
-                </div>
-              ` : ''}
-              ${retreat.schedule && retreat.schedule.length > 0 ? `
-                <div style="margin-bottom:1.5rem;">
-                  <p style="font-weight:600;font-size:0.85rem;margin-bottom:0.75rem;color:var(--accent);">Daily Schedule Preview:</p>
-                  <div style="display:grid;gap:0.75rem;">
-                    ${retreat.schedule.slice(0, 3).map(item => `
-                      <div style="display:flex;gap:0.75rem;align-items:start;font-size:0.82rem;padding:0.75rem;background:var(--bg-alt);border-radius:var(--radius-sm);">
-                        <span style="font-size:1.1rem;">${item.icon || '🌿'}</span>
-                        <div style="flex:1;">
-                          <div style="font-weight:600;color:var(--accent-warm);margin-bottom:0.2rem;font-size:0.75rem;letter-spacing:0.05em;">${item.time}</div>
-                          <div style="font-weight:600;margin-bottom:0.15rem;">${item.title}</div>
-                        </div>
-                      </div>
-                    `).join('')}
-                    ${retreat.schedule.length > 3 ? `<div style="text-align:center;font-size:0.8rem;color:var(--text-light);">+ ${retreat.schedule.length - 3} more activities</div>` : ''}
+        grid.style.display = 'block';
+
+        const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const fmt = (d) => new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+        grid.innerHTML = retreats.map((retreat, i) => {
+          const hasImage = retreat.image && String(retreat.image).trim();
+          const dates = retreat.start_date ? `${new Date(retreat.start_date).toLocaleDateString('en-IN',{day:'numeric',month:'short'})} – ${fmt(retreat.end_date)}` : '';
+          const metaBits = [retreat.location ? '📍 ' + retreat.location : '', dates ? '📅 ' + dates : ''].filter(Boolean);
+          const nameParts = String(retreat.title || '').trim().split(' ');
+          const lastWord = nameParts.length > 1 ? nameParts.pop() : '';
+          const titleHtml = lastWord ? `${esc(nameParts.join(' '))} <em>${esc(lastWord)}.</em>` : `<em>${esc(retreat.title)}</em>`;
+          const highlights = (retreat.highlights && retreat.highlights.length)
+            ? `<ul style="font-size:0.92rem;color:var(--text-secondary);line-height:1.9;margin:0 0 1.75rem;padding-left:1.1rem;">${retreat.highlights.slice(0,4).map(h => `<li>${esc(h)}</li>`).join('')}</ul>` : '';
+          return `
+            <div class="sticky-class-section ${i % 2 === 1 ? 'flip' : ''}">
+              <div class="sticky-class-inner">
+                <div class="sticky-class-image-col">
+                  <div class="sticky-class-image-wrap">
+                    ${hasImage ? `<img src="${esc(retreat.image)}" alt="${esc(retreat.title)}" class="sticky-class-image" onerror="this.outerHTML='🏔️'"/>` : '🏔️'}
                   </div>
                 </div>
-              ` : ''}
-              <div style="display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid var(--border);">
-                ${retreat.price ? `<p style="font-size:1.3rem;font-weight:600;color:var(--accent);">₹${retreat.price.toLocaleString('en-IN')}</p>` : '<div></div>'}
-                <span class="btn btn-primary" style="pointer-events:none;">View Details →</span>
+                <div class="sticky-class-content-col">
+                  <div class="class-content-meta">
+                    ${metaBits.map((b, j) => `${j ? '<span class="class-dot">•</span>' : ''}<span>${esc(b)}</span>`).join('')}
+                  </div>
+                  <h2 class="heading-editorial class-title-sticky appear-on-scroll">${titleHtml}</h2>
+                  ${retreat.description ? `<p class="class-description-sticky appear-on-scroll" style="--delay:0.1s;">${esc(retreat.description)}</p>` : ''}
+                  ${highlights}
+                  ${retreat.price ? `<p style="font-size:1.3rem;font-weight:600;color:var(--accent);margin-bottom:1.5rem;">₹${retreat.price.toLocaleString('en-IN')}</p>` : ''}
+                  <a href="/retreat/detail?id=${retreat.id}" class="btn btn-primary appear-on-scroll" style="--delay:0.2s;">View Details →</a>
+                </div>
               </div>
             </div>
-          </a>
-        `).join('');
-        
-        setTimeout(() => grid.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 50);
+          `;
+        }).join('');
+
+        if (typeof observeAppear === 'function') observeAppear(document);
       } catch (err) {
         console.error('Failed to load retreats:', err);
         loader.style.display = 'none';

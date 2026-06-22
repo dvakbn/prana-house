@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title id="page-title">Retreat Details | Prana House</title>
   <meta name="description" id="page-description" content=""/>
-  <link rel="stylesheet" href="/css/style.css"/>
+  <link rel="stylesheet" href="/css/style.css?v=20260621d"/>
   <style>
     .retreat-detail-hero {
       min-height: 70vh;
-      background: linear-gradient(160deg, #1a2e1a 0%, #2d4a2d 60%, #1e3320 100%);
+      background: linear-gradient(160deg, #4A2233 0%, #7A3A4E 60%, #3A1B29 100%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -23,7 +23,7 @@
       inset: 0;
       background: 
         radial-gradient(ellipse 70% 60% at 50% 40%, rgba(200,169,110,0.12) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 80% 60%, rgba(92,138,92,0.1) 0%, transparent 60%);
+        radial-gradient(ellipse 40% 40% at 80% 60%, rgba(194,115,138,0.1) 0%, transparent 60%);
     }
     .orb {
       position: absolute;
@@ -32,7 +32,7 @@
       opacity: 0.6;
       animation: drift 15s ease-in-out infinite;
     }
-    .orb-1 { width:350px;height:350px; background:rgba(92,138,92,0.15); top:10%; right:15%; animation-delay:0s; }
+    .orb-1 { width:350px;height:350px; background:rgba(194,115,138,0.15); top:10%; right:15%; animation-delay:0s; }
     .orb-2 { width:250px;height:250px; background:rgba(200,169,110,0.12); bottom:20%; left:10%; animation-delay:-5s; }
     @keyframes drift {
       0%,100% { transform: translate(0,0); }
@@ -138,12 +138,12 @@
     }
     .highlight-item:hover {
       transform: translateX(5px);
-      border-color: rgba(92,138,92,0.3);
+      border-color: rgba(194,115,138,0.3);
     }
     .highlight-icon {
       width: 36px;
       height: 36px;
-      background: rgba(92,138,92,0.1);
+      background: rgba(194,115,138,0.1);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -195,7 +195,7 @@
     .schedule-card:hover {
       transform: translateY(-6px);
       box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-      border-color: rgba(92,138,92,0.25);
+      border-color: rgba(194,115,138,0.25);
     }
     .schedule-time {
       font-family: var(--font-display);
@@ -223,7 +223,7 @@
     }
     
     .booking-section {
-      background: linear-gradient(135deg, var(--accent) 0%, #2d4a2d 100%);
+      background: linear-gradient(135deg, var(--accent) 0%, #7A3A4E 100%);
       padding: 5rem 0;
       position: relative;
       overflow: hidden;
@@ -345,8 +345,8 @@
   </section>
 
   <div id="footer-placeholder"></div>
-  <script src="/js/components.js"></script>
-  <script src="/js/main.js"></script>
+  <script src="/js/components.js?v=20260621d"></script>
+  <script src="/js/main.js?v=20260621d"></script>
   <script>
     // Get retreat ID from URL
     const urlParams = new URLSearchParams(window.location.search);

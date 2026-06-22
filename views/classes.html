@@ -142,7 +142,7 @@
   }
   </script>
   
-  <link rel="stylesheet" href="/css/style.css"/>
+  <link rel="stylesheet" href="/css/style.css?v=20260621d"/>
   <style>
     .class-card {
       background: var(--bg-card);
@@ -154,7 +154,7 @@
       overflow: hidden;
       height: 100%;
     }
-    .class-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: rgba(92,138,92,0.3); }
+    .class-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: rgba(194,115,138,0.3); }
     .class-card-content {
       padding: 1.5rem;
       display: flex;
@@ -163,7 +163,7 @@
     }
     .class-icon-box {
       width: 60px; height: 60px;
-      background: rgba(92,138,92,0.1);
+      background: rgba(194,115,138,0.1);
       border-radius: 14px;
       display: flex; align-items: center; justify-content: center;
       font-size: 1.6rem;
@@ -187,7 +187,7 @@
       margin-left: auto;
       flex-shrink: 0;
     }
-    .level-all { background: rgba(92,138,92,0.1); color: var(--accent); }
+    .level-all { background: rgba(194,115,138,0.1); color: var(--accent); }
     .level-beginner { background: rgba(200,169,110,0.12); color: var(--accent-warm); }
     .level-intermediate { background: rgba(201,169,154,0.15); color: var(--accent-rose); }
     .faq-item {
@@ -216,8 +216,8 @@
   <section class="section-pad" style="background:var(--bg);padding-top:8rem;" id="online-classes-section">
     <div class="container">
       <div class="section-header centered fade-in">
-        <span class="section-label">💻 Learn From Home</span>
-        <h2>Online <span class="display-italic">Classes</span></h2>
+        <div class="eyebrow-label" style="text-align:center;">💻 Learn From Home</div>
+        <h2 class="heading-editorial">Online <em>classes.</em></h2>
         <div class="divider-leaf centered"></div>
         <p style="max-width:600px;margin:1rem auto 0;color:var(--text-secondary);">Live interactive yoga sessions from the comfort of your home. Small groups, personal attention.</p>
       </div>
@@ -239,8 +239,8 @@
   <section class="section-pad" style="background:var(--bg-alt);" id="offline-classes-section">
     <div class="container">
       <div class="section-header centered fade-in">
-        <span class="section-label">🏡 In-Person Sessions</span>
-        <h2>Offline <span class="display-italic">Classes</span></h2>
+        <div class="eyebrow-label" style="text-align:center;">🏡 In-Person Sessions</div>
+        <h2 class="heading-editorial">Offline <em>classes.</em></h2>
         <div class="divider-leaf centered"></div>
         <p style="max-width:600px;margin:1rem auto 0;color:var(--text-secondary);">Join us at Prana House, Pratap Nagar, Jaipur for personalized in-person yoga sessions.</p>
       </div>
@@ -263,8 +263,8 @@
     <div class="container-sm">
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:3rem;text-align:center;" class="fade-in">
         <div style="font-size:3rem;margin-bottom:1rem;">🌿</div>
-        <span class="section-label">Personalised Care</span>
-        <h2>One-to-One <span class="display-italic">Consultation</span></h2>
+        <span class="eyebrow-label">Personalised Care</span>
+        <h2 class="heading-editorial">One-to-One <em>Consultation</em></h2>
         <div class="divider-leaf centered"></div>
         <p style="font-size:1.05rem;max-width:520px;margin:0 auto 2rem;">
           A private session with Dr. Fareen Tak — she will assess your health history, physical condition and goals to create a completely personalised yoga and wellness plan for you.
@@ -284,8 +284,8 @@
   <section class="section-pad" style="background:var(--bg);" id="section-faq">
     <div class="container-sm">
       <div class="section-header centered fade-in">
-        <span class="section-label">Questions?</span>
-        <h2>Frequently <span class="display-italic">Asked</span></h2>
+        <div class="eyebrow-label" style="text-align:center;">Questions?</div>
+        <h2 class="heading-editorial">Frequently <em>asked.</em></h2>
         <div class="divider-leaf centered"></div>
       </div>
       <div class="fade-in">
@@ -314,8 +314,8 @@
   </section>
 
   <div id="footer-placeholder"></div>
-  <script src="/js/components.js"></script>
-  <script src="/js/main.js"></script>
+  <script src="/js/components.js?v=20260621d"></script>
+  <script src="/js/main.js?v=20260621d"></script>
   <script>
     // FAQ accordion
     document.querySelectorAll('.faq-q').forEach(q => {
@@ -352,11 +352,8 @@
           noOnline.style.display = 'block';
         } else {
           const onlineToShow = [...onlineClasses, ...hybridClasses];
-          onlineGrid.style.display = 'grid';
-          onlineGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(320px, 1fr))';
-          onlineGrid.style.gap = '1.5rem';
-          onlineGrid.innerHTML = renderClassCards(onlineToShow);
-          setTimeout(() => onlineGrid.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 50);
+          onlineGrid.style.display = 'block';
+          onlineGrid.innerHTML = renderStickyClasses(onlineToShow);
         }
         
         // Render offline classes
@@ -365,12 +362,10 @@
           noOffline.style.display = 'block';
         } else {
           const offlineToShow = [...offlineClasses, ...hybridClasses];
-          offlineGrid.style.display = 'grid';
-          offlineGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(320px, 1fr))';
-          offlineGrid.style.gap = '1.5rem';
-          offlineGrid.innerHTML = renderClassCards(offlineToShow);
-          setTimeout(() => offlineGrid.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 50);
+          offlineGrid.style.display = 'block';
+          offlineGrid.innerHTML = renderStickyClasses(offlineToShow);
         }
+        if (typeof observeAppear === 'function') observeAppear(document);
       } catch (err) {
         console.error('Failed to load classes:', err);
         onlineLoader.style.display = 'none';
@@ -380,46 +375,42 @@
       }
     }
     
-    function renderClassCards(classes) {
-      return classes.map(cls => {
+    function renderStickyClasses(classes) {
+      const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const emoji = (t) => t === 'online' ? '💻' : t === 'offline' ? '🏡' : '🔄';
+      return classes.map((cls, i) => {
         const hasImage = cls.image && cls.image.trim();
-        
+        const lvl = cls.level === 'all' ? 'All Levels' : (cls.level ? cls.level.charAt(0).toUpperCase() + cls.level.slice(1) : '');
+        const metaBits = [
+          cls.duration ? cls.duration + ' min' : '',
+          cls.type ? cls.type.charAt(0).toUpperCase() + cls.type.slice(1) : '',
+          cls.schedule || ''
+        ].filter(Boolean);
+        const nameParts = String(cls.name || '').trim().split(' ');
+        const lastWord = nameParts.length > 1 ? nameParts.pop() : '';
+        const titleHtml = lastWord
+          ? `${esc(nameParts.join(' '))} <em>${esc(lastWord)}.</em>`
+          : `<em>${esc(cls.name)}</em>`;
         return `
-          <div class="class-card fade-in">
-            ${hasImage ? `
-              <div style="width:100%;height:200px;overflow:hidden;position:relative;">
-                <img src="${cls.image}" alt="${cls.name}" 
-                  style="width:100%;height:100%;object-fit:cover;" 
-                  onerror="this.parentElement.innerHTML='<div style=display:flex;align-items:center;justify-content:center;height:100%;background:rgba(92,138,92,0.1);font-size:3rem;>${cls.type === 'online' ? '💻' : cls.type === 'offline' ? '🏡' : '🔄'}</div>'"/>
-                <div style="position:absolute;top:1rem;right:1rem;">
-                  <span class="level-badge level-${cls.level === 'all' ? 'all' : cls.level.toLowerCase()}" style="backdrop-filter:blur(10px);background:rgba(255,255,255,0.95);box-shadow:0 2px 8px rgba(0,0,0,0.1);">${cls.level === 'all' ? 'All Levels' : cls.level.charAt(0).toUpperCase() + cls.level.slice(1)}</span>
-                </div>
-                <div style="position:absolute;top:1rem;left:1rem;">
-                  <div style="backdrop-filter:blur(10px);background:rgba(255,255,255,0.95);box-shadow:0 2px 8px rgba(0,0,0,0.1);border-radius:8px;padding:0.35rem 0.65rem;font-size:1.2rem;">
-                    ${cls.type === 'online' ? '💻' : cls.type === 'offline' ? '🏡' : '🔄'}
-                  </div>
+          <div class="sticky-class-section ${i % 2 === 1 ? 'flip' : ''}">
+            ${lvl ? `<span class="level-pill">${esc(lvl)}</span>` : ''}
+            <div class="sticky-class-inner">
+              <div class="sticky-class-image-col">
+                <div class="sticky-class-image-wrap">
+                  ${hasImage
+                    ? `<img src="${esc(cls.image)}" alt="${esc(cls.name)}" class="sticky-class-image" onerror="this.outerHTML='${emoji(cls.type)}'"/>`
+                    : emoji(cls.type)}
                 </div>
               </div>
-            ` : ''}
-            <div class="class-card-content">
-              ${!hasImage ? `
-                <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;">
-                  <div class="class-icon-box" style="width:48px;height:48px;font-size:1.3rem;">
-                    ${cls.type === 'online' ? '💻' : cls.type === 'offline' ? '🏡' : '🔄'}
-                  </div>
-                  <div style="flex:1;">
-                    <span class="level-badge level-${cls.level === 'all' ? 'all' : cls.level.toLowerCase()}">${cls.level === 'all' ? 'All Levels' : cls.level.charAt(0).toUpperCase() + cls.level.slice(1)}</span>
-                  </div>
+              <div class="sticky-class-content-col">
+                <div class="class-content-meta">
+                  ${metaBits.map((b, j) => `${j ? '<span class="class-dot">•</span>' : ''}<span>${esc(b)}</span>`).join('')}
                 </div>
-              ` : ''}
-              <h3 style="font-size:1.1rem;margin-bottom:0.75rem;">${cls.name}</h3>
-              ${cls.description ? `<p style="font-size:0.88rem;margin-bottom:1rem;color:var(--text-secondary);line-height:1.6;">${cls.description.substring(0, 100)}${cls.description.length > 100 ? '...' : ''}</p>` : ''}
-              <div class="class-meta-row" style="margin-bottom:1rem;">
-                <span class="class-meta-item">📅 ${cls.schedule}</span>
-                ${cls.duration ? `<span class="class-meta-item">⏱ ${cls.duration} min</span>` : ''}
+                <h2 class="heading-editorial class-title-sticky appear-on-scroll">${titleHtml}</h2>
+                ${cls.description ? `<p class="class-description-sticky appear-on-scroll" style="--delay:0.1s;">${esc(cls.description)}</p>` : ''}
+                ${cls.price ? `<p style="font-size:1.2rem;font-weight:600;color:var(--accent);margin-bottom:1.5rem;">₹${cls.price.toLocaleString('en-IN')}/month</p>` : ''}
+                <a href="/class/detail?id=${cls.id}" class="btn btn-primary appear-on-scroll" style="--delay:0.2s;">View Details →</a>
               </div>
-              ${cls.price ? `<p style="font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:1rem;">₹${cls.price.toLocaleString('en-IN')}/month</p>` : ''}
-              <a href="/class/detail?id=${cls.id}" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:auto;">View Details →</a>
             </div>
           </div>
         `;
