@@ -26,12 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Navbar Scroll ─────────────────────────────────
   const navbar = document.querySelector('.navbar');
-  let lastScrollY = 0;
   let rafPending = false;
 
   function updateNavbar() {
     rafPending = false;
-    // 60px threshold — avoids false triggers on mobile touch momentum
+    // 60px threshold — stable on mobile touch momentum
     if (window.scrollY > 60) {
       navbar?.classList.add('scrolled');
     } else {
@@ -42,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.addEventListener('scroll', () => {
-    lastScrollY = window.scrollY;
     if (!rafPending) {
       rafPending = true;
       requestAnimationFrame(updateNavbar);

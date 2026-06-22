@@ -229,15 +229,13 @@ p  { font-size: 1rem; color: var(--text-secondary); }
 .navbar {
   position: fixed;
   top: 0; left: 0; right: 0;
+  /* Account for iOS notch / status bar */
+  padding-top: env(safe-area-inset-top, 0px);
   z-index: 1000;
   background: transparent;
   border-bottom: 1px solid transparent;
   box-shadow: none;
-  /* GPU-composited transform only — no top/layout animation, no jank on mobile */
-  will-change: transform;
-  transform: translateY(0);
-  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
-              background 0.38s ease;
+  /* NO transform on the navbar itself — transforms break position:fixed on mobile WebKit */
 }
 .nav-inner {
   position: relative;
@@ -248,23 +246,26 @@ p  { font-size: 1rem; color: var(--text-secondary); }
   height: 76px;
   max-width: 1200px;
   margin: 0 auto;
+  /* Floating pill offset lives here as margin-top, not as translateY on parent */
+  margin-top: 0px;
   padding: 0 1.75rem;
   border: 1px solid transparent;
   border-radius: 50px;
-  /* All pill transitions on the inner element — never on top/layout properties */
+  /* Only animate properties that don't cause layout recalc on mobile */
   transition: height 0.38s cubic-bezier(0.22, 1, 0.36, 1),
               max-width 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+              margin-top 0.38s cubic-bezier(0.22, 1, 0.36, 1),
               background 0.38s ease,
               box-shadow 0.38s ease,
               border-color 0.38s ease;
 }
-/* Scrolled → floating frosted glass pill via translateY (GPU path) */
-.navbar.scrolled {
-  transform: translateY(14px);
-}
+/* Scrolled → floating frosted glass pill
+   The float is achieved via margin-top on .nav-inner, not translateY on .navbar,
+   so position:fixed is never affected on mobile */
 .navbar.scrolled .nav-inner {
   height: 64px;
   max-width: 1080px;
+  margin-top: 10px;
   padding: 0 1.75rem;
   background: rgba(255,255,255,0.86);
   backdrop-filter: blur(18px) saturate(160%);
@@ -276,6 +277,18 @@ p  { font-size: 1rem; color: var(--text-secondary); }
   background: rgba(36,26,30,0.86);
   border-color: rgba(255,255,255,0.08);
   box-shadow: 0 10px 36px rgba(0,0,0,0.42);
+}
+/* Mobile — tighter pill, honour safe-area inset */
+@media (max-width: 768px) {
+  .navbar {
+    padding-top: max(env(safe-area-inset-top, 0px), 0px);
+  }
+  .nav-inner { height: 60px; padding: 0 1.1rem; }
+  .navbar.scrolled .nav-inner {
+    margin-top: 8px;
+    height: 56px;
+    max-width: calc(100vw - 2rem);
+  }
 }
 .nav-logo {
   flex: 1 1 0;
@@ -1242,12 +1255,7 @@ body.nav-over-hero .navbar:not(.scrolled) .nav-hamburger span { background: #fff
 /* Editorial logo wordmark */
 .nav-logo-text { font-family: var(--font-serif); letter-spacing: 0.04em; }
 
-/* Mobile: hide centered links, keep pill tidy */
-@media (max-width: 768px) {
-  .nav-inner { height: 68px; padding: 0 1.25rem; }
-  .navbar.scrolled .nav-inner { max-width: calc(100vw - 2rem); }
-  .nav-links { display: none; }
-}
+/* Mobile: hide centered links, keep pill tidy — handled by navbar block above */
 
 /* ═══ HERO — full-viewport image ═══ */
 .hero-editorial {
