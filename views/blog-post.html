@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Blog | Prana House</title>
-  <link rel="stylesheet" href="/css/style.css?v=20260622c"/>
+  <link rel="stylesheet" href="/css/style.css?v=20260622d"/>
   <style>
     .post-hero { background: var(--bg-alt); padding: 8rem 0 4rem; border-bottom: 1px solid var(--border); }
     .post-meta { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1.5rem; font-size:0.82rem; color:var(--text-light); }
@@ -19,7 +19,7 @@
     .post-body li { font-size: 1.05rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 0.5rem; }
     .post-body ul li { list-style: disc; }
     .post-body ol li { list-style: decimal; }
-    .post-body blockquote { border-left: 3px solid var(--accent); padding: 1rem 1.5rem; margin: 2rem 0; background: rgba(194,115,138,0.05); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-style: italic; font-family: var(--font-display); font-size: 1.2rem; }
+    .post-body blockquote { border-left: 3px solid var(--accent); padding: 1rem 1.5rem; margin: 2rem 0; background: rgba(212,39,90,0.05); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-style: italic; font-family: var(--font-display); font-size: 1.2rem; }
     .post-cover { width:100%; max-height:420px; object-fit:cover; border-radius:var(--radius); margin-bottom:2.5rem; }
     .post-emoji-cover { height:220px; background:var(--surface); border-radius:var(--radius); display:flex;align-items:center;justify-content:center;font-size:6rem;margin-bottom:2.5rem; }
     .back-link { display:inline-flex; align-items:center; gap:0.5rem; color:var(--accent); font-size:0.88rem; margin-bottom:2rem; }
@@ -37,8 +37,8 @@
     <a href="/blog" class="btn btn-primary" style="margin-top:1.5rem;">← Back to Blog</a>
   </div>
   <div id="footer-placeholder"></div>
-  <script src="/js/components.js?v=20260622c"></script>
-  <script src="/js/main.js?v=20260622c"></script>
+  <script src="/js/components.js?v=20260622d"></script>
+  <script src="/js/main.js?v=20260622d"></script>
   <script>
     // Format blog content: convert markdown-like syntax to HTML
     function formatBlogContent(text) {
@@ -131,7 +131,7 @@
           <div class="post-hero">
             <div class="container-sm">
               <a href="/blog" class="back-link">← Back to Blog</a>
-              <span class="blog-category" style="display:inline-block;font-size:0.7rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);background:rgba(194,115,138,0.1);padding:0.25rem 0.75rem;border-radius:50px;margin-bottom:1rem;">${post.category || 'Wellness'}</span>
+              <span class="blog-category" style="display:inline-block;font-size:0.7rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);background:rgba(212,39,90,0.1);padding:0.25rem 0.75rem;border-radius:50px;margin-bottom:1rem;">${post.category || 'Wellness'}</span>
               <h1 style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:1rem;">${post.title}</h1>
               <div class="post-meta">
                 <span>✍️ ${post.author || 'Dr. Fareen Tak'}</span>

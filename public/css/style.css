@@ -8,7 +8,7 @@
 
 /* ── CSS Variables ── */
 :root {
-  /* Light Mode Palette — Premium · Feminine · Elegant (Warm Sand / Dusty Rose / Honey Gold) */
+  /* Light Mode Palette — Premium · Feminine · Punchy (Warm Sand / Deep Pink / Honey Gold) */
   --bg:           #F5EDE4;
   --bg-alt:       #EBDFD2;
   --bg-card:      #FFFCF8;
@@ -18,11 +18,11 @@
   --text-primary: #33271F;
   --text-secondary: #6F5F54;
   --text-light:   #A8968A;
-  --accent:       #C2738A;       /* dusty rose */
+  --accent:       #D4275A;       /* deep raspberry pink */
   --accent-warm:  #D5A05E;       /* honey gold */
-  --accent-rose:  #E7BBC1;       /* blush */
-  --accent-deep:  #9C4F63;       /* deep wine-rose */
-  --accent-soft:  rgba(194,115,138,0.10);
+  --accent-rose:  #F0A0B8;       /* soft blush */
+  --accent-deep:  #A81A44;       /* dark wine-pink */
+  --accent-soft:  rgba(212,39,90,0.09);
   --nav-bg:       rgba(245,237,228,0.82);
   --shadow:       0 2px 8px rgba(44,44,44,0.04), 0 8px 30px rgba(44,44,44,0.05);
   --shadow-hover: 0 4px 16px rgba(44,44,44,0.06), 0 18px 50px rgba(44,44,44,0.09);
@@ -81,11 +81,11 @@
   --text-primary: #F5EAE6;
   --text-secondary: #CDB6B2;
   --text-light:   #93807C;
-  --accent:       #E0A1AE;
+  --accent:       #E8638A;       /* bright hot pink for dark mode */
   --accent-warm:  #E2BC82;
-  --accent-rose:  #EFC6CB;
-  --accent-deep:  #E79FB0;
-  --accent-soft:  rgba(224,161,174,0.12);
+  --accent-rose:  #F5B8CB;
+  --accent-deep:  #F07A9E;
+  --accent-soft:  rgba(232,99,138,0.14);
   --nav-bg:       rgba(28,21,24,0.88);
   --shadow:       0 2px 8px rgba(0,0,0,0.2), 0 8px 30px rgba(0,0,0,0.28);
   --shadow-hover: 0 4px 16px rgba(0,0,0,0.3), 0 18px 50px rgba(0,0,0,0.4);
@@ -115,7 +115,7 @@ img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
-::selection { background: rgba(194,115,138,0.18); color: var(--accent-deep); }
+::selection { background: rgba(212,39,90,0.18); color: var(--accent-deep); }
 
 /* ── Typography Scale ── */
 h1, h2, h3, h4, h5 {
@@ -196,12 +196,12 @@ p  { font-size: 1rem; color: var(--text-secondary); }
 .btn-primary {
   background: var(--accent);
   color: #fff;
-  box-shadow: 0 2px 14px rgba(194,115,138,0.22);
+  box-shadow: 0 2px 14px rgba(212,39,90,0.22);
 }
 .btn-primary:hover {
   background: var(--accent-deep);
   transform: translateY(-2px);
-  box-shadow: 0 8px 26px rgba(194,115,138,0.3);
+  box-shadow: 0 8px 26px rgba(212,39,90,0.3);
 }
 .btn-outline {
   border: 1.5px solid var(--border);
@@ -455,7 +455,7 @@ p  { font-size: 1rem; color: var(--text-secondary); }
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 65% 35%, rgba(194,115,138,0.09) 0%, transparent 65%),
+  background: radial-gradient(ellipse 80% 60% at 65% 35%, rgba(212,39,90,0.09) 0%, transparent 65%),
               radial-gradient(ellipse 60% 80% at 15% 85%, rgba(200,169,110,0.07) 0%, transparent 65%);
 }
 .hero-canvas {
@@ -472,8 +472,8 @@ p  { font-size: 1rem; color: var(--text-secondary); }
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(194,115,138,0.08);
-  border: 1px solid rgba(194,115,138,0.2);
+  background: rgba(212,39,90,0.08);
+  border: 1px solid rgba(212,39,90,0.2);
   color: var(--accent);
   padding: 0.45rem 1.1rem;
   border-radius: 50px;
@@ -541,7 +541,7 @@ p  { font-size: 1rem; color: var(--text-secondary); }
 .card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-hover);
-  border-color: rgba(194,115,138,0.25);
+  border-color: rgba(212,39,90,0.25);
 }
 .card-body { padding: 1.85rem; }
 .card-icon {
@@ -574,7 +574,7 @@ p  { font-size: 1rem; color: var(--text-secondary); }
 .program-card:hover {
   transform: translateY(-6px);
   box-shadow: var(--shadow-hover);
-  border-color: rgba(194,115,138,0.25);
+  border-color: rgba(212,39,90,0.25);
 }
 .program-card-thumb {
   height: 190px;
@@ -775,7 +775,7 @@ p  { font-size: 1rem; color: var(--text-secondary); }
 .testimonial-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-hover);
-  border-color: rgba(194,115,138,0.25);
+  border-color: rgba(212,39,90,0.25);
 }
 .testimonial-stars { color: var(--accent-warm); font-size: 0.9rem; margin-bottom: 1rem; letter-spacing: 3px; }
 .testimonial-text { font-size: 0.96rem; line-height: 1.85; margin-bottom: 1.5rem; font-style: italic; color: var(--text-secondary); }
@@ -816,7 +816,7 @@ p  { font-size: 1rem; color: var(--text-secondary); }
 }
 .form-input:focus, .form-textarea:focus, .form-select:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(194,115,138,0.1);
+  box-shadow: 0 0 0 4px rgba(212,39,90,0.1);
 }
 .form-input::placeholder, .form-textarea::placeholder { color: var(--text-light); }
 .form-textarea { min-height: 130px; resize: vertical; }
@@ -909,7 +909,7 @@ p  { font-size: 1rem; color: var(--text-secondary); }
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 60% 80% at 50% 0%, rgba(194,115,138,0.07) 0%, transparent 60%);
+  background: radial-gradient(ellipse 60% 80% at 50% 0%, rgba(212,39,90,0.07) 0%, transparent 60%);
 }
 .page-hero .container, .page-hero .container-sm { position: relative; z-index: 2; }
 .page-hero h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); margin-bottom: 1rem; }
@@ -969,7 +969,7 @@ p  { font-size: 1rem; color: var(--text-secondary); }
 /* ── Notice / Alert ── */
 .notice {
   background: var(--accent-soft);
-  border: 1px solid rgba(194,115,138,0.22);
+  border: 1px solid rgba(212,39,90,0.22);
   border-radius: var(--radius-sm);
   padding: 1rem 1.25rem;
   font-size: 0.88rem;
@@ -1413,7 +1413,7 @@ body.nav-over-hero .navbar:not(.scrolled) .nav-hamburger span { background: #fff
 .class-card-image-wrap { position: relative; height: 340px; overflow: hidden; background: var(--surface); }
 .class-card-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; display:block; }
 .class-card-portrait:hover .class-card-image { transform: scale(1.05); }
-.class-card-image-fallback { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 4rem; background: rgba(194,115,138,0.1); }
+.class-card-image-fallback { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 4rem; background: rgba(212,39,90,0.1); }
 .class-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(28,26,23,0.5) 0%, transparent 55%); pointer-events: none; }
 .class-card-badges { position: absolute; top: 1rem; left: 1rem; display: flex; gap: 0.4rem; z-index: 2; }
 .badge-glass {
@@ -1436,7 +1436,7 @@ body.nav-over-hero .navbar:not(.scrolled) .nav-hamburger span { background: #fff
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 .testimonial-portrait-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
-.testimonial-pimg-wrap { height: 230px; overflow: hidden; background: rgba(194,115,138,0.1); display:flex; align-items:center; justify-content:center; font-size:3.5rem; }
+.testimonial-pimg-wrap { height: 230px; overflow: hidden; background: rgba(212,39,90,0.1); display:flex; align-items:center; justify-content:center; font-size:3.5rem; }
 .testimonial-pimg { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.5s ease; filter: grayscale(12%); }
 .testimonial-portrait-card:hover .testimonial-pimg { transform: scale(1.04); filter: grayscale(0%); }
 .testimonial-pbody { padding: 1.5rem 1.6rem 1.8rem; }
@@ -1449,7 +1449,7 @@ body.nav-over-hero .navbar:not(.scrolled) .nav-hamburger span { background: #fff
 .watercolor-bg::before {
   content: ''; position: absolute; top: -10%; right: -5%;
   width: 600px; height: 600px;
-  background: radial-gradient(ellipse at center, rgba(194,115,138,0.06) 0%, rgba(200,169,110,0.04) 50%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(212,39,90,0.06) 0%, rgba(200,169,110,0.04) 50%, transparent 70%);
   pointer-events: none; z-index: 0; border-radius: 50%;
 }
 

@@ -145,7 +145,7 @@
   }
   </script>
   
-  <link rel="stylesheet" href="/css/style.css?v=20260622c"/>
+  <link rel="stylesheet" href="/css/style.css?v=20260622d"/>
   <style>
     /* ── Hero Canvas ── */
     #hero-canvas { position:absolute; inset:0; z-index:0; pointer-events:none; }
@@ -198,7 +198,7 @@
       text-align: center;
       transition: var(--transition);
     }
-    .why-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: rgba(194,115,138,0.3); }
+    .why-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: rgba(212,39,90,0.3); }
     .why-num {
       font-family: var(--font-display);
       font-size: 3rem;
@@ -221,7 +221,7 @@
       background: var(--bg-card);
       transition: var(--transition);
     }
-    .class-mode-card:hover { box-shadow: var(--shadow-hover); border-color: rgba(194,115,138,0.3); }
+    .class-mode-card:hover { box-shadow: var(--shadow-hover); border-color: rgba(212,39,90,0.3); }
     .class-mode-card h3 { font-size: 1.6rem; margin-bottom: 0.75rem; }
     .class-feature {
       display: flex; align-items: center; gap: 0.6rem;
@@ -233,8 +233,8 @@
 
     /* ── Consultation banner ── */
     .consultation-banner {
-      background: linear-gradient(135deg, rgba(194,115,138,0.1), rgba(200,169,110,0.08));
-      border: 1px solid rgba(194,115,138,0.2);
+      background: linear-gradient(135deg, rgba(212,39,90,0.1), rgba(200,169,110,0.08));
+      border: 1px solid rgba(212,39,90,0.2);
       border-radius: var(--radius);
       padding: 3rem;
       display: flex;
@@ -293,7 +293,7 @@
     }
 
     .form-message { padding: 0.85rem 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; margin-top: 1rem; display: none; }
-    .form-message.success { background: rgba(194,115,138,0.12); color: var(--accent-deep); border: 1px solid rgba(194,115,138,0.3); }
+    .form-message.success { background: rgba(212,39,90,0.12); color: var(--accent-deep); border: 1px solid rgba(212,39,90,0.3); }
     .form-message.error { background: rgba(201,90,90,0.1); color: #b94040; border: 1px solid rgba(201,90,90,0.3); }
   </style>
 </head>
@@ -373,7 +373,7 @@
             </div>
           </div>
           <div class="botanical-leaf-decor" aria-hidden="true">
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#C2738A" stroke-width="1" opacity="0.18">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#D4275A" stroke-width="1" opacity="0.18">
               <path d="M100 180 C60 160 20 120 30 60 C40 20 80 10 100 30 C120 10 160 20 170 60 C180 120 140 160 100 180Z"/>
               <path d="M100 30 L100 180" stroke-dasharray="4 6"/>
               <path d="M100 80 C80 70 65 75 60 90"/>
@@ -388,8 +388,8 @@
       <div class="divider-botanical" aria-hidden="true">
         <div class="divider-line"></div>
         <svg viewBox="0 0 24 24" fill="none" class="divider-icon">
-          <path d="M12 2 C8 6 4 10 4 14 C4 18 7.6 21 12 21 C16.4 21 20 18 20 14 C20 10 16 6 12 2Z" stroke="#C2738A" stroke-width="1.2" fill="rgba(194,115,138,0.1)"/>
-          <line x1="12" y1="21" x2="12" y2="24" stroke="#C2738A" stroke-width="1"/>
+          <path d="M12 2 C8 6 4 10 4 14 C4 18 7.6 21 12 21 C16.4 21 20 18 20 14 C20 10 16 6 12 2Z" stroke="#D4275A" stroke-width="1.2" fill="rgba(212,39,90,0.1)"/>
+          <line x1="12" y1="21" x2="12" y2="24" stroke="#D4275A" stroke-width="1"/>
         </svg>
         <div class="divider-line"></div>
       </div>
@@ -531,8 +531,8 @@
   <!-- Footer injected by components.js -->
   <div id="footer-placeholder"></div>
 
-  <script src="/js/components.js?v=20260622c"></script>
-  <script src="/js/main.js?v=20260622c"></script>
+  <script src="/js/components.js?v=20260622d"></script>
+  <script src="/js/main.js?v=20260622d"></script>
   <script>
     const escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 

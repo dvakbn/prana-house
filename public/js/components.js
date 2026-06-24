@@ -12,10 +12,10 @@ const NAVBAR_HTML = `
     <a href="/" class="nav-logo">
       <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- 8 fully symmetrical petals radiating from center -->
-        <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(194,115,138,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(0 20 20)"/>
-        <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(194,115,138,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(45 20 20)"/>
-        <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(194,115,138,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(90 20 20)"/>
-        <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(194,115,138,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(135 20 20)"/>
+        <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(212,39,90,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(0 20 20)"/>
+        <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(212,39,90,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(45 20 20)"/>
+        <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(212,39,90,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(90 20 20)"/>
+        <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(212,39,90,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(135 20 20)"/>
         <!-- Center circle -->
         <circle cx="20" cy="20" r="3.5" fill="var(--accent-warm)" opacity="0.9"/>
         <circle cx="20" cy="20" r="1.5" fill="#fff" opacity="0.7"/>
@@ -97,10 +97,10 @@ const FOOTER_HTML = `
       <div class="footer-brand" id="footer-brand">
         <a href="/" class="nav-logo" style="margin-bottom:0.5rem;display:inline-flex;">
           <svg viewBox="0 0 40 40" fill="none" width="32" height="32">
-            <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(194,115,138,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(0 20 20)"/>
-            <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(194,115,138,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(45 20 20)"/>
-            <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(194,115,138,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(90 20 20)"/>
-            <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(194,115,138,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(135 20 20)"/>
+            <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(212,39,90,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(0 20 20)"/>
+            <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(212,39,90,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(45 20 20)"/>
+            <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(212,39,90,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(90 20 20)"/>
+            <ellipse cx="20" cy="20" rx="3.2" ry="8" fill="rgba(212,39,90,0.18)" stroke="var(--accent)" stroke-width="1" transform="rotate(135 20 20)"/>
             <circle cx="20" cy="20" r="3.5" fill="var(--accent-warm)" opacity="0.9"/>
             <circle cx="20" cy="20" r="1.5" fill="#fff" opacity="0.7"/>
           </svg>
@@ -194,10 +194,10 @@ const FOOTER_CTA_HTML = `
         <ellipse cx="150" cy="280" rx="40" ry="80" stroke="#C8A96E" stroke-width="1.2" opacity="0.45" transform="rotate(15 150 280)"/>
         <ellipse cx="150" cy="280" rx="40" ry="80" stroke="#C8A96E" stroke-width="1.2" opacity="0.45" transform="rotate(30 150 280)"/>
         <ellipse cx="150" cy="280" rx="40" ry="80" stroke="#C8A96E" stroke-width="1.2" opacity="0.45" transform="rotate(-30 150 280)"/>
-        <circle cx="150" cy="260" r="18" stroke="#C2738A" stroke-width="1.2" opacity="0.5" fill="none"/>
-        <path d="M150 360 C140 400 155 430 148 480" stroke="#C2738A" stroke-width="1" opacity="0.3"/>
-        <path d="M148 400 C120 385 105 395 110 415 C115 435 140 425 148 400Z" stroke="#C2738A" stroke-width="1" opacity="0.3" fill="rgba(194,115,138,0.06)"/>
-        <path d="M149 420 C177 405 192 415 187 435 C182 455 157 445 149 420Z" stroke="#C2738A" stroke-width="1" opacity="0.3" fill="rgba(194,115,138,0.06)"/>
+        <circle cx="150" cy="260" r="18" stroke="#D4275A" stroke-width="1.2" opacity="0.5" fill="none"/>
+        <path d="M150 360 C140 400 155 430 148 480" stroke="#D4275A" stroke-width="1" opacity="0.3"/>
+        <path d="M148 400 C120 385 105 395 110 415 C115 435 140 425 148 400Z" stroke="#D4275A" stroke-width="1" opacity="0.3" fill="rgba(212,39,90,0.06)"/>
+        <path d="M149 420 C177 405 192 415 187 435 C182 455 157 445 149 420Z" stroke="#D4275A" stroke-width="1" opacity="0.3" fill="rgba(212,39,90,0.06)"/>
       </svg>
     </div>
   </div>
